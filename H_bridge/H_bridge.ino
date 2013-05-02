@@ -9,36 +9,47 @@ void setup()
   Serial.println("Two motors");
 
   
+  while (!Serial) {
+    ; // wait for serial port to connect. Needed for Leonardo only
+  }
+
+  pinMode(2, INPUT);   // digital sensor is on digital pin 2
+  establishContact(); 
 }
 
 
-
+void establishContact() {
+  while (Serial.available() <= 0) {
+    Serial.print('A');   // send a capital A
+    delay(300);
+  }
+}
 
 void loop()
 {
-  hBridge.left();
-  delay (1000);
-  hBridge.stopAll();
-  delay (1000);  
-  hBridge.right();
-  delay (1000);
-  hBridge.stopAll();
-  delay (1000);  
-  hBridge.right();
-  delay (1000);
-  hBridge.stopAll();
-  delay (1000);
-  hBridge.left();
-  delay (1000);
-  hBridge.stopAll();
- 
   
-  int ledPin = 13;
-  while (1)
-  {
-    digitalWrite(ledPin, HIGH);   // sets the LED on
-    delay(1000);                  // waits for a second
-    digitalWrite(ledPin, LOW);    // sets the LED off
-    delay(1000);
+ 
+ 
+  if (Serial.available() > 0) {
+    // get incoming byte:
+    char inByte = Serial.read();
+    
+    switch(inByte) {
+      case  'a': hBridge.left();
+                 delay (1000);
+                 break;
+      case  'd': hBridge.right();
+                 delay (1000);
+                 break;
+      case  'w': hBridge.forward();
+                 delay (1000);
+                 break;
+      case  's': hBridge.backward();
+                 delay (1000);
+                 break;
+    }  
+    
+    
+    hBridge.stopAll();
   }
 }
