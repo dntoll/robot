@@ -33,19 +33,20 @@ void loop()
   if (Serial.available() > 0) {
     // get incoming byte:
     char inByte = Serial.read();
+    int time = 200;
     
     switch(inByte) {
       case  'a': hBridge.left();
-                 delay (1000);
+                 delay (time);
                  break;
       case  'd': hBridge.right();
-                 delay (1000);
+                 delay (time);
                  break;
       case  'w': hBridge.forward();
-                 delay (1000);
+                 delay (time);
                  break;
       case  's': hBridge.backward();
-                 delay (1000);
+                 delay (time);
                  break;
     }  
     
