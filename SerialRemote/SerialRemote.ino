@@ -21,7 +21,8 @@ Servo myservo;  // create servo object to control a servo
 SharpSensor sharp(SHARP_PIN);
 HC_SR04 sonar(TRIGGER_PIN, ECHO_PIN);
 L298N hBridge = L298N();
-Compass compass;
+Compass *compass;
+int servoPos = 90;
 
 void setup() {
   Serial.begin(57600); // Open serial monitor at 115200 baud to see ping results.
@@ -33,11 +34,11 @@ void setup() {
   
 
   Serial.println("Constructing new HMC5883L");
-  compass = Compass();
+  compass = new Compass();
   
   Serial.println("Initiating Servo");
   myservo.attach(SERVO_PIN);  // attaches the servo on pin 9 to the servo object 
-  myservo.write(90);
+  myservo.write(servoPos);
   
   establishContact(); 
   
@@ -92,7 +93,11 @@ void loop() {
                  delay (time);
                  break;
       case  'm': mes();
-                 delay (time);
+                 break;
+      case  'c': compass->measure();
+                 break;
+      case  'b': myservo.write(servoPos-45);
+                 delay(time  );
                  break;
     }  
     
