@@ -42,7 +42,7 @@ class Compass {
   }
   
   // Our main program loop.
-void measure()
+float measure()
 {
   // Retrive the raw values from the compass (not scaled).
   MagnetometerRaw raw = compass.ReadRawAxis();
@@ -90,13 +90,8 @@ void measure()
   float headingDegrees = heading * 180/M_PI; 
 
   // Output the data via the serial port.
-  Output(raw, scaled, heading, headingDegrees);
-  
-  // Normally we would delay the application by 66ms to allow the loop
-  // to run at 15Hz (default bandwidth for the HMC5883L).
-  // However since we have a long serial out (104ms at 9600) we will let
-  // it run at its natural speed.
-  delay(66);
+  //  Output(raw, scaled, heading, headingDegrees);
+  return headingDegrees;
 }
   /*float CalculateHeadingTiltCompensated(MagnetometerScaled mag)
   {

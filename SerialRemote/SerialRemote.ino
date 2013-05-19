@@ -1,4 +1,5 @@
 #include <NewPing.h>
+
 #include "Sensor.h"
 #include "HC_SR04.h"
 #include "SharpSensor.h"
@@ -7,41 +8,26 @@
 #include <Wire.h>
 #include <HMC5883L.h>
 #include "Compass.h"
+#include "MPU6050.h"
+#include "Robot.h"
 
 
 
-#define TRIGGER_PIN   16 
-#define ECHO_PIN      15  
-#define SERVO_PIN     11
-#define SHARP_PIN     0
-#define SHARP_PIN     0
 
+Robot *pRobot;
 
-Servo myservo;  // create servo object to control a servo 
-SharpSensor sharp(SHARP_PIN);
-HC_SR04 sonar(TRIGGER_PIN, ECHO_PIN);
-L298N hBridge = L298N();
-Compass *compass;
-int servoPos = 90;
 
 void setup() {
   Serial.begin(57600); // Open serial monitor at 115200 baud to see ping results.
   Serial.println("Robot starting up");
   
+  pRobot = new Robot();
+  
   while (!Serial) {
     ; // wait for serial port to connect. Needed for Leonardo only
   }
   
-
-  Serial.println("Constructing new HMC5883L");
-  compass = new Compass();
-  
-  Serial.println("Initiating Servo");
-  myservo.attach(SERVO_PIN);  // attaches the servo on pin 9 to the servo object 
-  myservo.write(servoPos);
-  
-  establishContact(); 
-  
+  establishContact();
 }
 
 void establishContact() {
@@ -51,26 +37,6 @@ void establishContact() {
   }
 }
 
-void mes() {
-  
-  float sharpMeasurement, sharpcm, sonarMeasurement = 0, sonarcm = 0;
-  sharpMeasurement = sharp.getMedian(5,1);
-  sharpcm = sharp.transformToCM(sharpMeasurement);
- 
- 
-  sonarMeasurement = sonar.getMedian(5,30);
-  sonarcm = sonar.transformToCM(sonarMeasurement);
-  
-  Serial.print(sharpMeasurement);
-      Serial.print(" IR CM : ");
-      Serial.print(sharpcm);
-      Serial.print(" Sonar CM : ");
-      Serial.print(sonarcm);
-      
-      Serial.print(" Sharp E : ");
-      Serial.print((sonarcm - sharpcm) * (sonarcm - sharpcm));
-      Serial.println();
-}
 
 void loop() {
       
@@ -80,28 +46,32 @@ void loop() {
     int time = 200;
     
     switch(inByte) {
-      case  'a': hBridge.left();
-                 delay (time);
+      case  'a': pRobot->left(time);
                  break;
-      case  'd': hBridge.right();
-                 delay (time);
+      case  'd': pRobot->right(time);
                  break;
-      case  'w': hBridge.forward();
-                 delay (time);
+      case  'w': pRobot->forward(time);
                  break;
-      case  's': hBridge.backward();
-                 delay (time);
+      case  's': pRobot->backward(time);
                  break;
-      case  'm': mes();
+      case  'm': pRobot->measureDistance(90);
                  break;
-      case  'c': compass->measure();
+      case  'g': pRobot->measureGyro();
                  break;
-      case  'b': myservo.write(servoPos-45);
-                 delay(time  );
+      case  'c': pRobot->measureCompass();
                  break;
-    }  
+      case  'q': pRobot->sonarSweep();
+                 break;
+      case  'i': pRobot->irSweep();
+                 break;  
+      case  't': pRobot->measureTemperature();
+                 break;    
+      case  'n': pRobot->calibrate();
+                 break;           
+                 
+                
+    }
     
     
-    hBridge.stopAll();
   }
 }
