@@ -12,7 +12,7 @@ public class RobotFinder {
 		for(SerialPort port : ports) {
 			
 			System.out.println("Robot::main port found port " + port.getName());
-			if (port.getName().equals("COM14") || port.getName().equals("ttyUSB0")) {
+			if (port.getName().equals("COM14") || port.getName().equals("ttyAMA0")) {
 				
 				Robot robot = new Robot(port); 
 				
