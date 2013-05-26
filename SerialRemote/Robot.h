@@ -5,15 +5,15 @@
 #define SERVO_PIN     11
 #define SHARP_PIN     0
 #define SHARP_ENABLE_PIN 2
-#define MIN_DEGREES 10
-#define MAX_DEGREES 150
+#define MIN_DEGREES 0
+#define MAX_DEGREES 170
 #define SERVO_DELAY_TIME 80
 
 class Robot {
   public:
     Robot() : m_sharp(SHARP_PIN), m_sonar(TRIGGER_PIN, ECHO_PIN) {
       
-      m_hBridge.stopAll();
+      //m_hBridge.stopAll();
       
       m_servoPos = 90;
       m_servo.attach(SERVO_PIN);  // attaches the servo on pin 9 to the servo object 
@@ -36,7 +36,7 @@ class Robot {
        shutdownSharp();
        int minAngle = MIN_DEGREES;
        int maxAngle = MAX_DEGREES;
-       for(int pos = minAngle; pos <= maxAngle; pos += 10)  // goes from 0 degrees to 180 degrees 
+       for(int pos = minAngle; pos <= maxAngle; pos += 5)  // goes from 0 degrees to 180 degrees 
        { 
           moveServo(pos);
           float sonarMeasurement = m_sonar.getMedian(5, 30);
@@ -47,13 +47,34 @@ class Robot {
           Serial.print(":");
           Serial.print(sonarcm);
        }
-       Serial.println(";");
+       Serial.println("");
+       
+       moveServo(90);
     }
     
     void calibrate() {
+      //Serial.print("Calibration");
+      while (true) {
+        if (Serial.available() > 0) {
+          char inByte = Serial.read();
+          if (inByte == 'n') {
+            break;
+          } 
+        } else {
+          m_pCompass->calibrate();
+          delay(300);
+        }
+      }
+      
+      m_pCompass->printCalibration();
+      Serial.println("DONE");
+    }
+    
+    
+    void calibrateIR() {
       Serial.print("Calibration");
       while (Serial.available() <= 0) {
-        measureCompass();
+        measureDistance(90);
         delay(300);
       }
     }
@@ -63,7 +84,7 @@ class Robot {
        startupSharp();
        int minAngle = MIN_DEGREES;
        int maxAngle = MAX_DEGREES;
-       for(int pos = minAngle; pos <= maxAngle; pos += 1)  // goes from 0 degrees to 180 degrees 
+       for(int pos = maxAngle; pos >= minAngle; pos -= 1)  // goes from 0 degrees to 180 degrees 
        { 
           moveServo(pos);
           float sharpMeasurement, sharpcm, sonarMeasurement = 0, sonarcm = 0;
@@ -75,7 +96,9 @@ class Robot {
           Serial.print(":");
           Serial.print(sharpcm);
        }
-       Serial.println(";");
+       Serial.println("");
+       
+       moveServo(90);
     }
     
     void measureDistance(int a_pos) {
@@ -83,7 +106,7 @@ class Robot {
       moveServo(a_pos);
       startupSharp();
       float sharpMeasurement, sharpcm, sonarMeasurement = 0, sonarcm = 0;
-      sharpMeasurement = m_sharp.getMedian(5,1);
+      sharpMeasurement = m_sharp.getMedian(5,5);
       sharpcm = m_sharp.transformToCM(sharpMeasurement);
       shutdownSharp();
      
@@ -91,9 +114,13 @@ class Robot {
       sonarcm = m_sonar.transformToCM(sonarMeasurement);
       Serial.print(":");
       Serial.print(sharpcm, 1);
-      Serial.print(": ");
+      Serial.print(":");
       Serial.print(sonarcm, 1);
-      Serial.println(";");
+      Serial.print(":");
+      Serial.print(sharpMeasurement);
+      Serial.print(":");
+      Serial.print(sonarMeasurement, 1);
+      Serial.println("");
     }
     
     void measureGyro() {
@@ -113,21 +140,21 @@ class Robot {
       Serial.print(accel_t_gyro.value.y_gyro, DEC);
       Serial.print(":");
       Serial.print(accel_t_gyro.value.z_gyro, DEC);
-      Serial.println(";");
+      Serial.println("");
     }
     
     void measureTemperature() {
        float deg = m_pGyro->getTemperature();
        Serial.print("Temperature:");
        Serial.print(deg);
-       Serial.println(";");
+       Serial.println("");
     }
     
     void measureCompass() {
        float deg = m_pCompass->measure();
        Serial.print("Compass:");
        Serial.print(deg);
-       Serial.println(";");
+       Serial.println("");
     }
     
     void left(int a_time) {
@@ -135,7 +162,7 @@ class Robot {
       m_hBridge.left();
       delay(a_time);
       m_hBridge.stopAll();
-      Serial.println(";");
+      Serial.println("");
       
     }
     void right(int a_time) {
@@ -150,7 +177,7 @@ class Robot {
       m_hBridge.forward();
       delay(a_time);
       m_hBridge.stopAll();
-      Serial.println(";");
+      Serial.println("");
     }
     void backward(int a_time) {
       Serial.print("Move:backward");

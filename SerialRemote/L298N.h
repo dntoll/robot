@@ -43,8 +43,9 @@ class L298N  {
       digitalWrite(IN3, leftForward ? LOW : HIGH);
       digitalWrite(IN4, leftForward ? HIGH : LOW);//setting motorB's directon 
       
-      analogWrite(ENA,225);//start driving motorA
-      analogWrite(ENB,192);//start driving motorB
+     // analogWrite(ENA,225);//start driving motorA
+      digitalWrite(ENA, HIGH);
+      digitalWrite(ENB,HIGH);//start driving motorB
     }
 
     void stopAll() {

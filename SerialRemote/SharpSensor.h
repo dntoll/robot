@@ -19,9 +19,9 @@ class SharpSensor : public Sensor {
   
   
   float transformToCM(float a_voltage) {
-      static const int numDots = 11;
-      static const float voltages[numDots]= {0.60f, 0.65f,  0.71f, 0.77f, 0.85, 0.95f, 1.09, 1.31, 1.63f, 2.11f, 2.9f};
-      static const float distance[numDots]= {120,    110,    100,    90,    80,   70,  60,   50,      40,    30,   16};
+      static const int numDots = 13;
+      static const float voltages[numDots]= {0.52,  0.58, 0.60f, 0.65f,  0.71f, 0.77f, 0.85, 0.95f, 1.09, 1.31, 1.63f, 2.11f, 2.9f};
+      static const float distance[numDots]= {140,    130,    120,    110,    100,    90,    80,   70,  60,   50,      40,    30,   16};
       float dist = 0.0f;
      
       for (int i = 0; i < numDots-1; i++) {

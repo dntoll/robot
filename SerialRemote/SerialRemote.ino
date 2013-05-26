@@ -31,10 +31,8 @@ void setup() {
 }
 
 void establishContact() {
-  while (Serial.available() <= 0) {
-    Serial.print('A');   // send a capital A
-    delay(300);
-  }
+ 
+  Serial.println("DONE");
 }
 
 
@@ -43,7 +41,11 @@ void loop() {
   if (Serial.available() > 0) {
     // get incoming byte:
     char inByte = Serial.read();
-    int time = 200;
+    int time = 100;
+    
+    /*Serial.print("[");
+    Serial.print(int(inByte));   
+    Serial.println("]");*/
     
     switch(inByte) {
       case  'a': pRobot->left(time);
@@ -67,8 +69,11 @@ void loop() {
       case  't': pRobot->measureTemperature();
                  break;    
       case  'n': pRobot->calibrate();
+                 break;   
+      case  'p': pRobot->calibrateIR();
                  break;           
-                 
+      default : 
+              ;//  Serial.println("unknown character");      
                 
     }
     

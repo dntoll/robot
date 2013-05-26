@@ -35,19 +35,16 @@ class Compass {
     if(error != 0) // If there is an error, print it out.
       Serial.println(compass.GetErrorText(error));
       
-      minX = 10000;
-      maxX = -10000;
-      minY = 10000;
-      maxY = -10000;
+      minX = -223;
+      maxX = 52;
+      minY = -356;
+      maxY = -85;
   }
   
-  // Our main program loop.
-float measure()
-{
+  
+void calibrate() {
   // Retrive the raw values from the compass (not scaled).
   MagnetometerRaw raw = compass.ReadRawAxis();
-  // Retrived the scaled values from the compass (scaled to the configured scale).
-  MagnetometerScaled scaled = compass.ReadScaledAxis();
 
   if (raw.XAxis < minX && raw.XAxis > -1000) {
       minX = raw.XAxis;
@@ -61,7 +58,36 @@ float measure()
   if (raw.YAxis > maxY && raw.YAxis < 1000) {
       maxY = raw.YAxis;
   }
-  
+} 
+
+void printCalibration() {
+  Serial.println(minX);
+  Serial.println(maxX);
+  Serial.println(minY);
+  Serial.println(maxY);
+}
+
+  // Our main program loop.
+float measure()
+{
+  // Retrive the raw values from the compass (not scaled).
+  MagnetometerRaw raw = compass.ReadRawAxis();
+  // Retrived the scaled values from the compass (scaled to the configured scale).
+  MagnetometerScaled scaled = compass.ReadScaledAxis();
+/*
+  if (raw.XAxis < minX && raw.XAxis > -1000) {
+      minX = raw.XAxis;
+  }  
+  if (raw.YAxis < minY && raw.YAxis > -1000) {
+      minY = raw.YAxis;
+  }
+  if (raw.XAxis > maxX && raw.XAxis < 1000) {
+      maxX = raw.XAxis;
+  }  
+  if (raw.YAxis > maxY && raw.YAxis < 1000) {
+      maxY = raw.YAxis;
+  }
+  */
   //recenter
   float rX = map(raw.XAxis, minX, maxX, -255, 255);
   float rY = map(raw.YAxis, minY, maxY, -255, 255);
@@ -85,10 +111,30 @@ float measure()
   // Check for wrap due to addition of declination.
   if(heading > 2*PI)
     heading -= 2*PI;
-   
+    
   // Convert radians to degrees for readability.
   float headingDegrees = heading * 180/M_PI; 
-
+  
+  headingDegrees -= 40;
+  if(headingDegrees < 0)
+    headingDegrees += 360;
+  
+  static float match[] =      {0,  45, 81, 126, 180, 218, 252, 296, 360 };
+  static float correction[] = {0,  45,  90, 135, 180, 225, 270, 315, 360 };
+  //wrap case
+  /*if (headingDegrees > match[7] && headingDegrees <= match[0]) {
+    if (headingDegrees <= match[0]) {
+      return map(headingDegrees, -20, 40, 315, 360);
+    } else {
+      //340-360
+      return map(headingDegrees, 340, 340+60, 315, 360);
+    }
+  }*/
+  for (int i = 0; i < 8; i++) {
+    if (headingDegrees > match[i] && headingDegrees <= match[i+1]) {
+      return map(headingDegrees, match[i], match[i+1], correction[i], correction[i+1]);
+    }
+  }
   // Output the data via the serial port.
   //  Output(raw, scaled, heading, headingDegrees);
   return headingDegrees;
