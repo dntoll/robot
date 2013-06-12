@@ -1,6 +1,8 @@
 package daniel.robot;
 
 import daniel.SerialPort;
+import java.awt.geom.Point2D.Float;
+import java.util.Random;
 
 public class Robot {
 	
@@ -62,6 +64,10 @@ public class Robot {
 												  temperature);
 		return reading;
 	}
+	
+	
+
+	
 
 	private SerialPort m_port;
 	

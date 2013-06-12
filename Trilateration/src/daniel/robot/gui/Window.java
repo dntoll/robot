@@ -18,6 +18,7 @@ import javax.swing.SwingUtilities;
 import daniel.robot.IRReading;
 import daniel.robot.Robot;
 import daniel.robot.RobotFinder;
+import daniel.robot.SLAM;
 import daniel.robot.SensorReading;
 import daniel.robot.SonarReading;
 
@@ -34,8 +35,10 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	Thread m_panelThread;
 	Robot m_robot;
 	
+	
 	public Window(Robot robot) {
 		m_robot = robot;
+		
 
 		
 	    m_roboPanel = new RobotPanel(robot);
@@ -46,12 +49,9 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	    m_roboPanel.setBackground(new java.awt.Color(255, 255, 255));
 	    m_roboPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 	    
-	    
+	    m_roboPanel.add(b1);
 	    this.setContentPane(m_roboPanel);
 	    b1.addActionListener(this);
-	    m_roboPanel.add(b1);
-	    
-	    
 	    b1.setEnabled(true);
 	    
         // be nice to testers..
@@ -69,9 +69,9 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 		if (m_panelThread != null) {
 			return;
 		}
+		m_roboPanel.startUp();
 		m_panelThread = new Thread(m_updater);
 		m_panelThread.start();
-	    
 	}
 	
 	
