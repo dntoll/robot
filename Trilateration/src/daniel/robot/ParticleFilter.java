@@ -2,6 +2,8 @@ package daniel.robot;
 
 import java.util.Random;
 
+import daniel.robot.sensors.SensorReading;
+
 public class ParticleFilter {
 	
 	private static Random rand = new Random();
@@ -54,7 +56,7 @@ public class ParticleFilter {
 	           beta -= m_weights[index];
 	           index = (index + 1) % N;
 	       }
-	       newParticles[newParticleIndex] = m_particles[index];
+	       newParticles[newParticleIndex] = new State(m_particles[index].m_position, m_particles[index].m_heading);
 	       newParticleIndex++;
 	    }
 	    

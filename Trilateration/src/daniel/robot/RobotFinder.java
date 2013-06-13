@@ -13,7 +13,8 @@ public class RobotFinder {
 			
 			System.out.println("Robot::main port found port " + port.getName());
 			if (port.getName().equals("COM14") || 
-				port.getName().equals("/dev/ttyUSB0")) { //TODO better to supply this as an argument...
+				port.getName().equals("/dev/ttyUSB0") ||
+				port.getName().equals("/dev/ttyUSB1")) { //TODO better to supply this as an argument...
 				
 				Robot robot = new Robot(port); 
 				

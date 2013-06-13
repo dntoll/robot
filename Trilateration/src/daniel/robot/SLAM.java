@@ -3,6 +3,8 @@ package daniel.robot;
 import java.awt.geom.Point2D.Float;
 import java.util.Random;
 
+import daniel.robot.sensors.SensorReading;
+
 public class SLAM {
 	
 	public World m_world = new World();
@@ -15,7 +17,7 @@ public class SLAM {
 	}
 
 	public void startUp() throws Exception {
-		float compassDirection = m_robot.SenseSome().m_compassDirection;
+		Direction compassDirection = m_robot.SenseSome().m_compassDirection;
 		State startState = new State(new Float(0.0f, 0.0f), compassDirection);
 		
 		m_particles = new ParticleFilter(startState);
@@ -29,7 +31,7 @@ public class SLAM {
 		SensorReading Z = m_robot.SenseAll();
 		
 		//WE MOVE THE PARTICLES TO REFLECT UNCERTAINTY
-		m_particles.move(0.0f, 0.0f, 0.0f, 3.0f, 1.0f);
+		m_particles.move(0.0f, 0.0f, 0.0f, 10.0f, 5.0f);
 		m_particles.setWeights(m_world, Z);
 		m_particles = m_particles.ResampleParticles();
 		

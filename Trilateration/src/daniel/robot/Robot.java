@@ -1,6 +1,12 @@
 package daniel.robot;
 
 import daniel.SerialPort;
+import daniel.robot.sensors.DistanceReading;
+import daniel.robot.sensors.GyroAccelerometerReading;
+import daniel.robot.sensors.IRReading;
+import daniel.robot.sensors.SensorReading;
+import daniel.robot.sensors.SonarReading;
+
 import java.awt.geom.Point2D.Float;
 import java.util.Random;
 
@@ -26,7 +32,7 @@ public class Robot {
 		System.out.println("Sending sensor request to Robot");
 		m_port.write("cgqit\n");
 		
-		float compassDirection = m_protocol.readCompass(m_port.readSyncronosly());
+		Direction compassDirection = m_protocol.readCompass(m_port.readSyncronosly());
 		GyroAccelerometerReading gyroAccelerator = m_protocol.readGyroAndAccelerometer(m_port.readSyncronosly());
 		SonarReading[] sonar = m_protocol.readSonar(m_port.readSyncronosly());
 		IRReading[] ir = m_protocol.readIR(m_port.readSyncronosly());
@@ -45,7 +51,7 @@ public class Robot {
 		
 		m_port.write("cgmt\n");
 		
-		float compassDirection = m_protocol.readCompass(m_port.readSyncronosly());
+		Direction compassDirection = m_protocol.readCompass(m_port.readSyncronosly());
 		GyroAccelerometerReading gyroAccelerator = m_protocol.readGyroAndAccelerometer(m_port.readSyncronosly());
 		
 		

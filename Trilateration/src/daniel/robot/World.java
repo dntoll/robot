@@ -3,6 +3,10 @@ package daniel.robot;
 import java.util.ArrayList;
 import java.util.List;
 
+import daniel.robot.sensors.IRReading;
+import daniel.robot.sensors.SensorReading;
+import daniel.robot.statistics.Gaussian;
+
 public class World {
 	
 	public class Reading {
@@ -18,8 +22,8 @@ public class World {
 		}
 	}
 
-	private static final float compassNoise = 3.0f;
-	private static final float irDistanceNoise = 5.5f;
+	private static final float compassNoise = 10.0f;
+	
 	private static final float mapSizeMeters = 5.0f;
 	private static final int mapPixelsPerMeter = 30;
 	
@@ -48,25 +52,33 @@ public class World {
 	public float measurementProbability(State state, SensorReading reading) throws Exception {
 		float prob = 1.0f;
 		
-		prob *= gaussian(state.m_heading, compassNoise, reading.m_compassDirection);
+		float directionalChange = state.m_heading.GetDifferenceInDegrees(reading.m_compassDirection);
+		prob *= Gaussian.gaussian(0, compassNoise, directionalChange);
 		
 		int numMatching = 0;
+		
+		double match = 1.0;
+		float error = 0.0f;
 		for (IRReading ir : reading.m_ir) {
 			try {
 				float expectedDistance = m_map.getDistance(state, ir.m_servo, 3.0f);
 				
 				float distance = ir.m_distance;
 				
-				prob *= gaussian(expectedDistance, irDistanceNoise, distance);
+				float thisMatch = Gaussian.gaussian(expectedDistance, IRReading.irDistanceNoise, distance);
+				match *= (double)thisMatch;
 				numMatching++;
+				
+				error += Math.sqrt((distance - expectedDistance)*(distance - expectedDistance));
 			} catch (Exception e) {
-				prob *= gaussian(2, irDistanceNoise, 5.0f);
+				
 			}
 		}
-		if (numMatching == 0)
-			return 0.0f;
+		float overlap = (float)numMatching/(float)reading.m_ir.length;
 		
-		return prob;
+		match = Gaussian.gaussian(0, IRReading.irDistanceNoise, (float)error / (float)numMatching);
+		
+		return prob * (float)match * overlap;
 		//throw new Exception("Not implemented");
 		
 		/*# calculates how likely a measurement should be
@@ -78,13 +90,7 @@ public class World {
         return prob*/
 	}
 
-	private float gaussian(float mu, float sigma, float x) {
-		return phi((x - mu) / sigma) / sigma;
-	}
 	
-	public static float phi(float x) {
-        return (float) (Math.exp(-x*x / 2) / Math.sqrt(2.0f * Math.PI));
-    }
 
 	
 

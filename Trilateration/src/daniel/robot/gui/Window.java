@@ -15,12 +15,12 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
-import daniel.robot.IRReading;
 import daniel.robot.Robot;
 import daniel.robot.RobotFinder;
 import daniel.robot.SLAM;
-import daniel.robot.SensorReading;
-import daniel.robot.SonarReading;
+import daniel.robot.sensors.IRReading;
+import daniel.robot.sensors.SensorReading;
+import daniel.robot.sensors.SonarReading;
 
 public class Window extends javax.swing.JFrame implements ActionListener {
 

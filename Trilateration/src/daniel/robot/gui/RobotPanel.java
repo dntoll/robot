@@ -14,14 +14,15 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import daniel.robot.IRReading;
+import daniel.robot.Direction;
 import daniel.robot.Map;
 import daniel.robot.Robot;
 import daniel.robot.SLAM;
-import daniel.robot.SensorReading;
-import daniel.robot.SonarReading;
 import daniel.robot.State;
 import daniel.robot.World;
+import daniel.robot.sensors.IRReading;
+import daniel.robot.sensors.SensorReading;
+import daniel.robot.sensors.SonarReading;
 
 public class RobotPanel extends JPanel {
 
@@ -54,15 +55,17 @@ public class RobotPanel extends JPanel {
 	}
 
     public void updateRobot() {
+    	
     	try {
     		
-    		m_slam.updateAfterMovement();
+    		
     		//m_readings.add(m_robot.SenseSome());
     		//validate();
     		//m_readings.add(m_robot.SenseAll());
     		validate();
     		paintComponent(this.getGraphics());
-    		Thread.sleep(1000);
+    		Thread.sleep(5000);
+    		m_slam.updateAfterMovement();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -85,13 +88,11 @@ public class RobotPanel extends JPanel {
         
         Graphics2D g2d = (Graphics2D) g;
         
-        int layer = 0;
+       // g.translate(-200, 0);
         for (World.Reading s : m_slam.m_world.m_world) {
-        	layer++;
         	float transparency = 0.5f;// * ((float)layer / (float)m_slam.m_world.m_world.size());
-        	
-        	
         	drawSensorReading(g, scale, g2d, s, transparency);
+        	//g.translate(100, 0);
         }
         
         
@@ -103,13 +104,20 @@ public class RobotPanel extends JPanel {
     //	if (m_readings.size() > 0)
     //		g.drawString("" + m_readings.get(m_readings.size()-1).m_compassDirection, 20, 20);        
         
-    	g.translate(-posX, -posY);
+    	
     	
     	drawBestGuess(g2d, scale, m_slam.m_world.m_map);
+    	
+    	g.translate(-posX, -posY);
     }
 
-	private void drawBestGuess(Graphics2D g2d, float scale, Map map) {
-		g2d.drawImage(map.getImage(), 0, 0, null);
+	
+
+	private void drawBestGuess(Graphics2D g2d, float scale, Map m_map) {
+		 g2d.setColor(Color.BLACK);
+		for (java.awt.geom.Point2D.Float fp : m_map.m_obstacles) {
+			g2d.drawRect((int)(fp.x*scale), (int)(fp.y*scale), 1, 1);
+		}
 		
 		
 	}
@@ -130,10 +138,13 @@ public class RobotPanel extends JPanel {
       
 		State state = reading.getBestGuess();
 		
-		g.translate((int)(state.m_position.x * scale), (int)(state.m_position.y * scale));
+		g.translate(-(int)(state.m_position.x * scale), -(int)(state.m_position.y * scale));
 		
 		
-		drawArc(g, 1, 200*scale, state.m_heading);    
+		drawArc(g, 1, 200*scale, state.m_heading);
+		
+		g.setColor(Color.CYAN);
+		drawArc(g, 1, 200*scale, reading.m_reading.m_compassDirection);
 
 		
 		
@@ -146,7 +157,7 @@ public class RobotPanel extends JPanel {
 		for(SonarReading sr : reading.m_reading.m_sonar) {
 			
 			float distance = sr.m_distance * scale;
-		    float servo  = state.m_heading -sr.m_servo +90;
+		    Direction servo  = state.m_heading.getHeadDirection(sr.m_servo);
 		    drawArc(g, degrees, distance, servo);
 		}
 		
@@ -155,27 +166,18 @@ public class RobotPanel extends JPanel {
 		g.setColor(Color.RED);
 		for(IRReading sr : reading.m_reading.m_ir) {
 			float distance = sr.m_distance * scale;
-		    float servo  = state.m_heading - sr.m_servo +90;
+			Direction servo  = state.m_heading.getHeadDirection(sr.m_servo);
 		    
 		    drawArc(g, degrees, distance, servo);
 		}
 		
-		g.translate(-(int)(state.m_position.x * scale), -(int)(state.m_position.y * scale));
+		g.translate((int)(state.m_position.x * scale), (int)(state.m_position.y * scale));
 	}
 
-	private void drawArc(Graphics g, int degrees, float distance, float servo) {
-		
-		servo+= 180.0f;
-		
-		while (servo > 360)
-			servo -= 360;
-		while (servo < 0)
-			servo += 360;
-		
-		servo = 360 - servo;
+	private void drawArc(Graphics g, int degrees, float distance, Direction a_head) {
 		
 		
-		g.fillArc(-(int)distance/2, -(int)distance/2, (int)distance, (int)distance, (int)servo-degrees/2, degrees);
+		g.fillArc(-(int)distance/2, -(int)distance/2, (int)distance, (int)distance, (int)(a_head.getHeadingDegrees())-degrees/2, degrees);
 	}
 
 	

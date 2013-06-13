@@ -1,14 +1,18 @@
 package daniel.robot;
 
 import daniel.SerialPort;
+import daniel.robot.sensors.DistanceReading;
+import daniel.robot.sensors.GyroAccelerometerReading;
+import daniel.robot.sensors.IRReading;
+import daniel.robot.sensors.SonarReading;
 
 
 public class Protocoll {
 
-	public float readCompass(String string) throws Exception {
+	public Direction readCompass(String string) throws Exception {
 		String[] parts = Split(string);
 		if (parts[0].equals("Compass")) {
-			return Float.parseFloat(parts[1]);
+			return new Direction(Float.parseFloat(parts[1]));
 		} else {
 			throw new Exception("No header found" +string);
 		}
