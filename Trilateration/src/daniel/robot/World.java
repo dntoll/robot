@@ -36,15 +36,14 @@ public class World {
 
 	public void append(ParticleFilter particles, SensorReading reading) {
 		m_world.add( new Reading(particles, reading) );
-		
-		AddToMap(particles.getBestGuess(), reading);
+		m_map.Add(particles.getBestGuess(), reading);
 	}
 
 	
 
 	private void AddToMap(State bestGuess, SensorReading reading) {
 		
-		m_map.Add(bestGuess, reading);
+		
 	}
 
 
@@ -53,7 +52,7 @@ public class World {
 		float prob = 1.0f;
 		
 		float directionalChange = state.m_heading.GetDifferenceInDegrees(reading.m_compassDirection);
-		prob *= Gaussian.gaussian(0, compassNoise, directionalChange);
+		//prob *= Gaussian.gaussian(0, compassNoise, directionalChange);
 		
 		int numMatching = 0;
 		
@@ -61,12 +60,12 @@ public class World {
 		float error = 0.0f;
 		for (IRReading ir : reading.m_ir) {
 			try {
-				float expectedDistance = m_map.getDistance(state, ir.m_servo, 3.0f);
+				float expectedDistance = m_map.getDistance(state, ir.m_servo, IRReading.BEAM_WIDTH);
 				
 				float distance = ir.m_distance;
 				
-				float thisMatch = Gaussian.gaussian(expectedDistance, IRReading.irDistanceNoise, distance);
-				match *= (double)thisMatch;
+			//	float thisMatch = Gaussian.gaussian(expectedDistance, IRReading.irDistanceNoise, distance);
+				//match *= (double)thisMatch;
 				numMatching++;
 				
 				error += Math.sqrt((distance - expectedDistance)*(distance - expectedDistance));
@@ -76,7 +75,7 @@ public class World {
 		}
 		float overlap = (float)numMatching/(float)reading.m_ir.length;
 		
-		match = Gaussian.gaussian(0, IRReading.irDistanceNoise, (float)error / (float)numMatching);
+		match = Gaussian.gaussian(0, IRReading.IR_DISTANCE_NOISE, (float)error / (float)numMatching);
 		
 		return prob * (float)match * overlap;
 		//throw new Exception("Not implemented");

@@ -138,7 +138,7 @@ public class RobotPanel extends JPanel {
       
 		State state = reading.getBestGuess();
 		
-		g.translate(-(int)(state.m_position.x * scale), -(int)(state.m_position.y * scale));
+		g.translate((int)(state.m_position.x * scale), (int)(state.m_position.y * scale));
 		
 		
 		drawArc(g, 1, 200*scale, state.m_heading);
@@ -171,7 +171,7 @@ public class RobotPanel extends JPanel {
 		    drawArc(g, degrees, distance, servo);
 		}
 		
-		g.translate((int)(state.m_position.x * scale), (int)(state.m_position.y * scale));
+		g.translate(-(int)(state.m_position.x * scale), -(int)(state.m_position.y * scale));
 	}
 
 	private void drawArc(Graphics g, int degrees, float distance, Direction a_head) {
