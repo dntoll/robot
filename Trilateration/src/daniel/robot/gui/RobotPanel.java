@@ -5,13 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImageOp;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JPanel;
 
 import daniel.robot.Direction;
@@ -21,7 +14,6 @@ import daniel.robot.SLAM;
 import daniel.robot.State;
 import daniel.robot.World;
 import daniel.robot.sensors.IRReading;
-import daniel.robot.sensors.SensorReading;
 import daniel.robot.sensors.SonarReading;
 
 public class RobotPanel extends JPanel {
@@ -32,8 +24,10 @@ public class RobotPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	Robot m_robot;
 	SLAM m_slam;
+	ParticleFilterView m_particleFilterView = new ParticleFilterView();
 	
     RobotPanel(Robot robot) {
+    	//super(true);
         // set a preferred size for the custom panel.
         setPreferredSize(new Dimension(800,800));
         m_robot = robot;
@@ -62,10 +56,20 @@ public class RobotPanel extends JPanel {
     		//m_readings.add(m_robot.SenseSome());
     		//validate();
     		//m_readings.add(m_robot.SenseAll());
+    		this.invalidate();
     		validate();
-    		paintComponent(this.getGraphics());
-    		Thread.sleep(5000);
+    		Thread.sleep(1000);
+    		
+    		
+    		update(this.getGraphics());
+    		for (int i = 10; i >= 0; i--) {
+    			Thread.sleep(1000);
+    			System.out.println(i);
+    		}
+    		System.out.println("start update");
     		m_slam.updateAfterMovement();
+    		System.out.println("done update");
+    		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -73,26 +77,34 @@ public class RobotPanel extends JPanel {
     
     
 
-	@Override
-    public void paintComponent(Graphics g) {
-		super.paintComponent(g);
-
-        int posY = 400;
+	//@Override
+   // public void paintComponent(Graphics g) {
+    //super.paintComponent(g);
+	public void update(Graphics g) {
+		
+		int posY = 400;
         int posX = 400;
-        g.drawRect(posX-5, posY-5, 10, 10);
-        
-        g.translate(posX, posY);
         float scale = 4.0f;
         
+        Graphics2D g2d = (Graphics2D) g;
+		
+        g2d.setComposite(AlphaComposite.getInstance(
+                AlphaComposite.SRC_OVER, 1.0f));
+		//clean
+        g2d.setColor(Color.YELLOW);
+        g2d.fillRect(0, 0, this.getWidth(), this.getHeight());
+		
+		
+		//draw measurements
+		drawErrors(g2d);
+
+        g.translate(posX, posY);
         drawDistanceRings(g, scale);
         
-        Graphics2D g2d = (Graphics2D) g;
         
-       // g.translate(-200, 0);
         for (World.Reading s : m_slam.m_world.m_world) {
         	float transparency = 0.5f;// * ((float)layer / (float)m_slam.m_world.m_world.size());
         	drawSensorReading(g, scale, g2d, s, transparency);
-        	//g.translate(100, 0);
         }
         
         
@@ -100,16 +112,29 @@ public class RobotPanel extends JPanel {
         g.setColor(Color.BLACK);
     	g2d.setComposite(AlphaComposite.getInstance(
                 AlphaComposite.SRC_OVER, 1.0f));
-    	
-    //	if (m_readings.size() > 0)
-    //		g.drawString("" + m_readings.get(m_readings.size()-1).m_compassDirection, 20, 20);        
-        
-    	
-    	
+
     	drawBestGuess(g2d, scale, m_slam.m_world.m_map);
+    	if (m_slam.m_world.m_world.size() > 0) {
+    		int index = m_slam.m_world.m_world.size()-1;
+    		World.Reading reading = m_slam.m_world.m_world.get(index);
+    		m_particleFilterView.draw(g2d, reading.m_particles, scale);
+    	}
+    	
     	
     	g.translate(-posX, -posY);
     }
+
+	private void drawErrors(Graphics2D g) {
+		g.setColor(Color.BLACK);
+		
+		int reading = 0;
+		for (World.Reading s : m_slam.m_world.m_world) {
+        	State state = s.getBestGuess();
+        	g.drawString(state.toString(),  20, reading * 30);
+        	
+        	reading++;
+        }
+	}
 
 	
 
@@ -146,8 +171,9 @@ public class RobotPanel extends JPanel {
 		g.setColor(Color.CYAN);
 		drawArc(g, 1, 200*scale, reading.m_reading.m_compassDirection);
 
+		g.drawRect(-5, -5, 10, 10);
 		
-		
+		/*
 		g2d.setComposite(AlphaComposite.getInstance(
 		        AlphaComposite.SRC_OVER, transparency));
 		
@@ -169,7 +195,7 @@ public class RobotPanel extends JPanel {
 			Direction servo  = state.m_heading.getHeadDirection(sr.m_servo);
 		    
 		    drawArc(g, degrees, distance, servo);
-		}
+		}*/
 		
 		g.translate(-(int)(state.m_position.x * scale), -(int)(state.m_position.y * scale));
 	}

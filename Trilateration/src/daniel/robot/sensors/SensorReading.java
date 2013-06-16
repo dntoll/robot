@@ -28,6 +28,6 @@ public class SensorReading {
 	}
 
 	public String toString() {
-		return "SensorReading " + m_compassDirection;
+		return "SensorReading Compass: " + m_compassDirection + " IR: " + m_ir[0].m_distance;
 	}
 }

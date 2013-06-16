@@ -35,7 +35,10 @@ public class Map {
 			
 			float x = bestGuess.m_position.x + direction.getX() * distance;
 			float y = bestGuess.m_position.y + direction.getY() * distance;
+			//only close points
+			
 			m_obstacles.add(new Point2D.Float(x ,y ));
+			
 		}
 
 	}

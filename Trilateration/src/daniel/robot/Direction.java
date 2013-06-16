@@ -72,5 +72,10 @@ public class Direction {
 		
 		return m_heading;
 	}
+	
+	public String toString() {
+		return " " + m_heading + " degrees";
+	
+	}
 
 }

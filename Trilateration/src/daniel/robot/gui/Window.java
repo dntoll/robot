@@ -3,6 +3,7 @@ package daniel.robot.gui;
 import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -37,9 +38,13 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	
 	
 	public Window(Robot robot) {
+		JPanel content = new JPanel();
+		content.setLayout(new FlowLayout(FlowLayout.RIGHT));
+		this.setContentPane(content);
+		
 		m_robot = robot;
 		
-
+		
 		
 	    m_roboPanel = new RobotPanel(robot);
 	    m_updater = new PanelUpdater(m_roboPanel);
@@ -47,10 +52,12 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	    JButton b1 = new JButton("Done Calibration");
 	    
 	    m_roboPanel.setBackground(new java.awt.Color(255, 255, 255));
-	    m_roboPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+	    //m_roboPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 	    
-	    m_roboPanel.add(b1);
-	    this.setContentPane(m_roboPanel);
+	    
+	    content.add(m_roboPanel);
+	    content.add(b1);
+	    
 	    b1.addActionListener(this);
 	    b1.setEnabled(true);
 	    
@@ -64,13 +71,16 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	
 	void startThread() {
 		
-		m_robot.StopCalibrateCompass();
-		m_robot.Wait();
+		
 		if (m_panelThread != null) {
 			return;
 		}
-		m_roboPanel.startUp();
 		m_panelThread = new Thread(m_updater);
+		
+		m_robot.StopCalibrateCompass();
+		m_robot.Wait();
+		m_roboPanel.startUp();
+		
 		m_panelThread.start();
 	}
 	
@@ -78,7 +88,7 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		// TODO Auto-generated method stub
+		
     	startThread();
 	}
 	
