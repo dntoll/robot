@@ -1,7 +1,7 @@
 package daniel.robot;
 
 import daniel.SerialPort;
-import daniel.robot.sensors.DistanceReading;
+import daniel.robot.sensors.IRandSonarReading;
 import daniel.robot.sensors.GyroAccelerometerReading;
 import daniel.robot.sensors.IRReading;
 import daniel.robot.sensors.SensorReading;
@@ -58,7 +58,7 @@ public class Robot {
 		SonarReading[] sonar = new SonarReading[1];//m_protocol.readSonar(m_port.readSyncronosly());
 		IRReading[] ir = new IRReading[1];
 		
-		DistanceReading d = m_protocol.readDistanceMeasurement(m_port.readSyncronosly());
+		IRandSonarReading d = m_protocol.readDistanceMeasurement(m_port.readSyncronosly());
 		sonar[0] = d.m_sonar;
 		ir[0] = d.m_ir;
 		float temperature = m_protocol.readTemperature(m_port.readSyncronosly());

@@ -1,7 +1,7 @@
 package daniel.robot;
 
 import daniel.SerialPort;
-import daniel.robot.sensors.DistanceReading;
+import daniel.robot.sensors.IRandSonarReading;
 import daniel.robot.sensors.GyroAccelerometerReading;
 import daniel.robot.sensors.IRReading;
 import daniel.robot.sensors.SonarReading;
@@ -122,7 +122,7 @@ public class Protocoll {
 		port.write("n\n");
 	}
 
-	public DistanceReading readDistanceMeasurement(String readSyncronosly) throws Exception {
+	public IRandSonarReading readDistanceMeasurement(String readSyncronosly) throws Exception {
 		String[] parts = Split(readSyncronosly);
 		if (parts[0].equals("Sharp") && parts[1].equals("Sonar")) {
 			IRReading i = new IRReading(90.0f, 
@@ -130,7 +130,7 @@ public class Protocoll {
 			SonarReading s = new SonarReading(90.0f, 
 										  Float.parseFloat(parts[3]));
 			
-			return new DistanceReading(s, i); 
+			return new IRandSonarReading(s, i); 
 			
 		} else {
 			throw new Exception("No header found" + parts[0] + parts[1]);
