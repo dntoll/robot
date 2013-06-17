@@ -3,6 +3,7 @@ package daniel.robot.SLAM;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Float;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
 import java.util.ArrayList;
@@ -37,9 +38,14 @@ public class Map {
 			
 			float x = bestGuess.m_position.x + direction.getX() * distance;
 			float y = bestGuess.m_position.y + direction.getY() * distance;
+			
+			
+			
 			//only close points
-			if (distance < 200.0f) 
+			if (distance > 20 && distance < 150.0f) 
 			{
+				RemoveOnTheWay(direction, bestGuess.m_position, distance);
+			
 				m_obstacles.add(new Point2D.Float(x ,y ));
 			}
 			
@@ -49,10 +55,29 @@ public class Map {
 
 	
 
+	private void RemoveOnTheWay(Direction direction, Float start, float distance) {
+		for (Point2D.Float end : m_obstacles ) {
+			float dx = (end.x - start.x);
+			float dy = (end.y - start.y);
+			
+			Direction toObstacle = Direction.RadiansToDegrees((float) Math.atan2(dy, dx));
+			
+			float degreesDifference = toObstacle.GetDifferenceInDegrees(direction);
+			
+			if (degreesDifference < 1.0f) {
+				float distanceSquare = dx * dx + dy * dy;
+				if (distanceSquare  < distance) {
+					m_obstacles.remove(end);
+					return;
+				}
+			}
+		}
+		
+	}
+
 	public float getDistance(State state, float a_servoDirection, float beamWidth) throws Exception {
 		//WritableRaster raster = m_image.getRaster();
 		Direction direction = state.m_heading.getHeadDirection(a_servoDirection);
-		
 		Point2D.Float start = state.m_position;
 		
 		float minLenSquare = 1000000.0f;
