@@ -10,7 +10,7 @@ import daniel.robot.statistics.Gaussian;
 
 public class MeasurementCollection {
 	
-	public ArrayList<Reading> m_world = new ArrayList<Reading>();
+	public ArrayList<Reading> m_sensorScans = new ArrayList<Reading>();
 	
 	
 	MeasurementCollection() {
@@ -20,7 +20,7 @@ public class MeasurementCollection {
 	public void append(ParticleFilter particles, SensorReading reading) {
 		
 		State s = particles.getBestGuess();
-		m_world.add( new Reading(particles, reading) );
+		m_sensorScans.add( new Reading(particles, reading) );
 		System.out.println(s.toString());
 		System.out.println(reading.toString());
 	}
@@ -53,7 +53,7 @@ public class MeasurementCollection {
 
 	private Reading getLastReading() {
 		// TODO Auto-generated method stub
-		return m_world.get(m_world.size()-1);
+		return m_sensorScans.get(m_sensorScans.size()-1);
 	}
 
 	

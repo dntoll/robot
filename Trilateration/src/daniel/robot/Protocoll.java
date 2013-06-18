@@ -137,6 +137,18 @@ public class Protocoll {
 		}
 	}
 
+	public void readDoneMoving(String readSyncronosly) throws Exception {
+		String[] parts = Split(readSyncronosly);
+		parts = Split(readSyncronosly);
+		if (parts[0].equals("Move") && parts[1].equals("forward")) {
+			
+			return; 
+			
+		} else {
+			throw new Exception("No header found : " + parts[0] + parts[1]);
+		}
+	}
+
 
 	
 }

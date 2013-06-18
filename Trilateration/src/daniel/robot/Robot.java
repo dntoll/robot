@@ -71,6 +71,12 @@ public class Robot {
 		return reading;
 	}
 	
+	public void move(float distance) throws Exception {
+		// TODO Auto-generated method stub
+		m_port.write("w\n");
+		m_protocol.readDoneMoving(m_port.readSyncronosly());
+	}
+	
 	
 
 	
@@ -114,5 +120,6 @@ public class Robot {
         	
         }
 	}
+	
 	
 }

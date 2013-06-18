@@ -170,7 +170,7 @@ class Robot {
       m_hBridge.right();
       delay(a_time);
       m_hBridge.stopAll();
-      Serial.println(";");
+      Serial.println("");
     }
     void forward(int a_time) {
       Serial.print("Move:forward");
