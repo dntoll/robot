@@ -18,16 +18,12 @@ import daniel.robot.sensors.SensorReading;
  * Bitmap map of robot world, starts with 0.0 in the middle
  * @author dntoll
  *
- */
+ */ 
 public class Map {
 
 	public List<Point2D.Float> m_obstacles = new ArrayList<Point2D.Float>();
 	
-	public Map() {
-		
-	}
-
-	public void Add(State bestGuess, SensorReading reading) {
+	public Map(State bestGuess, SensorReading reading) {
 		
 		
 		for (DistanceReading ir : reading.m_distances) {
@@ -39,13 +35,9 @@ public class Map {
 			float x = bestGuess.m_position.x + direction.getX() * distance;
 			float y = bestGuess.m_position.y + direction.getY() * distance;
 			
-			
-			
 			//only close points
 			if (distance > 20 && distance < 150.0f) 
 			{
-				RemoveOnTheWay(direction, bestGuess.m_position, distance);
-			
 				m_obstacles.add(new Point2D.Float(x ,y ));
 			}
 			
@@ -53,7 +45,7 @@ public class Map {
 
 	}
 
-	
+	/*
 
 	private void RemoveOnTheWay(Direction direction, Float start, float distance) {
 		for (Point2D.Float end : m_obstacles ) {
@@ -73,7 +65,7 @@ public class Map {
 			}
 		}
 		
-	}
+	}*/
 
 	public float getDistance(State state, float a_servoDirection, float beamWidth) throws Exception {
 		//WritableRaster raster = m_image.getRaster();

@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import daniel.robot.Direction;
 import daniel.robot.Robot;
 import daniel.robot.SLAM.Map;
+import daniel.robot.SLAM.MeasurementCollection;
+import daniel.robot.SLAM.Reading;
 import daniel.robot.SLAM.SLAM;
 import daniel.robot.SLAM.State;
 import daniel.robot.sensors.IRReading;
@@ -98,21 +100,16 @@ public class RobotPanel extends JPanel {
 		//drawErrors(g2d);
 
         g.translate(posX, posY);
-        
-        
-       
-        
-        
-        
+         
         g.setColor(Color.BLACK);
     	g2d.setComposite(AlphaComposite.getInstance(
                 AlphaComposite.SRC_OVER, 1.0f));
 
-    	drawBestGuess(g2d, scale, m_slam.m_world.m_map);
+    	drawBestGuess(g2d, scale, m_slam.m_world);
     	
     	if (m_slam.m_world.m_world.size() > 0) {
     		int index = m_slam.m_world.m_world.size()-1;
-    		daniel.robot.SLAM.MeasurementCollection.Reading reading = m_slam.m_world.m_world.get(index);
+    		daniel.robot.SLAM.Reading reading = m_slam.m_world.m_world.get(index);
     		
     		
     		State bestGuess = reading.getBestGuess();
@@ -127,7 +124,7 @@ public class RobotPanel extends JPanel {
     	}
     	
     	 int layer = 1;
-         for (daniel.robot.SLAM.MeasurementCollection.Reading s : m_slam.m_world.m_world) {
+         for (daniel.robot.SLAM.Reading s : m_slam.m_world.m_world) {
          	float transparency =  1.0f;//((float)layer / (float)m_slam.m_world.m_world.size());
          	drawPosition(g, scale, g2d, s, transparency);
          	layer++;
@@ -151,11 +148,14 @@ public class RobotPanel extends JPanel {
 
 	
 
-	private void drawBestGuess(Graphics2D g2d, float scale, Map m_map) {
+	private void drawBestGuess(Graphics2D g2d, float scale, MeasurementCollection a_world) {
 		 g2d.setColor(Color.BLACK);
-		for (java.awt.geom.Point2D.Float fp : m_map.m_obstacles) {
-			g2d.fillRect((int)(fp.x*scale), (int)(fp.y*scale), (int)scale, (int)scale);
-		}
+		 
+		 for (Reading r : a_world.m_world) {
+			for (java.awt.geom.Point2D.Float fp : r.m_map.m_obstacles) {
+				g2d.fillRect((int)(fp.x*scale), (int)(fp.y*scale), (int)scale, (int)scale);
+			}
+		 }
 		
 		
 	}
@@ -171,7 +171,7 @@ public class RobotPanel extends JPanel {
         }
 	}
 	
-	private void drawSensorReading(Graphics2D g,  float scale, daniel.robot.SLAM.MeasurementCollection.Reading reading) {
+	private void drawSensorReading(Graphics2D g,  float scale, daniel.robot.SLAM.Reading reading) {
 		State state = reading.getBestGuess();
 		
 		//g.translate((int)(state.m_position.x * scale), (int)(state.m_position.y * scale));
@@ -204,7 +204,7 @@ public class RobotPanel extends JPanel {
 	}
 
 	private void drawPosition(Graphics g, float scale, Graphics2D g2d,
-			daniel.robot.SLAM.MeasurementCollection.Reading reading, float transparency) {
+			daniel.robot.SLAM.Reading reading, float transparency) {
 		
 		g2d.setComposite(AlphaComposite.getInstance(
 		        AlphaComposite.SRC_OVER, transparency));

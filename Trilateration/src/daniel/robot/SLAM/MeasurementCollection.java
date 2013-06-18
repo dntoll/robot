@@ -10,33 +10,17 @@ import daniel.robot.statistics.Gaussian;
 
 public class MeasurementCollection {
 	
-	public class Reading {
-		public Reading(ParticleFilter particles, SensorReading reading) {
-			m_particles = particles;
-			m_reading = reading;
-		}
-		public ParticleFilter m_particles;
-		public SensorReading m_reading;
-		
-		
-		public State getBestGuess() {
-			return m_particles.getBestGuess();
-		}
-	}
+	public ArrayList<Reading> m_world = new ArrayList<Reading>();
 	
-	public List<Reading> m_world = new ArrayList<Reading>();
-	public Map m_map;
 	
 	MeasurementCollection() {
-		m_map = new Map();
+		
 	}
 
 	public void append(ParticleFilter particles, SensorReading reading) {
 		
 		State s = particles.getBestGuess();
 		m_world.add( new Reading(particles, reading) );
-		m_map.Add(s, reading);
-		
 		System.out.println(s.toString());
 		System.out.println(reading.toString());
 	}
@@ -50,7 +34,7 @@ public class MeasurementCollection {
 		state.m_distanceError = 0.0f;
 		for (DistanceReading ir : reading.m_distances) {
 			try {
-				float expectedDistance = m_map.getDistance(state, ir.m_servo, IRReading.BEAM_WIDTH);
+				float expectedDistance = getLastReading().getDistance(state, ir.m_servo, IRReading.BEAM_WIDTH);
 				float distance = ir.m_distance;
 				numMatching++;
 				
@@ -65,6 +49,11 @@ public class MeasurementCollection {
 		
 		return directionalProb * (match) * state.m_overlap;
 		
+	}
+
+	private Reading getLastReading() {
+		// TODO Auto-generated method stub
+		return m_world.get(m_world.size()-1);
 	}
 
 	

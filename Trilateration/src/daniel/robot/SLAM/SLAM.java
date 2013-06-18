@@ -33,7 +33,7 @@ public class SLAM {
 		SensorReading Z = m_robot.SenseAll();
 		
 		//WE MOVE THE PARTICLES TO REFLECT UNCERTAINTY
-		m_particles.move(0.0f, 0.0f, 10.0f, 5.0f);
+		m_particles.move(5.0f, 0.0f, 5.0f, 5.0f);
 		m_particles.setWeights(m_world, Z);
 		m_particles = m_particles.ResampleParticles();
 		

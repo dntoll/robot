@@ -1,6 +1,7 @@
 package daniel.robot.sensors;
 
 import daniel.robot.Direction;
+import daniel.robot.SLAM.State;
 
 
 public class SensorReading {
