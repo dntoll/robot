@@ -140,7 +140,7 @@ public class Protocoll {
 	public void readDoneMoving(String readSyncronosly) throws Exception {
 		String[] parts = Split(readSyncronosly);
 		parts = Split(readSyncronosly);
-		if (parts[0].equals("Move") && parts[1].equals("forward")) {
+		if (parts[0].equals("Move") ) {
 			
 			return; 
 			

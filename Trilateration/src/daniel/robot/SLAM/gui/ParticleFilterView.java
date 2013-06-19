@@ -9,17 +9,17 @@ import daniel.robot.SLAM.State;
 
 public class ParticleFilterView {
 
-	public void draw(Graphics2D g2d, ParticleFilter filter, float scale) {
-		int size = filter.getSize();
+	public void draw(Graphics2D a_grapics, ParticleFilter a_filter, float a_scale) {
+		int size = a_filter.getSize();
 		
-		g2d.setColor(Color.RED);
-		g2d.setComposite(AlphaComposite.getInstance(
+		a_grapics.setColor(Color.RED);
+		a_grapics.setComposite(AlphaComposite.getInstance(
 		        AlphaComposite.SRC_OVER, 0.03f));
 		
 		for (int p = 0; p < size; p++) {
-			State s = filter.getState(p);
+			State s = a_filter.getState(p);
 			
-			g2d.fillRect((int)(s.m_position.x*scale), (int)(s.m_position.y*scale), (int)scale, (int)scale);
+			a_grapics.fillRect((int)(s.m_position.x*a_scale), (int)(s.m_position.y*a_scale), (int)a_scale, (int)a_scale);
 		}
 	}
 

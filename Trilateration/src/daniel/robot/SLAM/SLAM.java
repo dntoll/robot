@@ -7,12 +7,12 @@ import daniel.robot.sensors.SensorReading;
 
 public class SLAM {
 	
-	public MeasurementCollection m_world = new MeasurementCollection();
-	Robot m_robot;
-	ParticleFilter m_particles;
+	public PoseCollection m_world = new PoseCollection();
+	Robot 		   m_robot;
+	ParticleFilter m_latestRobotPosition;
 	
-	public SLAM(Robot robot) throws Exception {
-		m_robot = robot;
+	public SLAM(Robot a_robot) throws Exception {
+		m_robot = a_robot;
 		
 	}
 
@@ -20,28 +20,30 @@ public class SLAM {
 		Direction compassDirection = m_robot.SenseSome().m_compassDirection;
 		State startState = new State(new Float(0.0f, 0.0f), compassDirection);
 		
-		m_particles = new ParticleFilter(startState);
+		m_latestRobotPosition = new ParticleFilter(startState);
 		
 		SensorReading reading = m_robot.SenseAll();
-		m_world.append(m_particles, reading);
+		m_world.append(m_latestRobotPosition, reading, new Movement(0,0));
 	}
 	
 	public void updateAfterMovement() throws Exception {
-		float distance = 3.0f;
-		m_robot.move(distance);
+		
+		
+		float distance = 0.0f;
+		float turn = -15.0f;
+		
+		Movement move = new Movement(distance, turn);
+		m_robot.move(move);
 		//Wake up and sense!
 		SensorReading Z = m_robot.SenseAll();
 		
+		m_latestRobotPosition.move(move, 4.0f, 10.0f);
 		
+		m_latestRobotPosition.setWeights(m_world, Z);
 		
+		m_latestRobotPosition = m_latestRobotPosition.ResampleParticles();
 		
-		m_particles.move(distance, 0.0f, 2.0f, 3.0f);
-		
-		m_particles.setWeights(m_world, Z);
-		
-		m_particles = m_particles.ResampleParticles();
-		
-		m_world.append(m_particles, Z);
+		m_world.append(m_latestRobotPosition, Z, move);
 		
 		
 	}

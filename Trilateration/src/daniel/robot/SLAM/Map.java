@@ -1,17 +1,11 @@
 package daniel.robot.SLAM;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Float;
-import java.awt.image.BufferedImage;
-import java.awt.image.WritableRaster;
 import java.util.ArrayList;
 import java.util.List;
 
 import daniel.robot.Direction;
 import daniel.robot.sensors.DistanceReading;
-import daniel.robot.sensors.IRReading;
 import daniel.robot.sensors.SensorReading;
 
 /**
@@ -23,51 +17,36 @@ public class Map {
 
 	public List<Point2D.Float> m_obstacles = new ArrayList<Point2D.Float>();
 	
-	public Map(State bestGuess, SensorReading reading) {
+	public Map(State a_bestGuess, SensorReading a_reading) {
 		
-		
-		for (DistanceReading ir : reading.m_distances) {
+		Point2D.Float prevPosition = new Point2D.Float();
+		Point2D.Float prevprevPosition = new Point2D.Float();
+		for (DistanceReading distanceReading : a_reading.m_distances) {
 			
-			float distance = ir.m_distance;
+			float distance = distanceReading.m_distance;
 			
-			Direction direction = bestGuess.m_heading.getHeadDirection(ir.m_servo);
+			Direction direction = a_bestGuess.m_heading.getHeadDirection(distanceReading.m_servo);
 			
-			float x = bestGuess.m_position.x + direction.getX() * distance;
-			float y = bestGuess.m_position.y + direction.getY() * distance;
+			float x = a_bestGuess.m_position.x + direction.getX() * distance;
+			float y = a_bestGuess.m_position.y + direction.getY() * distance;
+			Point2D.Float position = new Point2D.Float(x ,y );
 			
-			//only close points
-			if (distance > 20 && distance < 150.0f) 
+			//only points within range and that is consistant with last reading
+			if (distance > 20 && 
+				distance < 120.0f && 
+				position.distance(prevPosition) < 4.0f &&
+				prevprevPosition.distance(prevPosition) < 4.0f)
 			{
-				m_obstacles.add(new Point2D.Float(x ,y ));
+				m_obstacles.add(position);
 			}
+			prevprevPosition = prevPosition;
+			prevPosition = position;
 			
 		}
 
 	}
 
-	/*
-
-	private void RemoveOnTheWay(Direction direction, Float start, float distance) {
-		for (Point2D.Float end : m_obstacles ) {
-			float dx = (end.x - start.x);
-			float dy = (end.y - start.y);
-			
-			Direction toObstacle = Direction.RadiansToDegrees((float) Math.atan2(dy, dx));
-			
-			float degreesDifference = toObstacle.GetDifferenceInDegrees(direction);
-			
-			if (degreesDifference < 1.0f) {
-				float distanceSquare = dx * dx + dy * dy;
-				if (distanceSquare  < distance) {
-					m_obstacles.remove(end);
-					return;
-				}
-			}
-		}
-		
-	}*/
-
-	public float getDistance(State state, float a_servoDirection, float beamWidth) throws Exception {
+	public float getDistance(State state, float a_servoDirection, float a_beamWidth) throws Exception {
 		//WritableRaster raster = m_image.getRaster();
 		Direction direction = state.m_heading.getHeadDirection(a_servoDirection);
 		Point2D.Float start = state.m_position;
@@ -83,7 +62,7 @@ public class Map {
 			
 			float degreesDifference = toObstacle.GetDifferenceInDegrees(direction);
 			
-			if (degreesDifference < beamWidth / 2.0f) {
+			if (degreesDifference < a_beamWidth / 2.0f) {
 				float distanceSquare = dx * dx + dy * dy;
 				if (distanceSquare  < minLenSquare) {
 					minLenSquare = distanceSquare;
@@ -101,9 +80,4 @@ public class Map {
 		return (float) Math.sqrt(minLenSquare);
 	}
 
-	
-
-	
-
-	
 }

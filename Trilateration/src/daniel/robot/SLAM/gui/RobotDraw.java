@@ -7,8 +7,8 @@ import java.awt.Graphics2D;
 
 import daniel.robot.Direction;
 import daniel.robot.Robot;
-import daniel.robot.SLAM.MeasurementCollection;
-import daniel.robot.SLAM.Reading;
+import daniel.robot.SLAM.PoseCollection;
+import daniel.robot.SLAM.Pose;
 import daniel.robot.SLAM.SLAM;
 import daniel.robot.SLAM.State;
 import daniel.robot.sensors.IRReading;
@@ -23,7 +23,7 @@ public class RobotDraw {
 		this.m_particleFilterView = m_particleFilterView;
 	}
 	
-	public void draw(Graphics g, int a_width, int a_height, MeasurementCollection a_knowledge) {
+	public void draw(Graphics g, int a_width, int a_height, PoseCollection a_knowledge) {
 		
 		int posY = 400;
         int posX = 400;
@@ -48,7 +48,7 @@ public class RobotDraw {
     	
     	if (a_knowledge.m_sensorScans.size() > 0) {
     		int index = a_knowledge.m_sensorScans.size()-1;
-    		daniel.robot.SLAM.Reading reading = a_knowledge.m_sensorScans.get(index);
+    		daniel.robot.SLAM.Pose reading = a_knowledge.m_sensorScans.get(index);
     		
     		
     		State bestGuess = reading.getBestGuess();
@@ -59,11 +59,11 @@ public class RobotDraw {
     		drawDistanceRings(g2d, scale);
     		g.translate((int)(-bestGuess.m_position.x * scale), -(int)(bestGuess.m_position.y * scale));
     		
-    		m_particleFilterView.draw(g2d, reading.m_particles, scale);
+    		m_particleFilterView.draw(g2d, reading.m_position, scale);
     	}
     	
     	 int layer = 1;
-         for (daniel.robot.SLAM.Reading s : a_knowledge.m_sensorScans) {
+         for (daniel.robot.SLAM.Pose s : a_knowledge.m_sensorScans) {
          	float transparency =  1.0f;//((float)layer / (float)m_slam.m_world.m_world.size());
          	drawPosition(g, scale, g2d, s, transparency);
          	layer++;
@@ -74,11 +74,11 @@ public class RobotDraw {
     }
 
 	
-	private void drawBestGuess(Graphics2D g2d, float scale, MeasurementCollection a_world) {
+	private void drawBestGuess(Graphics2D g2d, float scale, PoseCollection a_world) {
 		 g2d.setColor(Color.BLACK);
 		 
-		 for (Reading r : a_world.m_sensorScans) {
-			for (java.awt.geom.Point2D.Float fp : r.m_map.m_obstacles) {
+		 for (Pose r : a_world.m_sensorScans) {
+			for (java.awt.geom.Point2D.Float fp : r.m_bestGuessMap.m_obstacles) {
 				g2d.fillRect((int)(fp.x*scale), (int)(fp.y*scale), (int)scale, (int)scale);
 			}
 		 }
@@ -97,7 +97,7 @@ public class RobotDraw {
         }
 	}
 	
-	private void drawSensorReading(Graphics2D g,  float scale, daniel.robot.SLAM.Reading reading) {
+	private void drawSensorReading(Graphics2D g,  float scale, daniel.robot.SLAM.Pose reading) {
 		State state = reading.getBestGuess();
 		
 		//g.translate((int)(state.m_position.x * scale), (int)(state.m_position.y * scale));
@@ -111,7 +111,7 @@ public class RobotDraw {
 		
 		//int degrees = 1;
 		g.setColor(Color.ORANGE);
-		for(IRReading sr : reading.m_reading.m_ir) {
+		for(IRReading sr : reading.m_sensorReading.m_ir) {
 			Direction servo  = state.m_heading.getHeadDirection(sr.m_servo);
 			float distance = sr.m_distance * scale;
 			drawArc(g, viewPlayerPosX, viewPlayerPosY, servo, distance);
@@ -119,7 +119,7 @@ public class RobotDraw {
 		
 		//degrees = 15;
 		g.setColor(Color.GREEN);
-		for(SonarReading sr : reading.m_reading.m_sonar) {
+		for(SonarReading sr : reading.m_sensorReading.m_sonar) {
 			Direction servo  = state.m_heading.getHeadDirection(sr.m_servo);
 			float distance = sr.m_distance * scale;
 			drawArc(g, viewPlayerPosX, viewPlayerPosY, servo, distance);
@@ -130,7 +130,7 @@ public class RobotDraw {
 	}
 
 	private void drawPosition(Graphics g, float scale, Graphics2D g2d,
-			daniel.robot.SLAM.Reading reading, float transparency) {
+			daniel.robot.SLAM.Pose reading, float transparency) {
 		
 		g2d.setComposite(AlphaComposite.getInstance(
 		        AlphaComposite.SRC_OVER, transparency));
@@ -143,8 +143,8 @@ public class RobotDraw {
 		
 		int headingX = viewPlayerPosX + (int)(state.m_heading.getX() * 20 *scale);
 		int headingY = viewPlayerPosY + (int)(state.m_heading.getY() * 20 *scale);
-		int compassX = viewPlayerPosX + (int)(reading.m_reading.m_compassDirection.getX() * 10 *scale);
-		int compassY = viewPlayerPosY + (int)(reading.m_reading.m_compassDirection.getY() * 10 *scale);
+		int compassX = viewPlayerPosX + (int)(reading.m_sensorReading.m_compassDirection.getX() * 10 *scale);
+		int compassY = viewPlayerPosY + (int)(reading.m_sensorReading.m_compassDirection.getY() * 10 *scale);
 		
 		g.setColor(Color.BLACK);
 		g.drawLine(viewPlayerPosX, viewPlayerPosY, headingX, headingY);

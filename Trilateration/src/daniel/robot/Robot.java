@@ -1,6 +1,7 @@
 package daniel.robot;
 
 import daniel.SerialPort;
+import daniel.robot.SLAM.Movement;
 import daniel.robot.sensors.IRandSonarReading;
 import daniel.robot.sensors.GyroAccelerometerReading;
 import daniel.robot.sensors.IRReading;
@@ -13,7 +14,8 @@ import java.util.Random;
 public class Robot {
 	
 	
-	Protocoll m_protocol = new Protocoll();
+	private Protocoll m_protocol = new Protocoll();
+	private SerialPort m_port;
 
 	public void Wait() {
 		m_protocol.waitForDone(m_port);
@@ -71,23 +73,39 @@ public class Robot {
 		return reading;
 	}
 	
-	public void move(float distance) throws Exception {
-		// TODO Auto-generated method stub
-		m_port.write("w\n");
-		m_protocol.readDoneMoving(m_port.readSyncronosly());
+	public void move(Movement a_move) throws Exception {
+		//TURN
+		if (a_move.m_turnRight > 0.0f) {
+			m_port.write("d\n");
+			m_protocol.readDoneMoving(m_port.readSyncronosly());
+		} else if (a_move.m_turnRight < 0.0f) {
+			m_port.write("a\n");
+			m_protocol.readDoneMoving(m_port.readSyncronosly());
+		}
+		
+		//MOVE
+		if (a_move.m_distance > 0.0f) {
+			m_port.write("w\n");
+			m_protocol.readDoneMoving(m_port.readSyncronosly());
+		} else if (a_move.m_distance < 0.0f) {
+			m_port.write("s\n");
+			m_protocol.readDoneMoving(m_port.readSyncronosly());
+		}
+		
+		
 	}
 	
 	
 
 	
 
-	private SerialPort m_port;
+	
 	
 	public Robot(SerialPort port) {
 		this.m_port = port;
 	}
 	
-	public String read() {
+	private String read() {
 		String data = m_port.read();
 		
 		

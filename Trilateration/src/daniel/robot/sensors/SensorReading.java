@@ -1,7 +1,6 @@
 package daniel.robot.sensors;
 
 import daniel.robot.Direction;
-import daniel.robot.SLAM.State;
 
 
 public class SensorReading {
@@ -11,6 +10,8 @@ public class SensorReading {
 	public SonarReading[] m_sonar;
 	public IRReading[] m_ir;
 	public GyroAccelerometerReading m_gyroAccelerator;
+	
+	//TODO: MOVE TO OTHER DERIVATE CLASS...
 	public DistanceReading[] m_distances;
 	
 	public SensorReading(Direction compassDirection,
@@ -24,11 +25,13 @@ public class SensorReading {
 		
 		setupDistances();
 	}
-	
-	
-	
-	
 
+	public String toString() {
+		return "SensorReading Compass: " + m_compassDirection + " IR: " + m_ir[0].m_distance;
+	}
+
+
+	
 	private void setupDistances() throws Exception {
 		m_distances = new DistanceReading[m_ir.length];
 		
@@ -37,9 +40,6 @@ public class SensorReading {
 			m_distances[i] = new DistanceReading(m_ir[i], sonar, distanceDegrees(m_ir[i].m_servo, sonar.m_servo));
 		}
 	}
-
-
-
 
 
 	private SonarReading getFurthestSonar(float a_servo) {
@@ -58,10 +58,6 @@ public class SensorReading {
 		return ret;
 	}
 
-
-
-
-
 	private float distanceDegrees(float a_degrees1, float a_degrees2) {
 		return (float) Math.sqrt((a_degrees1 - a_degrees2) * (a_degrees1 - a_degrees2));
 	}
@@ -70,7 +66,5 @@ public class SensorReading {
 
 
 
-	public String toString() {
-		return "SensorReading Compass: " + m_compassDirection + " IR: " + m_ir[0].m_distance;
-	}
+	
 }
