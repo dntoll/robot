@@ -1,5 +1,7 @@
 #pragma once
 
+#include "odometry.h"
+
 #define TRIGGER_PIN   16 
 #define ECHO_PIN      15  
 #define SERVO_PIN     11
@@ -160,33 +162,34 @@ class Robot {
     void left(int a_time) {
       Serial.print("Move:Left");
       m_hBridge.left();
-      delay(a_time);
-      m_hBridge.stopAll();
-      Serial.println("");
+      driveAndMeasure(a_time);
       
     }
     void right(int a_time) {
       Serial.print("Move:Right");
       m_hBridge.right();
-      delay(a_time);
-      m_hBridge.stopAll();
-      Serial.println("");
+      driveAndMeasure(a_time);
     }
     void forward(int a_time) {
-      Serial.print("Move:forward");
+      Serial.print("Move:forward:");
       m_hBridge.forward();
-      delay(a_time);
-      m_hBridge.stopAll();
-      Serial.println("");
+      driveAndMeasure(a_time);
     }
     void backward(int a_time) {
       Serial.print("Move:backward");
       m_hBridge.backward();
-      delay(a_time);
-      m_hBridge.stopAll();
-      Serial.println(";");
+      driveAndMeasure(a_time);
     }
   private:
+    void driveAndMeasure(int a_time) {
+    //  Odometry odo;
+   //   odo.measureForTime(a_time);
+   //   Serial.print(":");
+     delay(a_time);
+      m_hBridge.stopAll();
+  //    Serial.print(odo.toString());
+      Serial.println("");
+    }
     
     void moveServo(int pos) {
       m_servoPos = pos;

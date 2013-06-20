@@ -22,15 +22,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 class Compass {
   public:
   Compass() {
-    Serial.println("Starting the I2C interface.");
+    Serial.println("Compass");
     Wire.begin(); // Start the I2C interface.
     compass = HMC5883L(); // Construct a new HMC5883 compass.
-    Serial.println("Setting scale to +/- 1.3 Ga");
     int error = compass.SetScale(1.3); // Set the scale of the compass.
     if(error != 0) // If there is an error, print it out.
       Serial.println(compass.GetErrorText(error));
-    
-    Serial.println("Setting measurement mode to continous.");
+
     error = compass.SetMeasurementMode(Measurement_Continuous); // Set the measurement mode to Continuous
     if(error != 0) // If there is an error, print it out.
       Serial.println(compass.GetErrorText(error));
@@ -175,7 +173,7 @@ float measure()
   
  private:
   // Output the data down the serial port.
-  void Output(MagnetometerRaw raw, MagnetometerScaled scaled, float heading, float headingDegrees)
+  /*void Output(MagnetometerRaw raw, MagnetometerScaled scaled, float heading, float headingDegrees)
   {
      Serial.print("Raw:\t");
      Serial.print(minX);
@@ -191,7 +189,7 @@ float measure()
      Serial.print(" Radians   \t");
      Serial.print(headingDegrees);
      Serial.println(" Degrees   \t");
-  }
+  }*/
  
   float RadiansToDegrees(float rads)
   {
