@@ -15,13 +15,14 @@ public class Robot {
 	private SerialPort m_port;
 
 	public void Wait() {
-		
 		m_protocol.waitForDone(m_port);
 	}
+	
 	public void CalibrateCompass() {	
 		m_protocol.calibrate(m_port);
 		System.out.println("Started Calibration");
 	}
+	
 	public void StopCalibrateCompass() {	
 		m_protocol.stopCalibrate(m_port);
 		System.out.println("Ended Calibration");

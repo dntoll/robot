@@ -19,7 +19,10 @@ public class ParticleFilterView {
 		for (int p = 0; p < size; p++) {
 			State s = a_filter.getState(p);
 			
-			a_grapics.fillRect((int)(s.m_position.x*a_scale), (int)(s.m_position.y*a_scale), (int)a_scale, (int)a_scale);
+			
+			
+			a_grapics.fillRect((int)(s.getRobotPosition().x*a_scale), (int)(s.getRobotPosition().y*a_scale), (int)a_scale, (int)a_scale);
+			a_grapics.fillRect((int)(s.getHeadPosition().x*a_scale), (int)(s.getHeadPosition().y*a_scale), (int)a_scale/2, (int)a_scale/2);
 		}
 	}
 

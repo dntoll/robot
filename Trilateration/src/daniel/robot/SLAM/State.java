@@ -1,13 +1,26 @@
 package daniel.robot.SLAM;
 
+import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Float;
 import java.util.Random;
 
 import daniel.robot.Direction;
 
 public class State {
-	public Float m_position; //in degrees
+	private Float m_position; //in degrees
 	public Direction m_heading; //in meters
+	
+	
+	public Float getRobotPosition() {
+		return m_position;
+	}
+	
+	public Float getHeadPosition() {
+		float distance = 7.0f; //Head is 7 cm in front of center
+		float x = m_position.x + m_heading.getX() * distance;
+		float y = m_position.y + m_heading.getY() * distance;
+		return new Point2D.Float(x ,y );
+	}
 	
 	public MatchingError m_error;
 	

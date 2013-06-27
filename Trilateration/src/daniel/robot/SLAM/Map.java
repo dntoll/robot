@@ -62,7 +62,7 @@ public class Map {
 					
 					if (middleIndex < endIndex) {
 						Point2D.Float lastMiddlePos = getIRPosition(a_bestGuess, a_reading.m_ir[middleIndex+1]);
-						if (middlePos.distance(lastMiddlePos) > 7.0f ) {
+						if (middlePos.distance(lastMiddlePos) > 4.0f ) {
 							ok = false;
 							break;
 						}
@@ -77,7 +77,7 @@ public class Map {
 					
 					float distance = (float) lineCandidate.ptLineDist(middlePos);
 					
-					if (distance > 8.0f) {
+					if (distance > 3.0f) {
 						ok = false;
 						break;
 					}
@@ -104,9 +104,10 @@ public class Map {
 			IRReading distanceReading) {
 		float distance = distanceReading.m_distance;
 		Direction direction = a_bestGuess.m_heading.getHeadDirection(distanceReading.m_servo);
+		Point2D.Float headPosition = a_bestGuess.getHeadPosition();
 		
-		float x = a_bestGuess.m_position.x + direction.getX() * distance;
-		float y = a_bestGuess.m_position.y + direction.getY() * distance;
+		float x = headPosition.x + direction.getX() * distance;
+		float y = headPosition.y + direction.getY() * distance;
 		Point2D.Float position = new Point2D.Float(x ,y );
 		return position;
 	}
@@ -114,7 +115,9 @@ public class Map {
 	public float getDistance(State state, float a_servoDirection, float a_beamWidth) throws Exception {
 		//WritableRaster raster = m_image.getRaster();
 		Direction direction = state.m_heading.getHeadDirection(a_servoDirection);
-		Point2D.Float start = state.m_position;
+		
+		Point2D.Float headPosition = state.getHeadPosition();
+		Point2D.Float start = headPosition;
 		
 		float minLenSquare = 1000000.0f;
 		boolean found = false;

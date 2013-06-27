@@ -4,6 +4,7 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.geom.Point2D;
 
 import daniel.robot.Direction;
 import daniel.robot.SLAM.PoseCollection;
@@ -52,10 +53,10 @@ public class RobotDraw {
     		State bestGuess = reading.getBestGuess();
     		
     		drawSensorReading(g2d, scale, reading);
-    		
-    		g.translate((int)(bestGuess.m_position.x * scale), (int)(bestGuess.m_position.y * scale));
+    		Point2D.Float headPosition = bestGuess.getHeadPosition();
+    		g.translate((int)(headPosition.x * scale), (int)(headPosition.y * scale));
     		drawDistanceRings(g2d, scale);
-    		g.translate((int)(-bestGuess.m_position.x * scale), -(int)(bestGuess.m_position.y * scale));
+    		g.translate((int)(-headPosition.x * scale), -(int)(headPosition.y * scale));
     		
     		m_particleFilterView.draw(g2d, reading.m_position, scale);
     	}
@@ -75,9 +76,10 @@ public class RobotDraw {
 
 	
 	private void drawBestGuess(Graphics2D g2d, float scale, PoseCollection a_world) {
-		 g2d.setColor(Color.BLACK);
+		 
 		 
 		 for (Pose r : a_world.m_sensorScans) {
+			g2d.setColor(Color.BLACK);
 			for (java.awt.geom.Point2D.Float fp : r.m_bestGuessMap.m_landmarks) {
 				g2d.fillRect((int)(fp.x*scale), (int)(fp.y*scale), (int)scale, (int)scale);
 			}
@@ -110,8 +112,8 @@ public class RobotDraw {
 		State state = reading.getBestGuess();
 		
 		//g.translate((int)(state.m_position.x * scale), (int)(state.m_position.y * scale));
-		int viewPlayerPosX = (int)(state.m_position.x * scale);
-		int viewPlayerPosY = (int)(state.m_position.y * scale);
+		int viewPlayerPosX = (int)(state.getHeadPosition().x * scale);
+		int viewPlayerPosY = (int)(state.getHeadPosition().y * scale);
 		
 		g.setComposite(AlphaComposite.getInstance(
 		        AlphaComposite.SRC_OVER, 0.75f));
@@ -147,8 +149,8 @@ public class RobotDraw {
 		State state = reading.getBestGuess();
 		
 		//g.translate((int)(state.m_position.x * scale), (int)(state.m_position.y * scale));
-		int viewPlayerPosX = (int)(state.m_position.x * scale);
-		int viewPlayerPosY = (int)(state.m_position.y * scale);
+		int viewPlayerPosX = (int)(state.getRobotPosition().x * scale);
+		int viewPlayerPosY = (int)(state.getRobotPosition().y * scale);
 		
 		int headingX = viewPlayerPosX + (int)(state.m_heading.getX() * 20 *scale);
 		int headingY = viewPlayerPosY + (int)(state.m_heading.getY() * 20 *scale);

@@ -15,7 +15,7 @@ public class ParticleFilter {
 		m_particles = new State[NUMBER_OF_PARTICLES];
 		m_weights = new float[NUMBER_OF_PARTICLES];
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
-			m_particles[i] = new State(a_startState.m_position, a_startState.m_heading);
+			m_particles[i] = new State(a_startState.getRobotPosition(), a_startState.m_heading);
 			m_weights[i] = 1.0f / (float)NUMBER_OF_PARTICLES;
 		}
 	}
