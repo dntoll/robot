@@ -11,8 +11,6 @@ public class SensorReading {
 	public IRReading[] m_ir;
 	public GyroAccelerometerReading m_gyroAccelerator;
 	
-	//TODO: MOVE TO OTHER DERIVATE CLASS...
-	public DistanceReading[] m_distances;
 	
 	public SensorReading(Direction compassDirection,
 			GyroAccelerometerReading gyroAccelerator, SonarReading[] sonar,
@@ -22,8 +20,6 @@ public class SensorReading {
 		m_sonar = sonar;
 		m_ir = ir;
 		m_gyroAccelerator = gyroAccelerator;
-		
-		setupDistances();
 	}
 
 	public String toString() {
@@ -32,34 +28,28 @@ public class SensorReading {
 
 
 	
-	private void setupDistances() throws Exception {
-		m_distances = new DistanceReading[m_ir.length];
-		
-		for (int i = 0;i < m_ir.length; i++) {
-			SonarReading sonar = getFurthestSonar(m_ir[i].m_servo);
-			m_distances[i] = new DistanceReading(m_ir[i], sonar, distanceDegrees(m_ir[i].m_servo, sonar.m_servo));
-		}
+
+	private float distanceDegrees(float a_degrees1, float a_degrees2) {
+		return (float) Math.sqrt((a_degrees1 - a_degrees2) * (a_degrees1 - a_degrees2));
 	}
 
-
-	private SonarReading getFurthestSonar(float a_servo) {
-		SonarReading ret = m_sonar[0];
+	public boolean hasCloseSonar(IRReading distanceReading) {
+		
 		
 		float distance = 0.0f;//distanceDegrees(a_servo, m_sonar[0].m_servo);
 		
 		for (int i = 0; i< m_sonar.length; i++) {
-			float newDistance = distanceDegrees(m_sonar[i].m_servo,a_servo);
-			if (newDistance <= 6.5f && m_sonar[i].m_distance > distance) {
+			float newDistance = distanceDegrees(m_sonar[i].m_servo, distanceReading.m_servo);
+			if (newDistance <= SonarReading.SONAR_BEAM_WIDTH/2.0f) {
 				
-				ret = m_sonar[i];
-				distance = m_sonar[i].m_distance;
+				float difference = m_sonar[i].m_distance - distanceReading.m_distance;
+				if (difference*difference < 5*5) {
+					return true;
+				}
 			}
 		}
-		return ret;
-	}
-
-	private float distanceDegrees(float a_degrees1, float a_degrees2) {
-		return (float) Math.sqrt((a_degrees1 - a_degrees2) * (a_degrees1 - a_degrees2));
+		return false;
+		
 	}
 
 

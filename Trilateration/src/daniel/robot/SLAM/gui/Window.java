@@ -1,27 +1,13 @@
 package daniel.robot.SLAM.gui;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.FlowLayout;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.SwingUtilities;
-
 import daniel.robot.Robot;
 import daniel.robot.RobotFinder;
-import daniel.robot.SLAM.SLAM;
-import daniel.robot.sensors.IRReading;
-import daniel.robot.sensors.SensorReading;
-import daniel.robot.sensors.SonarReading;
 
 public class Window extends javax.swing.JFrame implements ActionListener {
 
@@ -35,7 +21,8 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	
 	Thread m_panelThread;
 	Robot m_robot;
-	
+	boolean m_calibration = false;
+	JButton m_calibrationButton;
 	
 	public Window(Robot robot) {
 		JPanel content = new JPanel();
@@ -47,25 +34,30 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 		
 		
 	    m_roboPanel = new RobotPanel(robot);
+	    m_roboPanel.setBackground(new java.awt.Color(255, 255, 255));
+	    m_roboPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 	    m_updater = new PanelUpdater(m_roboPanel);
 	    
-	    JButton b1 = new JButton("Done Calibration");
 	    
-	    m_roboPanel.setBackground(new java.awt.Color(255, 255, 255));
-	    //m_roboPanel.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+	    m_calibrationButton = new JButton("Calibration");
+	    JButton nextButton = new JButton("Next");
 	    
 	    
 	    content.add(m_roboPanel);
-	    content.add(b1);
+	    content.add(m_calibrationButton);
+	    content.add(nextButton);
 	    
-	    b1.addActionListener(this);
-	    b1.setEnabled(true);
+	    m_calibrationButton.addActionListener(this);
+	    m_calibrationButton.setEnabled(true);
+	    
+	    nextButton.addActionListener(m_roboPanel);
+	    nextButton.setEnabled(true);
 	    
         // be nice to testers..
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	    pack();
 	    
-	    robot.CalibrateCompass();
+	   
 	    
 	}
 	
@@ -88,8 +80,12 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	
 	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		
-    	startThread();
+		if (m_calibration == false) {
+			m_robot.CalibrateCompass();
+			m_calibrationButton.setText("Done Calibration");
+		} else {
+			startThread();
+		}
 	}
 	
 	public static void main(String args[]) {

@@ -4,11 +4,13 @@
 class L298N  {
   public:
     L298N() {
-     ENA=10;
-     IN1=6;
-     IN2=5;
-     ENB=9;
-     IN3=3;
+      
+     ENA=5;
+     ENB=3;
+     IN1=10;
+     IN2=9;
+
+     IN3=6;
      IN4=17;
       pinMode(ENA,OUTPUT);//output
       pinMode(ENB,OUTPUT);
@@ -16,8 +18,8 @@ class L298N  {
       pinMode(IN2,OUTPUT);
       pinMode(IN3,OUTPUT);
       pinMode(IN4,OUTPUT);
-      digitalWrite(ENA,LOW);
-      digitalWrite(ENB,LOW);//stop driving
+      analogWrite(ENA,0);//stop driving motorA
+      analogWrite(ENB,0);//stop driving motorB
       digitalWrite(IN1,LOW);
       digitalWrite(IN2,HIGH);//setting motorA's directon
       digitalWrite(IN3,LOW);
@@ -43,21 +45,20 @@ class L298N  {
       digitalWrite(IN3, leftForward ? LOW : HIGH);
       digitalWrite(IN4, leftForward ? HIGH : LOW);//setting motorB's directon 
       
-//      analogWrite(ENA,225);//start driving motorA
- //     analogWrite(ENB,225);//start driving motorA
-      digitalWrite(ENA, HIGH);
-      digitalWrite(ENB,HIGH);//start driving motorB
+      analogWrite(ENA,225);
+      analogWrite(ENB,200);
+ //     digitalWrite(ENA, HIGH);
+ //     digitalWrite(ENB,HIGH);//start driving motorB
     }
 
     void stopAll() {
       analogWrite(ENA,0);//stop driving motorA
       analogWrite(ENB,0);//stop driving motorB
       
-      analogWrite (IN1,0);//stop driving motorA
-      analogWrite (IN2,0);//stop driving motorB
-       
-      analogWrite (IN3,0);//stop driving motorA
-      analogWrite (IN4,0);//stop driving motorB
+      digitalWrite(IN1,LOW);
+      digitalWrite(IN2,HIGH);//setting motorA's directon
+      digitalWrite(IN3,LOW);
+      digitalWrite(IN4,HIGH);//setting motorB's directon
     }
   private:
     int ENA;

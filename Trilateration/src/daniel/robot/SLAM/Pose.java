@@ -31,4 +31,7 @@ public class Pose {
 	public float getDistance(State a_state, float a_servoDirection, float a_beamWidth) throws Exception {
 		return m_bestGuessMap.getDistance(a_state, a_servoDirection, a_beamWidth);
 	}
+
+
+	
 }

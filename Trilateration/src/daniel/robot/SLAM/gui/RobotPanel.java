@@ -1,23 +1,15 @@
 package daniel.robot.SLAM.gui;
 
-import java.awt.AlphaComposite;
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 import javax.swing.JPanel;
 
-import daniel.robot.Direction;
 import daniel.robot.Robot;
-import daniel.robot.SLAM.Map;
-import daniel.robot.SLAM.PoseCollection;
-import daniel.robot.SLAM.Pose;
 import daniel.robot.SLAM.SLAM;
-import daniel.robot.SLAM.State;
-import daniel.robot.sensors.IRReading;
-import daniel.robot.sensors.SonarReading;
 
-public class RobotPanel extends JPanel {
+public class RobotPanel extends JPanel  implements ActionListener {
 
 	/**
 	 * 
@@ -27,6 +19,7 @@ public class RobotPanel extends JPanel {
 	
 	//private Robot m_robot;
 	private SLAM m_slam;
+	private boolean m_hasStarted = false;
 
 	RobotPanel(Robot robot) {
     	//super(true);
@@ -46,24 +39,39 @@ public class RobotPanel extends JPanel {
 			e.printStackTrace();
 		}
 	}
+    
+    @Override
+	public void actionPerformed(ActionEvent arg0) {
+		if (m_hasStarted  == true) {
+			updateRobot();
+		} else {
+			try {
+				m_slam.startUp();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			m_hasStarted = true;
+			data.draw(this.getGraphics(), getWidth(), getHeight(), m_slam.m_world);
+		}
+	}
 
     public void updateRobot() {
     	
     	try {
     		//this.invalidate();
     		//validate();
+    		
+    		
+    		
+    		
     		Thread.sleep(1000);
-    		
-    		
-    		data.draw(this.getGraphics(), getWidth(), getHeight(), m_slam.m_world);
-    		for (int i = 10; i >= 0; i--) {
-    			Thread.sleep(1000);
-    			System.out.println(i);
-    		}
     		
     		System.out.println("start update");
     		m_slam.updateAfterMovement();
     		System.out.println("done update");
+    		
+    		data.draw(this.getGraphics(), getWidth(), getHeight(), m_slam.m_world);
     		
 		} catch (Exception e) {
 			e.printStackTrace();

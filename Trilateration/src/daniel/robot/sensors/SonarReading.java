@@ -1,19 +1,24 @@
 package daniel.robot.sensors;
 
 
-//TODO: baseclass with ir and distance reading
-public class SonarReading {
-	public float m_distance;
-	public float m_servo;
+public class SonarReading extends DistanceBase {
+	public static final float SONAR_DISTANCE_ERROR = 10;
+	public static float SONAR_BEAM_WIDTH = 15.0f;
 	
 	public SonarReading(float servoPos, float distance) {
-		
-		if (distance == 0) {
-			distance = 200;
+		super(servoPos, distance);
+		if (m_distance == 0) {
+			m_distance = 200;
 		}
 		
-		m_distance = distance;
-		m_servo = servoPos;
+	}
+
+	public float getBeamWidth() {
+		return SONAR_BEAM_WIDTH;
+	}
+
+	public boolean okDistance() {
+		return m_distance > 2.0f && m_distance < 200;
 	}
 	
 }

@@ -6,10 +6,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 
 import daniel.robot.Direction;
-import daniel.robot.Robot;
 import daniel.robot.SLAM.PoseCollection;
 import daniel.robot.SLAM.Pose;
-import daniel.robot.SLAM.SLAM;
 import daniel.robot.SLAM.State;
 import daniel.robot.sensors.IRReading;
 import daniel.robot.sensors.SonarReading;
@@ -27,7 +25,7 @@ public class RobotDraw {
 		
 		int posY = 400;
         int posX = 400;
-        float scale = 4.0f;
+        float scale = 5.0f;
         
         Graphics2D g2d = (Graphics2D) g;
 		
@@ -62,15 +60,17 @@ public class RobotDraw {
     		m_particleFilterView.draw(g2d, reading.m_position, scale);
     	}
     	
-    	 int layer = 1;
-         for (daniel.robot.SLAM.Pose s : a_knowledge.m_sensorScans) {
+    	 for (daniel.robot.SLAM.Pose s : a_knowledge.m_sensorScans) {
          	float transparency =  1.0f;//((float)layer / (float)m_slam.m_world.m_world.size());
          	drawPosition(g, scale, g2d, s, transparency);
-         	layer++;
          }
     	
     	
     	g.translate(-posX, -posY);
+    	
+    	
+    	String error = "Error :" + a_knowledge.getError();
+    	g.drawString(error, 20, 20);
     }
 
 	
@@ -78,8 +78,17 @@ public class RobotDraw {
 		 g2d.setColor(Color.BLACK);
 		 
 		 for (Pose r : a_world.m_sensorScans) {
-			for (java.awt.geom.Point2D.Float fp : r.m_bestGuessMap.m_obstacles) {
+			for (java.awt.geom.Point2D.Float fp : r.m_bestGuessMap.m_landmarks) {
 				g2d.fillRect((int)(fp.x*scale), (int)(fp.y*scale), (int)scale, (int)scale);
+			}
+			
+			
+			g2d.setColor(Color.RED);
+			for (java.awt.geom.Line2D.Float line : r.m_bestGuessMap.m_lines) {
+				g2d.drawLine((int)(line.x1*scale), 
+						     (int)(line.y1*scale),
+						     (int)(line.x2*scale), 
+						     (int)(line.y2*scale));
 			}
 		 }
 		

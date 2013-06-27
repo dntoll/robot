@@ -19,9 +19,9 @@ public class DistanceReading {
 		m_beamWidth = 15.0f - a_differenceDegrees;
 		if (a_closestSonar.m_distance < 17.0f) {
 			m_distance = a_closestSonar.m_distance;
-		} else if (a_closestSonar.m_distance > a_irReading.m_distance * 1.2f) {
+		} /*else if (a_closestSonar.m_distance > a_irReading.m_distance * 1.2f) {
 			m_distance = a_closestSonar.m_distance;
-		} else {
+		}*/ else {
 			m_distance = a_irReading.m_distance;
 			m_beamWidth = 2.0f;
 		}

@@ -14,7 +14,8 @@ class SharpSensor : public Sensor {
   
   float getRawMeasurement() {
       int sensorValue = analogRead(m_analogPin);
-      return (float)sensorValue * (5.0f / 1023.0f);
+      float value= (float)sensorValue * (5.0f / 1023.0f);
+      return value;
   }
   
   
@@ -29,6 +30,9 @@ class SharpSensor : public Sensor {
            return floatMap(a_voltage, voltages[i], voltages[i+1], distance[i], distance[i+1]);
         }
       }
+      
+      
+      
       return dist;
     }
   

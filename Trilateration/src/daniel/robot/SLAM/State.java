@@ -9,10 +9,7 @@ public class State {
 	public Float m_position; //in degrees
 	public Direction m_heading; //in meters
 	
-	//Error statistics compared to last measurement
-	public float m_directionalError;
-	public float m_distanceError;
-	public float m_overlap;
+	public MatchingError m_error;
 	
 	private static Random rand = new Random();
 	
@@ -21,9 +18,7 @@ public class State {
 		m_position.x = a_position.x;
 		m_position.y = a_position.y;
 		m_heading = new Direction(a_compassDirection.getHeadingDegrees());
-		m_directionalError = 0.0f;
-		m_distanceError = 0.0f;
-		m_overlap = 0.0f;
+		
 	}
 	
 	public State(State a_state) {
@@ -31,9 +26,7 @@ public class State {
 		m_position.x = a_state.m_position.x;
 		m_position.y = a_state.m_position.y;
 		m_heading = new Direction(a_state.m_heading.getHeadingDegrees());
-		m_directionalError = a_state.m_directionalError;
-		m_distanceError = a_state.m_distanceError;
-		m_overlap = a_state.m_overlap;
+		m_error = a_state.m_error;
 	}
 
 	
@@ -53,12 +46,20 @@ public class State {
 	
 	public String toString() {
 		return 
-		" de: " + m_directionalError + 
-	    " so: " + m_overlap + 
-		" di: " + m_distanceError + 
 		" x : "  + m_position.x +
 		" y : "  + m_position.y +
 		" d : "  + m_heading.getHeadingDegrees();
+	}
+
+	public void setError(MatchingError error) {
+		m_error = error;
+	}
+
+	public float getError() {
+		if (m_error == null)
+			return 0;
+		else
+			return m_error.getError();
 	}
 
 	

@@ -8,9 +8,6 @@ import daniel.robot.sensors.IRReading;
 import daniel.robot.sensors.SensorReading;
 import daniel.robot.sensors.SonarReading;
 
-import java.awt.geom.Point2D.Float;
-import java.util.Random;
-
 public class Robot {
 	
 	
@@ -18,6 +15,7 @@ public class Robot {
 	private SerialPort m_port;
 
 	public void Wait() {
+		
 		m_protocol.waitForDone(m_port);
 	}
 	public void CalibrateCompass() {	
@@ -87,6 +85,10 @@ public class Robot {
 		if (a_move.m_distance > 0.0f) {
 			m_port.write("w\n");
 			m_protocol.readDoneMoving(m_port.readSyncronosly());
+			m_port.write("w\n");
+			m_protocol.readDoneMoving(m_port.readSyncronosly());
+			m_port.write("w\n");
+			m_protocol.readDoneMoving(m_port.readSyncronosly());
 		} else if (a_move.m_distance < 0.0f) {
 			m_port.write("s\n");
 			m_protocol.readDoneMoving(m_port.readSyncronosly());
@@ -103,14 +105,13 @@ public class Robot {
 	
 	public Robot(SerialPort port) {
 		this.m_port = port;
+		m_port.write("z\n");
 	}
 	
-	private String read() {
+	/*private String read() {
 		String data = m_port.read();
-		
-		
 		return data;
-	}
+	}*/
 	
 	
 	public static void main(String[] args) {

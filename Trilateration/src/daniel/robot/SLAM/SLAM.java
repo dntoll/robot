@@ -30,14 +30,14 @@ public class SLAM {
 		
 		
 		float distance = 0.0f;
-		float turn = -15.0f;
+		float turn = 0.0f;
 		
 		Movement move = new Movement(distance, turn);
 		m_robot.move(move);
 		//Wake up and sense!
 		SensorReading Z = m_robot.SenseAll();
 		
-		m_latestRobotPosition.move(move, 4.0f, 10.0f);
+		m_latestRobotPosition.move(move, turn/2+10, distance/2 + 4);
 		
 		m_latestRobotPosition.setWeights(m_world, Z);
 		

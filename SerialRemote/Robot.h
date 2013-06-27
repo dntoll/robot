@@ -1,6 +1,20 @@
 #pragma once
 
 #include "odometry.h"
+#include "HC_SR04.h"
+#include "SharpSensor.h"
+#include "L298N.h"
+
+#ifdef COMPASS
+  #include "Compass.h"
+#endif
+
+#ifdef GYRO 
+ #include "MPU6050.h"
+#endif
+
+#include "odometry.h"
+
 
 #define TRIGGER_PIN   16 
 #define ECHO_PIN      15  
@@ -18,19 +32,26 @@ class Robot {
       //m_hBridge.stopAll();
       
       m_servoPos = 90;
-      m_servo.attach(SERVO_PIN);  // attaches the servo on pin 9 to the servo object 
-      m_servo.write(m_servoPos);
+      m_servo.attach(SERVO_PIN);  
+      
+   //   m_servo.write(m_servoPos);
       
       pinMode(SHARP_ENABLE_PIN, OUTPUT);
       digitalWrite(SHARP_ENABLE_PIN, LOW);
       
       m_pCompass = new Compass();
-      m_pGyro = new MPU6050();
+      #ifdef GYRO 
+        m_pGyro = new MPU6050();
+      #endif
     }
     
     ~Robot() {
-      delete m_pCompass;
-      delete m_pGyro;
+      #ifdef COMPASS
+        delete m_pCompass;
+      #endif
+      #ifdef GYRO 
+        delete m_pGyro;
+      #endif
     }
     
     void sonarSweep() {
@@ -55,6 +76,7 @@ class Robot {
     }
     
     void calibrate() {
+      #ifdef COMPASS
       //Serial.print("Calibration");
       while (true) {
         if (Serial.available() > 0) {
@@ -70,6 +92,7 @@ class Robot {
       
       m_pCompass->printCalibration();
       Serial.println("DONE");
+      #endif
     }
     
     
@@ -126,6 +149,7 @@ class Robot {
     }
     
     void measureGyro() {
+      #ifdef GYRO
       accel_t_gyro_union accel_t_gyro = m_pGyro->getAll();
       Serial.print("Accel:Gyro");
 
@@ -143,13 +167,16 @@ class Robot {
       Serial.print(":");
       Serial.print(accel_t_gyro.value.z_gyro, DEC);
       Serial.println("");
+      #endif
     }
     
     void measureTemperature() {
+      #ifdef GYRO
        float deg = m_pGyro->getTemperature();
        Serial.print("Temperature:");
        Serial.print(deg);
        Serial.println("");
+      #endif
     }
     
     void measureCompass() {
@@ -165,16 +192,19 @@ class Robot {
       driveAndMeasure(a_time);
       
     }
+    
     void right(int a_time) {
       Serial.print("Move:Right");
       m_hBridge.right();
       driveAndMeasure(a_time);
     }
+    
     void forward(int a_time) {
       Serial.print("Move:forward:");
       m_hBridge.forward();
       driveAndMeasure(a_time);
     }
+    
     void backward(int a_time) {
       Serial.print("Move:backward");
       m_hBridge.backward();
@@ -189,6 +219,9 @@ class Robot {
       m_hBridge.stopAll();
   //    Serial.print(odo.toString());
       Serial.println("");
+      
+      
+    //  measureCompass();
     }
     
     void moveServo(int pos) {
@@ -217,7 +250,9 @@ class Robot {
     SharpSensor m_sharp;
     HC_SR04 m_sonar;
     L298N m_hBridge;
-    MPU6050 *m_pGyro;
+    #ifdef GYRO
+      MPU6050 *m_pGyro;
+    #endif
     Compass *m_pCompass;
     int m_servoPos;
     

@@ -7,7 +7,7 @@ import daniel.robot.sensors.SensorReading;
 public class ParticleFilter {
 	
 	private static Random RANDOM = new Random();
-	private static int NUMBER_OF_PARTICLES = 1000;
+	private static int NUMBER_OF_PARTICLES = 3000;
 	float[] m_weights;
 	State[] m_particles;
 	
@@ -69,7 +69,7 @@ public class ParticleFilter {
 
 	public void setWeights(PoseCollection a_world, SensorReading a_reading) throws Exception {
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
-			m_weights[i] = a_world.measurementProbability( m_particles[i], a_reading );
+			m_weights[i] = a_world.measurementProbability( m_particles[i], a_reading ).getError();
 			
 			if (Float.isNaN(m_weights[i])) {
 				m_weights[i] = 0.0f;

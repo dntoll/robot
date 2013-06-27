@@ -20,6 +20,12 @@ class PanelUpdater implements Runnable  {
 		
 		try {
 			while(true) {
+				
+				for (int i = 10; i >= 0; i--) {
+	    			Thread.sleep(1000);
+	    			System.out.println(i);
+	    		}
+				
 				m_roboPanel.updateRobot();
 				
 				
