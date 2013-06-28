@@ -4,8 +4,8 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import daniel.robot.SLAM.ParticleFilter;
 import daniel.robot.SLAM.State;
+import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
 
 public class ParticleFilterView {
 

@@ -7,7 +7,7 @@ import java.util.Random;
 import daniel.robot.Direction;
 
 public class State {
-	private Float m_position; //in degrees
+	private Float m_position = new Float(); //in degrees
 	public Direction m_heading; //in meters
 	
 	
@@ -27,7 +27,6 @@ public class State {
 	private static Random rand = new Random();
 	
 	public State(Float a_position, Direction a_compassDirection) {
-		m_position = new Float();
 		m_position.x = a_position.x;
 		m_position.y = a_position.y;
 		m_heading = new Direction(a_compassDirection.getHeadingDegrees());
@@ -35,7 +34,6 @@ public class State {
 	}
 	
 	public State(State a_state) {
-		m_position = new Float();
 		m_position.x = a_state.m_position.x;
 		m_position.y = a_state.m_position.y;
 		m_heading = new Direction(a_state.m_heading.getHeadingDegrees());

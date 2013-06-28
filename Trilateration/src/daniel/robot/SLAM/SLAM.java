@@ -3,6 +3,7 @@ package daniel.robot.SLAM;
 import java.awt.geom.Point2D.Float;
 import daniel.robot.Direction;
 import daniel.robot.Robot;
+import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
 import daniel.robot.sensors.SensorReading;
 
 public class SLAM {
