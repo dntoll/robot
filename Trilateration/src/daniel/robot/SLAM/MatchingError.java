@@ -32,14 +32,14 @@ public class MatchingError {
 	
 	
 	public float getError() {
-		float match = Gaussian.gaussian(0, SonarReading.SONAR_DISTANCE_ERROR, (float)m_sonarError / (float)m_numMatching);
-		float match2 = 1.0f;//Gaussian.gaussian(0, IRReading.IR_DISTANCE_NOISE, (float)m_irError / (float)m_numMatching);
+		float match = 1.0f;//Gaussian.gaussian(0, SonarReading.SONAR_DISTANCE_ERROR, (float)m_sonarError / (float)m_numMatching);
+		float match2 = Gaussian.gaussian(0, IRReading.IR_DISTANCE_NOISE, (float)m_irError / (float)m_numMatching);
 		float directionalProb = 1.0f;// Gaussian.gaussian(0, compassNoise, state.m_directionalError);
 		return directionalProb * (match) *(match2) * m_overlap;
 	}
 	
 	
-	public static MatchingError getMatchingError(Pose a_known, State a_newState, SensorReading a_reading) {
+	public static MatchingError getMatchingError(Map a_known, State a_newState, SensorReading a_reading) {
 		MatchingError error = new MatchingError();
 		
 		error.m_directionalError = a_newState.m_heading.GetDifferenceInDegrees(a_reading.m_compassDirection);
@@ -59,7 +59,7 @@ public class MatchingError {
 		return error;
 	}
 
-	private static float MatchReading(Pose a_known, State a_newState,
+	private static float MatchReading(Map a_known, State a_newState,
 			MatchingError error, DistanceBase ir) {
 		float ret = 0;
 		try {

@@ -2,7 +2,7 @@ package daniel.robot.sensors;
 
 
 public class SonarReading extends DistanceBase {
-	public static final float SONAR_DISTANCE_ERROR = 10;
+	public static final float SONAR_DISTANCE_ERROR = 2;
 	public static float SONAR_BEAM_WIDTH = 15.0f;
 	
 	public SonarReading(float servoPos, float distance) {

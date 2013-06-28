@@ -35,9 +35,6 @@ public class SensorReading {
 
 	public boolean hasCloseSonar(IRReading distanceReading) {
 		
-		
-		float distance = 0.0f;//distanceDegrees(a_servo, m_sonar[0].m_servo);
-		
 		for (int i = 0; i< m_sonar.length; i++) {
 			float newDistance = distanceDegrees(m_sonar[i].m_servo, distanceReading.m_servo);
 			if (newDistance <= SonarReading.SONAR_BEAM_WIDTH/2.0f) {

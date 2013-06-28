@@ -7,6 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.Point2D;
 
 import daniel.robot.Direction;
+import daniel.robot.SLAM.Map;
 import daniel.robot.SLAM.PoseCollection;
 import daniel.robot.SLAM.Pose;
 import daniel.robot.SLAM.State;
@@ -50,7 +51,7 @@ public class RobotDraw {
     		daniel.robot.SLAM.Pose reading = a_knowledge.m_sensorScans.get(index);
     		
     		
-    		State bestGuess = reading.getBestGuess();
+    		State bestGuess = reading.getBestGuess().getState();
     		
     		drawSensorReading(g2d, scale, reading);
     		Point2D.Float headPosition = bestGuess.getHeadPosition();
@@ -77,22 +78,28 @@ public class RobotDraw {
 	
 	private void drawBestGuess(Graphics2D g2d, float scale, PoseCollection a_world) {
 		 
-		 
-		 for (Pose r : a_world.m_sensorScans) {
+		 Pose r = a_world.getLastPose();
+		 //for (Pose r : a_world.G.) {
 			g2d.setColor(Color.BLACK);
-			for (java.awt.geom.Point2D.Float fp : r.m_bestGuessMap.m_landmarks) {
-				g2d.fillRect((int)(fp.x*scale), (int)(fp.y*scale), (int)scale, (int)scale);
+			
+			Map map = r.getBestMap();
+			if (map != null) {
+				for (java.awt.geom.Point2D.Float fp : map.m_landmarks) {
+					g2d.fillRect((int)(fp.x*scale), (int)(fp.y*scale), (int)scale, (int)scale);
+				}
+				
+				
+				g2d.setColor(Color.RED);
+				for (java.awt.geom.Line2D.Float line : map.m_lines) {
+					g2d.drawLine((int)(line.x1*scale), 
+							     (int)(line.y1*scale),
+							     (int)(line.x2*scale), 
+							     (int)(line.y2*scale));
+				}
 			}
 			
-			
-			g2d.setColor(Color.RED);
-			for (java.awt.geom.Line2D.Float line : r.m_bestGuessMap.m_lines) {
-				g2d.drawLine((int)(line.x1*scale), 
-						     (int)(line.y1*scale),
-						     (int)(line.x2*scale), 
-						     (int)(line.y2*scale));
-			}
-		 }
+		//	break;
+		// }
 		
 		
 	}
@@ -109,7 +116,7 @@ public class RobotDraw {
 	}
 	
 	private void drawSensorReading(Graphics2D g,  float scale, daniel.robot.SLAM.Pose reading) {
-		State state = reading.getBestGuess();
+		State state = reading.getBestGuess().getState();
 		
 		//g.translate((int)(state.m_position.x * scale), (int)(state.m_position.y * scale));
 		int viewPlayerPosX = (int)(state.getHeadPosition().x * scale);
@@ -146,7 +153,7 @@ public class RobotDraw {
 		g2d.setComposite(AlphaComposite.getInstance(
 		        AlphaComposite.SRC_OVER, transparency));
       
-		State state = reading.getBestGuess();
+		State state = reading.getBestGuess().getState();
 		
 		//g.translate((int)(state.m_position.x * scale), (int)(state.m_position.y * scale));
 		int viewPlayerPosX = (int)(state.getRobotPosition().x * scale);

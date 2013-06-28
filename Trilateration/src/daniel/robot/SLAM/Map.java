@@ -1,14 +1,15 @@
 package daniel.robot.SLAM;
 
+import java.awt.Point;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Float;
 import java.util.ArrayList;
 import java.util.List;
 
 import daniel.robot.Direction;
 import daniel.robot.sensors.IRReading;
 import daniel.robot.sensors.SensorReading;
-import daniel.robot.statistics.LinearRegression;
 
 /**
  * Bitmap map of robot world, starts with 0.0 in the middle
@@ -21,7 +22,13 @@ public class Map {
 	
 	public List<Line2D.Float> m_lines = new ArrayList<Line2D.Float>();
 	
-	public Map(State a_bestGuess, SensorReading a_reading) {
+	public Map(State a_bestGuess, SensorReading a_reading, Map a_parentMap) {
+		
+		if (a_parentMap != null) {
+			m_landmarks.addAll(a_parentMap.m_landmarks);
+		}
+		
+		
 		
 		Point2D.Float prevPosition = new Point2D.Float();
 		Point2D.Float prevprevPosition = new Point2D.Float();
@@ -45,7 +52,7 @@ public class Map {
 			prevPosition = position;
 		}
 
-		
+		/*
 		for (int startIndex = 0; startIndex < a_reading.m_ir.length; startIndex++) {
 			Point2D.Float startPosition = getIRPosition(a_bestGuess, a_reading.m_ir[startIndex]);
 			
@@ -93,12 +100,33 @@ public class Map {
 					break;
 				}
 			}
-		}
+		}*/
 		
 		
 		
 
 	}
+
+	
+	
+	
+
+	private Float getClosestLandmark(Float position) {
+		Float ret = position;
+		float closestDistance = 10000000.0f;
+		for (Point2D.Float existing : m_landmarks) {
+			float distance = (float) existing.distanceSq(position);
+			if (distance < closestDistance) {
+				ret = existing;
+				closestDistance = distance;
+			}
+		}
+		return ret;
+	}
+
+
+
+
 
 	private Point2D.Float getIRPosition(State a_bestGuess,
 			IRReading distanceReading) {

@@ -8,9 +8,8 @@ import daniel.robot.sensors.SensorReading;
 
 public class SLAM {
 	
-	public PoseCollection m_world = new PoseCollection();
+	public PoseCollection m_world;
 	Robot 		   m_robot;
-	ParticleFilter m_latestRobotPosition;
 	
 	public SLAM(Robot a_robot) throws Exception {
 		m_robot = a_robot;
@@ -21,16 +20,23 @@ public class SLAM {
 		Direction compassDirection = m_robot.SenseSome().m_compassDirection;
 		State startState = new State(new Float(0.0f, 0.0f), compassDirection);
 		
-		m_latestRobotPosition = new ParticleFilter(startState);
-		
 		SensorReading reading = m_robot.SenseAll();
-		m_world.append(m_latestRobotPosition, reading, new Movement(0,0));
+		
+		ParticleFilter startPosition = new ParticleFilter(startState, reading);
+		
+		
+		
+		m_world = new PoseCollection(startPosition, reading);
+		
+		MatchingError error = MatchingError.getMatchingError( m_world.getLastPose().getBestMap(), startState, reading);
+		System.out.println(error);
+		
 	}
 	
 	public void updateAfterMovement() throws Exception {
 		
 		
-		float distance = 0.0f;
+		float distance = 5.0f;
 		float turn = 0.0f;
 		
 		Movement move = new Movement(distance, turn);
@@ -38,14 +44,11 @@ public class SLAM {
 		//Wake up and sense!
 		SensorReading Z = m_robot.SenseAll();
 		
-		m_latestRobotPosition.move(move, turn/2+10, distance/2 + 4);
-		
-		m_latestRobotPosition.setWeights(m_world, Z);
-		
-		m_latestRobotPosition = m_latestRobotPosition.ResampleParticles();
-		
-		m_world.append(m_latestRobotPosition, Z, move);
+		m_world.moveAndSense(move, Z);
 		
 		
+		
+		MatchingError error = MatchingError.getMatchingError( m_world.getLastPose().getBestMap(), m_world.getLastPose().getBestGuess().getState(), Z);
+		System.out.println(error);
 	}
 }

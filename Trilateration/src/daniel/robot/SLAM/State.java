@@ -10,6 +10,8 @@ public class State {
 	private Float m_position = new Float(); //in degrees
 	public Direction m_heading; //in meters
 	
+	private static Random rand = new Random();
+	
 	
 	public Float getRobotPosition() {
 		return m_position;
@@ -22,9 +24,7 @@ public class State {
 		return new Point2D.Float(x ,y );
 	}
 	
-	public MatchingError m_error;
 	
-	private static Random rand = new Random();
 	
 	public State(Float a_position, Direction a_compassDirection) {
 		m_position.x = a_position.x;
@@ -37,7 +37,6 @@ public class State {
 		m_position.x = a_state.m_position.x;
 		m_position.y = a_state.m_position.y;
 		m_heading = new Direction(a_state.m_heading.getHeadingDegrees());
-		m_error = a_state.m_error;
 	}
 
 	
@@ -62,16 +61,7 @@ public class State {
 		" d : "  + m_heading.getHeadingDegrees();
 	}
 
-	public void setError(MatchingError error) {
-		m_error = error;
-	}
-
-	public float getError() {
-		if (m_error == null)
-			return 0;
-		else
-			return m_error.getError();
-	}
+	
 
 	
 }

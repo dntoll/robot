@@ -10,31 +10,31 @@ public class PoseCollection {
 	public ArrayList<Pose> m_sensorScans = new ArrayList<Pose>();
 	
 	
-	PoseCollection() {
-		
+	PoseCollection(ParticleFilter startPosition, SensorReading reading) {
+		Pose startPose = new Pose(startPosition, reading, new Movement(0, 0));
+		m_sensorScans.add(startPose);
 	}
 
-	public void append(ParticleFilter a_particles, SensorReading a_reading, Movement a_movement) {
-		
-		State s = a_particles.getBestGuess();
-		m_sensorScans.add( new Pose(a_particles, a_reading, a_movement) );
-		System.out.println(s.toString());
-		System.out.println(a_reading.toString());
-	}
+	
 
-	public MatchingError measurementProbability(State a_newState, SensorReading a_reading) throws Exception {
-		MatchingError error = MatchingError.getMatchingError(getLastReading(), a_newState, a_reading);
-		
-		a_newState.setError(error);
-		return error;
-	}
-
-	private Pose getLastReading() {
+	public Pose getLastPose() {
 		return m_sensorScans.get(m_sensorScans.size()-1);
 	}
 	
 	public float getError() {
-		return getLastReading().getBestGuess().getError();
+		return getLastPose().getBestGuess().getWeight();
+	}
+
+	public void moveAndSense(Movement move, SensorReading sense) throws Exception {
+		
+		ParticleFilter newFilter = new ParticleFilter(getLastPose().m_position, move, sense);
+		Pose newPose = new Pose(newFilter, sense, move);
+		
+		m_sensorScans.add(newPose);
+		
+	//	newPose.m_position.getBestGuess().calculateWeight(sense);
+		
+		
 	}
 
 	
