@@ -16,8 +16,6 @@ public class Movement {
 		m_turnRight = a_turnRight;
 	}
 
-	
-
 	public float getPossibleAngle() {
 		return Gaussian.getRandomGaussian(m_turnRight, getHeadingVariance());
 		
@@ -35,5 +33,8 @@ public class Movement {
 	private float getPositionVariance() {
 		return 5;
 	}
+
+	//https://docs.google.com/spreadsheet/ccc?key=0AssbuCblTdssdGU4TFVSZlBINWptMS1ZbmRNUUVoNHc#gid=0
+	
 
 }

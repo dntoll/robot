@@ -88,7 +88,8 @@ public class Robot {
 			m_protocol.readDoneMoving(m_port.readSyncronosly());
 			m_protocol.readDoneMoving(m_port.readSyncronosly());
 		} else if (a_move.m_distance < 0.0f) {
-			m_port.write("s\n");
+			m_port.write("ss\n");
+			m_protocol.readDoneMoving(m_port.readSyncronosly());
 			m_protocol.readDoneMoving(m_port.readSyncronosly());
 		}
 		
