@@ -50,18 +50,18 @@ public class Robot {
 	
 	public SensorReading SenseSome() throws Exception  {
 		
-		m_port.write("cgmt\n");
+		m_port.write("cgt\n");
 		
 		Direction compassDirection = m_protocol.readCompass(m_port.readSyncronosly());
 		GyroAccelerometerReading gyroAccelerator = m_protocol.readGyroAndAccelerometer(m_port.readSyncronosly());
 		
 		
-		SonarReading[] sonar = new SonarReading[1];//m_protocol.readSonar(m_port.readSyncronosly());
-		IRReading[] ir = new IRReading[1];
-		
+		SonarReading[] sonar = new SonarReading[0];//m_protocol.readSonar(m_port.readSyncronosly());
+		IRReading[] ir = new IRReading[0];
+		/*
 		IRandSonarReading d = m_protocol.readDistanceMeasurement(m_port.readSyncronosly());
 		sonar[0] = d.m_sonar;
-		ir[0] = d.m_ir;
+		ir[0] = d.m_ir;*/
 		float temperature = m_protocol.readTemperature(m_port.readSyncronosly());
 		
 		SensorReading reading = new SensorReading(compassDirection,
@@ -84,11 +84,8 @@ public class Robot {
 		
 		//MOVE
 		if (a_move.m_distance > 0.0f) {
-			m_port.write("w\n");
+			m_port.write("ww\n");
 			m_protocol.readDoneMoving(m_port.readSyncronosly());
-			m_port.write("w\n");
-			m_protocol.readDoneMoving(m_port.readSyncronosly());
-			m_port.write("w\n");
 			m_protocol.readDoneMoving(m_port.readSyncronosly());
 		} else if (a_move.m_distance < 0.0f) {
 			m_port.write("s\n");

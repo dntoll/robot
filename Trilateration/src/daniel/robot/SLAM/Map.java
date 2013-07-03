@@ -45,7 +45,19 @@ public class Map {
 			{
 				
 				if (a_reading.hasCloseSonar(distanceReading)) {
-					m_landmarks.add(position);
+					
+					try {
+						float oldDistance = getDistance(a_bestGuess, distanceReading.m_servo, distanceReading.getBeamWidth());
+						
+						float difference = distanceReading.m_distance - oldDistance;
+						if (difference * difference > 10.0f*IRReading.IR_DISTANCE_NOISE * IRReading.IR_DISTANCE_NOISE) {
+							m_landmarks.add(position);	
+						}
+					} catch (Exception e) {
+						m_landmarks.add(position);	
+					}
+					
+					
 				}
 			}
 			prevprevPosition = prevPosition;
@@ -132,7 +144,7 @@ public class Map {
 			IRReading distanceReading) {
 		float distance = distanceReading.m_distance;
 		Direction direction = a_bestGuess.m_heading.getHeadDirection(distanceReading.m_servo);
-		Point2D.Float headPosition = a_bestGuess.getHeadPosition();
+		Point2D.Float headPosition = a_bestGuess.getRobotPosition();
 		
 		float x = headPosition.x + direction.getX() * distance;
 		float y = headPosition.y + direction.getY() * distance;
@@ -144,7 +156,7 @@ public class Map {
 		//WritableRaster raster = m_image.getRaster();
 		Direction direction = state.m_heading.getHeadDirection(a_servoDirection);
 		
-		Point2D.Float headPosition = state.getHeadPosition();
+		Point2D.Float headPosition = state.getRobotPosition();
 		Point2D.Float start = headPosition;
 		
 		float minLenSquare = 1000000.0f;

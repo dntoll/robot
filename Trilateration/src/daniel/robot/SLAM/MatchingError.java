@@ -3,7 +3,6 @@ package daniel.robot.SLAM;
 import daniel.robot.sensors.DistanceBase;
 import daniel.robot.sensors.IRReading;
 import daniel.robot.sensors.SensorReading;
-import daniel.robot.sensors.SonarReading;
 import daniel.robot.statistics.Gaussian;
 
 public class MatchingError {

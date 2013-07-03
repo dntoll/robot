@@ -33,10 +33,10 @@ class Compass {
     if(error != 0) // If there is an error, print it out.
       Serial.println(compass.GetErrorText(error));
       
-      minX = -223;
-      maxX = 52;
-      minY = -356;
-      maxY = -85;
+      minX = -241;
+      maxX = 233;
+      minY = -540;
+      maxY = 193;
   }
   
   
@@ -72,20 +72,7 @@ float measure()
   MagnetometerRaw raw = compass.ReadRawAxis();
   // Retrived the scaled values from the compass (scaled to the configured scale).
   MagnetometerScaled scaled = compass.ReadScaledAxis();
-/*
-  if (raw.XAxis < minX && raw.XAxis > -1000) {
-      minX = raw.XAxis;
-  }  
-  if (raw.YAxis < minY && raw.YAxis > -1000) {
-      minY = raw.YAxis;
-  }
-  if (raw.XAxis > maxX && raw.XAxis < 1000) {
-      maxX = raw.XAxis;
-  }  
-  if (raw.YAxis > maxY && raw.YAxis < 1000) {
-      maxY = raw.YAxis;
-  }
-  */
+
   //recenter
   float rX = map(raw.XAxis, minX, maxX, -255, 255);
   float rY = map(raw.YAxis, minY, maxY, -255, 255);
@@ -113,21 +100,14 @@ float measure()
   // Convert radians to degrees for readability.
   float headingDegrees = heading * 180/M_PI; 
   
-  headingDegrees -= 40;
+  headingDegrees -= 125;
   if(headingDegrees < 0)
     headingDegrees += 360;
   
-  static float match[] =      {0,  45, 81, 126, 180, 218, 252, 296, 360 };
+//  static float match[] =      {0,  36, 114, 175, 227, 265, 293, 327, 360 };
+  static float match[] = {0,  45,  90, 135, 180, 225, 270, 315, 360 };
   static float correction[] = {0,  45,  90, 135, 180, 225, 270, 315, 360 };
-  //wrap case
-  /*if (headingDegrees > match[7] && headingDegrees <= match[0]) {
-    if (headingDegrees <= match[0]) {
-      return map(headingDegrees, -20, 40, 315, 360);
-    } else {
-      //340-360
-      return map(headingDegrees, 340, 340+60, 315, 360);
-    }
-  }*/
+  
   for (int i = 0; i < 8; i++) {
     if (headingDegrees > match[i] && headingDegrees <= match[i+1]) {
       return map(headingDegrees, match[i], match[i+1], correction[i], correction[i+1]);
@@ -137,60 +117,11 @@ float measure()
   //  Output(raw, scaled, heading, headingDegrees);
   return headingDegrees;
 }
-  /*float CalculateHeadingTiltCompensated(MagnetometerScaled mag)
-  {
-    // We are swapping the accelerometers axis as they are opposite to the compass the way we have them mounted.
-    // We are swapping the signs axis as they are opposite.
-    // Configure this for your setup.
-    float accX = 0;
-    float accY = 1;
-    
-    float rollRadians = -30.0f *6.28f/360.0f;//asin(accY);
-    float pitchRadians = 0;//asin(accX);
-    
-    // We cannot correct for tilt over 40 degrees with this algorthem, if the board is tilted as such, return 0.
-    if(rollRadians > 0.78 || rollRadians < -0.78 || pitchRadians > 0.78 || pitchRadians < -0.78)
-    {
-      return 0;
-    }
-    
-    // Some of these are used twice, so rather than computing them twice in the algorithem we precompute them before hand.
-    float cosRoll = cos(rollRadians);
-    float sinRoll = sin(rollRadians);  
-    float cosPitch = cos(pitchRadians);
-    float sinPitch = sin(pitchRadians);
-    
-    // The tilt compensation algorithem.
-    float Xh = mag.XAxis * cosPitch + mag.ZAxis * sinPitch;
-    float Yh = mag.XAxis * sinRoll * sinPitch + mag.YAxis * cosRoll - mag.ZAxis * sinRoll * cosPitch;
-    
-    float heading = atan2(Yh, Xh);
-      
-    return heading;
-  }
-  */
+  
   
   
  private:
-  // Output the data down the serial port.
-  /*void Output(MagnetometerRaw raw, MagnetometerScaled scaled, float heading, float headingDegrees)
-  {
-     Serial.print("Raw:\t");
-     Serial.print(minX);
-     Serial.print("   ");   
-     Serial.print(maxX);
-     Serial.print("   ");   
-     Serial.print(minY);
-     Serial.print("   ");   
-     Serial.print(maxY);
-     Serial.print("   ");   
-     Serial.print("   \tHeading:\t");
-     Serial.print(heading);
-     Serial.print(" Radians   \t");
-     Serial.print(headingDegrees);
-     Serial.println(" Degrees   \t");
-  }*/
- 
+  
   float RadiansToDegrees(float rads)
   {
     // Correct for when signs are reversed.

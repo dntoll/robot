@@ -42,11 +42,11 @@ class L298N  {
     void runMotors(boolean leftForward, boolean rightForward) {
       digitalWrite(IN1,rightForward ? LOW : HIGH);
       digitalWrite(IN2,rightForward ? HIGH : LOW);//setting motorA's directon
-      digitalWrite(IN3, leftForward ? LOW : HIGH);
-      digitalWrite(IN4, leftForward ? HIGH : LOW);//setting motorB's directon 
+      digitalWrite(IN3, leftForward ? HIGH : LOW);
+      digitalWrite(IN4, leftForward ? LOW : HIGH);//setting motorB's directon 
       
-      analogWrite(ENA,225);
-      analogWrite(ENB,200);
+      analogWrite(ENA,255);
+      analogWrite(ENB,255);
  //     digitalWrite(ENA, HIGH);
  //     digitalWrite(ENB,HIGH);//start driving motorB
     }

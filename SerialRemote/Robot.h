@@ -16,18 +16,32 @@
 #include "odometry.h"
 
 
-#define TRIGGER_PIN   16 
-#define ECHO_PIN      15  
+//SERVO
 #define SERVO_PIN     11
-#define SHARP_PIN     0
-#define SHARP_ENABLE_PIN 2
-#define MIN_DEGREES 0
-#define MAX_DEGREES 170
+#define MIN_DEGREES 20
+#define MAX_DEGREES 160
 #define SERVO_DELAY_TIME 80
+
+//SONAR
+#define TRIGGER_PIN   4 
+#define ECHO_PIN      16  
+
+//SHARP
+#define SHARP_PIN1     1
+#define SHARP_PIN2     0
+
+//ENABLERS
+#define SHARP1_ENABLE_PIN 8
+#define SHARP2_ENABLE_PIN 12
+#define SONAR1_ENABLE_PIN 2
+#define SONAR2_ENABLE_PIN 7
+
+
+
 
 class Robot {
   public:
-    Robot() : m_sharp(SHARP_PIN), m_sonar(TRIGGER_PIN, ECHO_PIN) {
+    Robot() : m_sharp1(SHARP_PIN1), m_sharp2(SHARP_PIN2), m_sonar1(TRIGGER_PIN, ECHO_PIN), m_sonar2(TRIGGER_PIN, ECHO_PIN)  {
       
       //m_hBridge.stopAll();
       
@@ -35,9 +49,14 @@ class Robot {
       m_servo.attach(SERVO_PIN);  
       
    //   m_servo.write(m_servoPos);
+     pinMode(SHARP1_ENABLE_PIN, OUTPUT); 
+     pinMode(SHARP2_ENABLE_PIN, OUTPUT); 
+     pinMode(SONAR1_ENABLE_PIN, OUTPUT); 
+     pinMode(SONAR2_ENABLE_PIN, OUTPUT); 
       
-      pinMode(SHARP_ENABLE_PIN, OUTPUT);
-      digitalWrite(SHARP_ENABLE_PIN, LOW);
+      shutdownAll();
+      
+     // digitalWrite(SONAR2_ENABLE_PIN, HIGH);
       
       m_pCompass = new Compass();
       #ifdef GYRO 
@@ -56,14 +75,32 @@ class Robot {
     
     void sonarSweep() {
        Serial.print("Servo:Sonar");
-       shutdownSharp();
+
        int minAngle = MIN_DEGREES;
        int maxAngle = MAX_DEGREES;
+       float sonarMeasurement;
+       float sonarcm;
+       
+       shutdownAll();
+       startUpSensor(SONAR2_ENABLE_PIN);
        for(int pos = minAngle; pos <= maxAngle; pos += 5)  // goes from 0 degrees to 180 degrees 
        { 
           moveServo(pos);
-          float sonarMeasurement = m_sonar.getMedian(5, 30);
-          float sonarcm = m_sonar.transformToCM(sonarMeasurement);
+          sonarMeasurement = m_sonar2.getMedian(5, 30);
+          sonarcm = m_sonar2.transformToCM(sonarMeasurement);
+          
+          Serial.print(":");
+          Serial.print((m_servoPos+180)%360);
+          Serial.print(":");
+          Serial.print(sonarcm);
+       }
+       shutdownAll();
+       startUpSensor(SONAR1_ENABLE_PIN);
+       for(int pos = minAngle; pos <= maxAngle; pos += 5)  // goes from 0 degrees to 180 degrees 
+       { 
+          moveServo(pos);
+          sonarMeasurement = m_sonar1.getMedian(5, 30);
+          sonarcm = m_sonar1.transformToCM(sonarMeasurement);
           
           Serial.print(":");
           Serial.print(m_servoPos);
@@ -106,18 +143,36 @@ class Robot {
     
     void irSweep() {
        Serial.print("Servo:Sharp");
-       startupSharp();
        int minAngle = MIN_DEGREES;
        int maxAngle = MAX_DEGREES;
+       float sharpMeasurement, sharpcm, sonarMeasurement = 0, sonarcm = 0;
+       
+       shutdownAll();
+       startUpSensor(SHARP1_ENABLE_PIN);
        for(int pos = maxAngle; pos >= minAngle; pos -= 1)  // goes from 0 degrees to 180 degrees 
        { 
           moveServo(pos);
-          float sharpMeasurement, sharpcm, sonarMeasurement = 0, sonarcm = 0;
-          sharpMeasurement = m_sharp.getMedian(10,1);
-          sharpcm = m_sharp.transformToCM(sharpMeasurement);
+          sharpMeasurement = m_sharp1.getMedian(10,1);
+          sharpcm = m_sharp1.transformToCM(sharpMeasurement);
           
           Serial.print(":");
           Serial.print(m_servoPos);
+          Serial.print(":");
+          Serial.print(sharpcm);
+       }  
+       
+       shutdownAll();
+       startUpSensor(SHARP2_ENABLE_PIN);
+       
+       for(int pos = maxAngle; pos >= minAngle; pos -= 1)  // goes from 0 degrees to 180 degrees 
+       { 
+          moveServo(pos);
+          
+          sharpMeasurement = m_sharp2.getMedian(10,1);
+          sharpcm = m_sharp2.transformToCM(sharpMeasurement);
+          
+          Serial.print(":");
+          Serial.print((m_servoPos+180)%360);
           Serial.print(":");
           Serial.print(sharpcm);
        }
@@ -127,45 +182,77 @@ class Robot {
     }
     
     void measureDistance(int a_pos) {
-      Serial.print("Sharp:Sonar");
-      moveServo(a_pos);
-      startupSharp();
       float sharpMeasurement, sharpcm, sonarMeasurement = 0, sonarcm = 0;
-      sharpMeasurement = m_sharp.getMedian(5,5);
-      sharpcm = m_sharp.transformToCM(sharpMeasurement);
-      shutdownSharp();
-     
-      sonarMeasurement = m_sonar.getMedian(5,30);
-      sonarcm = m_sonar.transformToCM(sonarMeasurement);
-      Serial.print(":");
-      Serial.print(sharpcm, 1);
-      Serial.print(":");
-      Serial.print(sonarcm, 1);
-      Serial.print(":");
-      Serial.print(sharpMeasurement);
-      Serial.print(":");
-      Serial.print(sonarMeasurement, 1);
+      
+      Serial.println("Sharp:Sonar");
+      moveServo(a_pos);
+      
+      
+      shutdownAll();
+      startUpSensor(SHARP1_ENABLE_PIN);
+      
+      sharpMeasurement = m_sharp1.getMedian(5,40);
+      sharpcm = m_sharp1.transformToCM(sharpMeasurement);
+      Serial.print("s1:");
+      Serial.println(sharpcm, 1);
+      
+      shutdownAll();
+      startUpSensor(SONAR1_ENABLE_PIN);
+      sonarMeasurement = m_sonar1.getMedian(5,30);
+      sonarcm = m_sonar1.transformToCM(sonarMeasurement);
+      Serial.print("u1:");
+      Serial.println(sonarcm, 1);
+      
+      shutdownAll();
+      startUpSensor(SHARP2_ENABLE_PIN);
+      sharpMeasurement = m_sharp2.getMedian(5,40);
+      sharpcm = m_sharp2.transformToCM(sharpMeasurement);
+      Serial.print("s2:");
+      Serial.println(sharpcm, 1);
+      
+      
+      
+      shutdownAll();
+      startUpSensor(SONAR2_ENABLE_PIN);
+      sonarMeasurement = m_sonar2.getMedian(5,30);
+      sonarcm = m_sonar2.transformToCM(sonarMeasurement);
+      Serial.print("u2:");
+      Serial.println(sonarcm, 1);
+      
       Serial.println("");
+      
     }
     
     void measureGyro() {
       #ifdef GYRO
-      accel_t_gyro_union accel_t_gyro = m_pGyro->getAll();
+      int gx,gy,gz, ax, ay, az;
+      gx = gy = gz = 0;
+      
+      int samples = 5;
+      for (int i = 0; i< samples; i++) {
+        accel_t_gyro_union accel_t_gyro = m_pGyro->getAll();
+        gx += accel_t_gyro.value.x_gyro;
+        gy += accel_t_gyro.value.y_gyro;
+        gz += accel_t_gyro.value.z_gyro;
+        ax += accel_t_gyro.value.x_accel;
+        ay += accel_t_gyro.value.y_accel;
+        az += accel_t_gyro.value.z_accel;
+      }
       Serial.print("Accel:Gyro");
 
       
       Serial.print(":");
-      Serial.print(accel_t_gyro.value.x_accel, DEC);
+      Serial.print(ax/samples, DEC);
       Serial.print(":");
-      Serial.print(accel_t_gyro.value.y_accel, DEC);
+      Serial.print(ay/samples, DEC);
       Serial.print(":");
-      Serial.print(accel_t_gyro.value.z_accel, DEC);
+      Serial.print(az/samples, DEC);
       Serial.print(":");
-      Serial.print(accel_t_gyro.value.x_gyro, DEC);
+      Serial.print(gx/samples, DEC);
       Serial.print(":");
-      Serial.print(accel_t_gyro.value.y_gyro, DEC);
+      Serial.print(gy/samples, DEC);
       Serial.print(":");
-      Serial.print(accel_t_gyro.value.z_gyro, DEC);
+      Serial.print(gz/samples, DEC);
       Serial.println("");
       #endif
     }
@@ -212,16 +299,15 @@ class Robot {
     }
   private:
     void driveAndMeasure(int a_time) {
-    //  Odometry odo;
-   //   odo.measureForTime(a_time);
-   //   Serial.print(":");
-     delay(a_time);
+     //measureGyro();
+  //   for (int i = 0; i < a_time/10; i++) {
+    //   measureGyro();
+   //    delay(a_time/10);
+   //  }
+      delay(a_time);
       m_hBridge.stopAll();
-  //    Serial.print(odo.toString());
+   //   measureGyro();
       Serial.println("");
-      
-      
-    //  measureCompass();
     }
     
     void moveServo(int pos) {
@@ -232,23 +318,34 @@ class Robot {
 
     
     
-    void startupSharp() {
-      digitalWrite(SHARP_ENABLE_PIN, HIGH);
-      delay(38+10+6);
-      analogRead(SHARP_PIN);
-      delay(10);
+    void startUpSensor(int sensor) {
+      digitalWrite(sensor, HIGH);
+      
+      if (SHARP1_ENABLE_PIN == sensor || SHARP2_ENABLE_PIN == sensor) {
+         delay(38+10+6);
+         delay(0);
+         analogRead(sensor);
+      } else {
+        delay(55);
+      }
+
     }
     
-    void shutdownSharp() {
-      digitalWrite(SHARP_ENABLE_PIN, LOW);
-      delay(30);
+    void shutdownAll() {
+      digitalWrite(SHARP1_ENABLE_PIN, LOW);
+      digitalWrite(SHARP2_ENABLE_PIN, LOW);
+      digitalWrite(SONAR1_ENABLE_PIN, LOW);
+      digitalWrite(SONAR2_ENABLE_PIN, LOW);
+      delay(3);
     }
     
     
     
     Servo m_servo;  // create servo object to control a servo 
-    SharpSensor m_sharp;
-    HC_SR04 m_sonar;
+    SharpSensor m_sharp1;
+    SharpSensor m_sharp2;
+    HC_SR04 m_sonar1;
+    HC_SR04 m_sonar2;
     L298N m_hBridge;
     #ifdef GYRO
       MPU6050 *m_pGyro;

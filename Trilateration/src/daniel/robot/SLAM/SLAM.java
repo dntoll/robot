@@ -36,7 +36,7 @@ public class SLAM {
 	public void updateAfterMovement() throws Exception {
 		
 		
-		float distance = 5.0f;
+		float distance = -13.0f;
 		float turn = 0.0f;
 		
 		Movement move = new Movement(distance, turn);

@@ -65,5 +65,9 @@ public class Particle {
 		return m_map;
 	}
 
+	public Particle getParent() {
+		return m_parent;
+	}
+
 	
 }

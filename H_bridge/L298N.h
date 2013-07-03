@@ -53,11 +53,11 @@ class L298N  {
       analogWrite (IN4,0);//stop driving motorB
     }
   private:
-    int ENA=10;//connected to Arduino's port 5(output pwm)
-    int IN1=6;//connected to Arduino's port 2
-    int IN2=5;//connected to Arduino's port 3
-    int ENB=9;//connected to Arduino's port 6(output pwm)
-    int IN3=3;//connected to Arduino's port 4
+    int ENA=5;//connected to Arduino's port 5(output pwm)
+    int IN1=10;//connected to Arduino's port 2
+    int IN2=9;//connected to Arduino's port 3
+    int ENB=3;//connected to Arduino's port 6(output pwm)
+    int IN3=6;//connected to Arduino's port 4
     int IN4=17;//connected to Arduino's port 7
 
 };

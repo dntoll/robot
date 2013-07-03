@@ -49,7 +49,7 @@ class Odometry {
     boolean m_leftOn, m_rightOn;
     int m_left = 0;
     int m_right = 0;
-    static const int LEFT_PIN = 4;
-    static const int RIGHT_PIN = 7;
+    static const int LEFT_PIN = 0;
+    static const int RIGHT_PIN = 0;
   
 };

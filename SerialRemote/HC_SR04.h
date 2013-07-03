@@ -19,11 +19,11 @@ class HC_SR04 : public Sensor  {
     }
     
     float getRawMeasurement() {
-      return (float)sonar.ping();// / (float)US_ROUNDTRIP_CM; // Send ping, get ping time in microseconds (uS).
+      return (float)sonar.ping();
     }
     
     float transformToCM(float a_raw) {
-        return a_raw / (float)US_ROUNDTRIP_CM; // Send ping, get ping time in microseconds (uS).
+        return a_raw / (float)US_ROUNDTRIP_CM;
     }
   
   private:

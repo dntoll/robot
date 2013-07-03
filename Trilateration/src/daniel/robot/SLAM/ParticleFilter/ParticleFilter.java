@@ -29,7 +29,7 @@ public class ParticleFilter {
 			m_particles[i] = new Particle(a_parent.m_particles[i]);
 		}
 		
-		move(move, 20, 5);
+		move(move);
 		setWeights( sense);
 		
 		ResampleParticles(sense);
@@ -85,9 +85,9 @@ public class ParticleFilter {
 
 	
 	
-	private void move(Movement a_move, float a_headingVariance, float a_positionVariance) {
+	private void move(Movement a_move) {
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
-			m_particles[i].getState().move(a_move, a_headingVariance, a_positionVariance);
+			m_particles[i].getState().move(a_move);
 		}
 	}
 
