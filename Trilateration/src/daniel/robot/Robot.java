@@ -7,6 +7,7 @@ import daniel.robot.sensors.GyroAccelerometerReading;
 import daniel.robot.sensors.IRReading;
 import daniel.robot.sensors.SensorReading;
 import daniel.robot.sensors.SonarReading;
+import daniel.robot.server.RobotFinder;
 
 public class Robot {
 	
@@ -97,47 +98,12 @@ public class Robot {
 	}
 	
 	
-
-	
-
-	
-	
 	public Robot(SerialPort port) {
 		this.m_port = port;
 		m_port.write("z\n");
 	}
 	
-	/*private String read() {
-		String data = m_port.read();
-		return data;
-	}*/
-	
-	
-	public static void main(String[] args) {
-		
-		try
-        {
-			RobotFinder finder = new RobotFinder();
-			Robot robot = finder.findRobots();
-			robot.Wait();
 
-			//long lastTime = 0;
-			while(true) {
-				//String content = robot.read();
-				//System.out.print(content);
-				
-				SensorReading reading = robot.SenseAll();
-				System.out.println(reading.toString());
-				
-				Thread.sleep(10000);
-				
-			}
-        } catch (Exception e) {
-        	System.out.print(e);
-        	e.printStackTrace();
-        	
-        }
-	}
 	
 	
 }

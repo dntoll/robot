@@ -7,7 +7,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import daniel.robot.Robot;
-import daniel.robot.RobotFinder;
+import daniel.robot.server.RobotFinder;
 
 public class Window extends javax.swing.JFrame implements ActionListener {
 

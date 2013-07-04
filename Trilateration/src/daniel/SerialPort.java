@@ -26,7 +26,7 @@ public class SerialPort {
     		System.out.println("SerialPort::connectAndInitialize Port: " + identifier.getName());
     		
     		SerialPort port = new SerialPort(identifier);
-    		port.setupPort();
+    		
     		ports.add(port);
     	}
     	
@@ -59,8 +59,10 @@ public class SerialPort {
 	private Thread readThread;
 	private Thread writeThread;
 	
-	private SerialPort(CommPortIdentifier identifier) {
+	private SerialPort(CommPortIdentifier identifier) throws Exception {
 		this.portIdentifier = identifier;
+		
+		setupPort();
 	}
 	
 	
