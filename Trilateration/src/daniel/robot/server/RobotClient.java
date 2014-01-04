@@ -9,7 +9,8 @@ import java.net.UnknownHostException;
 public class RobotClient {
 	public static void main(String args[]) throws UnknownHostException, IOException, InterruptedException {
 		@SuppressWarnings("resource")
-		Socket server = new Socket("localhost", 6789);
+		//Socket server = new Socket("localhost", 6789);
+		Socket server = new Socket("192.168.1.6", 6789);
         System.out.println("Client found robot");
 		int d;
 		while (true) {

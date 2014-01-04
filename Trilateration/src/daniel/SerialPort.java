@@ -10,7 +10,7 @@ import java.util.List;
 
 
 
-public class SerialPort {
+public class SerialPort extends RobotPort {
 	
 	
 	@SuppressWarnings("unchecked")
@@ -39,20 +39,13 @@ public class SerialPort {
 		return portIdentifier.getName();
 	}
 	
-	public String read() {
-		return readBuffer.read();
-	}
 	
-	public void write(String data) {
-		writeBuffer.write(data);
-	}
 	
 	public String toString() {
 		return portIdentifier.toString();
 	}
 	
-	private SyncronizedBuffer readBuffer = new SyncronizedBuffer();
-	private SyncronizedBuffer writeBuffer = new SyncronizedBuffer();
+	
 	
 	private CommPortIdentifier portIdentifier;
 	private gnu.io.SerialPort serialPort;
@@ -101,18 +94,7 @@ public class SerialPort {
     	
     }
 	
-	public String readSyncronosly() throws Exception {
-		while(true) {
-			String data = read();
-			
-			if (data != "") {
-				return data;
-			} else {
-				Thread.sleep(100);
-			
-			}
-		}
-	}
+	
 
 	
 }

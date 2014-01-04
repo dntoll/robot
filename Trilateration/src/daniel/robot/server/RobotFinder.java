@@ -1,13 +1,11 @@
 package daniel.robot.server;
 
-import java.util.List;
-
-import daniel.SerialPort;
-import daniel.robot.Robot;
+import daniel.IPSerialPort;
+import daniel.RobotPort;
 
 public class RobotFinder {
-	public SerialPort findRobots() throws Exception {
-		List<SerialPort> ports = SerialPort.connectAndInitialize();
+	public RobotPort findRobots() throws Exception {
+		/*List<SerialPort> ports = SerialPort.connectAndInitialize();
 		
 		
 		for(SerialPort port : ports) {
@@ -17,9 +15,7 @@ public class RobotFinder {
 				port.getName().equals("/dev/ttyUSB0") ||
 				port.getName().equals("/dev/ttyUSB1")) { //TODO better to supply this as an argument...
 				
-				/*Robot robot = new Robot(port); 
 				
-				return robot;*/
 				
 				return port;
 				
@@ -30,6 +26,8 @@ public class RobotFinder {
 			
 			
 		}
-		throw new Exception("No robot found");
+		throw new Exception("No robot found");*/
+		
+		return new IPSerialPort();
 	}
 }

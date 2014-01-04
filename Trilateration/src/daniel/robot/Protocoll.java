@@ -1,6 +1,6 @@
 package daniel.robot;
 
-import daniel.SerialPort;
+import daniel.RobotPort;
 import daniel.robot.sensors.IRandSonarReading;
 import daniel.robot.sensors.GyroAccelerometerReading;
 import daniel.robot.sensors.IRReading;
@@ -98,7 +98,7 @@ public class Protocoll {
 		throw new Exception("no data provided");
 	}
 
-	public void waitForDone(SerialPort port) {
+	public void waitForDone(RobotPort port) {
 		String data;
 		
 		while(true) {
@@ -114,11 +114,11 @@ public class Protocoll {
 		}
 	}
 
-	public void calibrate(SerialPort port) {
+	public void calibrate(RobotPort port) {
 		port.write("n\n");
 	}
 	
-	public void stopCalibrate(SerialPort port) {
+	public void stopCalibrate(RobotPort port) {
 		port.write("n\n");
 	}
 

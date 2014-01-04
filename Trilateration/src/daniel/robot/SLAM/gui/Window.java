@@ -95,7 +95,7 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 	        	RobotFinder finder = new RobotFinder();
 				Robot robot;
 				try {
-					robot = finder.findRobots();
+					robot = new Robot(finder.findRobots());
 				
 					robot.Wait();
 					

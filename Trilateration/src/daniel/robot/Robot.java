@@ -1,6 +1,6 @@
 package daniel.robot;
 
-import daniel.SerialPort;
+import daniel.RobotPort;
 import daniel.robot.SLAM.Movement;
 import daniel.robot.sensors.IRandSonarReading;
 import daniel.robot.sensors.GyroAccelerometerReading;
@@ -13,7 +13,7 @@ public class Robot {
 	
 	
 	private Protocoll m_protocol = new Protocoll();
-	private SerialPort m_port;
+	private RobotPort m_port;
 
 	public void Wait() {
 		m_protocol.waitForDone(m_port);
@@ -98,7 +98,7 @@ public class Robot {
 	}
 	
 	
-	public Robot(SerialPort port) {
+	public Robot(RobotPort port) {
 		this.m_port = port;
 		m_port.write("z\n");
 	}

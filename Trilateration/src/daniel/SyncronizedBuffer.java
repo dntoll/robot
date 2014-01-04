@@ -19,6 +19,11 @@ class SyncronizedBuffer {
 		
 		return "";
 	}
+
+	public void write(byte d) {
+		
+		buffer += (char)d;
+	}
 	
 	
 	
