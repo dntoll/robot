@@ -8,8 +8,8 @@ public class IPSerialPort extends RobotPort implements Runnable{
 	
 	Socket server;
 	
-	public IPSerialPort() throws UnknownHostException, IOException{
-		this.server = new Socket("192.168.1.6", 6789);
+	public IPSerialPort(String serverAdress, int port) throws UnknownHostException, IOException{
+		this.server = new Socket(serverAdress, port);
         System.out.println("Client found robot");
         Thread t = new Thread(this);
         t.start();
@@ -36,14 +36,16 @@ public class IPSerialPort extends RobotPort implements Runnable{
 					//keep alive
 					server.getOutputStream().write(0);
 					server.getOutputStream().write(0);
-				} else {
-					d = server.getInputStream().read();
 					
+				} else {
+				//	System.out.println("got a byte");
+					d = server.getInputStream().read();
+					//System.out.write((byte)d);
 					this.readBuffer.write((byte)d);
 					
 				}
 			}
-			Thread.sleep(10);
+			Thread.sleep(1);
 		}
         } catch (Exception e) {
         	System.err.println(e.getStackTrace());

@@ -13,6 +13,8 @@ class SharpSensor : public Sensor {
   
   
   float getRawMeasurement() {
+    
+      analogRead(m_analogPin);
       int sensorValue = analogRead(m_analogPin);
       float value= (float)sensorValue * (5.0f / 1023.0f);
       return value;

@@ -97,7 +97,7 @@ public class Window extends javax.swing.JFrame implements ActionListener {
 				try {
 					robot = new Robot(finder.findRobots());
 				
-					robot.Wait();
+				//	robot.Wait();
 					
 		            Window e = new Window(robot);
 		            e.setVisible(true);

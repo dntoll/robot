@@ -5,8 +5,8 @@
 
 //SERVO
 #define SERVO_PIN     3
-#define MIN_DEGREES 20
-#define MAX_DEGREES 160
+#define MIN_DEGREES 5
+#define MAX_DEGREES 175
 #define SERVO_DELAY_TIME 80
 
 //SONAR
@@ -45,7 +45,8 @@ class SensorTower {
      digitalWrite(SONAR1_GND_PIN, LOW);
      digitalWrite(SONAR2_GND_PIN, LOW);
       
-      m_servoPos = 90;
+      m_servoPos = MIN_DEGREES;
+      moveServo(90);
       m_servo.attach(SERVO_PIN);  
       
    //   m_servo.write(m_servoPos);
@@ -54,12 +55,52 @@ class SensorTower {
      
       
     shutdownAll();
-      
+    startUpSensor(SONAR1_ENABLE_PIN); 
+    startUpSensor(SONAR2_ENABLE_PIN); 
+    startUpSensor(SHARP1_ENABLE_PIN); 
+    startUpSensor(SHARP2_ENABLE_PIN); 
      
     }
     
     ~SensorTower() {
      
+    }
+    
+    float sensor(int index) {
+      
+      float measurement;
+      float cm;
+       
+      switch (index) {
+        case 0 : 
+          measurement = m_sonar1.getMedian(5, 10);
+          return m_sonar1.transformToCM(measurement); 
+        case 1 : 
+          measurement = m_sharp1.getMedian(5,1);
+          return m_sharp1.transformToCM(measurement);
+        case 2 : 
+          measurement = m_sonar2.getMedian(5, 10);
+          return m_sonar2.transformToCM(measurement); 
+        case 3 : 
+          measurement = m_sharp2.getMedian(5,1);
+          return m_sharp2.transformToCM(measurement);
+      }
+      
+      return -1;
+    }
+    
+    void sweep() {
+      for(int pos = MIN_DEGREES; pos <= MAX_DEGREES; pos += 1)  // goes from 0 degrees to 180 degrees 
+       { 
+          moveServo(pos);
+          Serial.print((m_servoPos+180)%360);
+          for(int i = 0; i <4; i++) {
+            Serial.print(":");              
+            Serial.print(sensor(i));
+          }
+          Serial.println();
+       }
+       moveServo(90);
     }
     
     void sonarSweep() {
@@ -210,14 +251,15 @@ class SensorTower {
     void startUpSensor(int sensor) {
       digitalWrite(sensor, HIGH);
       
-      delay(100);
+      //delay(100);
       
-      if (SHARP1_ENABLE_PIN == sensor || SHARP2_ENABLE_PIN == sensor) {
+      if (SHARP1_ENABLE_PIN == sensor || 
+          SHARP2_ENABLE_PIN == sensor) {
          delay(38+10+6);
          
          analogRead(sensor);
       } else {
-        delay(55);
+        delay(100);
       }
 
     }

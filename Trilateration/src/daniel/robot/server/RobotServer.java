@@ -24,26 +24,40 @@ import daniel.SerialWriter;
  * @author daniel
  *
  */
-public class RobotServer {
+public class RobotServer implements Runnable {
 	
 	private ServerSocket m_serverSocket;
+	private String m_sensorsPort;
+	private int m_socketPort;
 
-	RobotServer() throws IOException {
-		m_serverSocket = new ServerSocket(6789); 
+	RobotServer(String sensorsPort, int socketPort) throws IOException {
+		m_socketPort = socketPort;
+		m_serverSocket = new ServerSocket(socketPort); 
+		this.m_sensorsPort = sensorsPort;
 	}
 	
-	private void run() throws IOException {
+	long keepAliveReceived;
+	public void run() {
 		
 		
 		while (true) {
-			System.out.println("starting up and listening to 6789");
-			Socket clientSocket = m_serverSocket.accept();
+			System.out.println("starting up and listening to " + m_socketPort);
+			Socket clientSocket;
+			try {
+				clientSocket = m_serverSocket.accept();
+			} catch (IOException e2) {
+				
+				e2.printStackTrace();
+				break;
+			}
 			System.out.println("accepted connection");
 		
-			long keepAliveReceived = System.currentTimeMillis();
+			keepAliveReceived = System.currentTimeMillis();
 			long keepAliveSent = System.currentTimeMillis();
+			
+				
 			try {
-				SerialPort port = findRobots();
+ 				SerialPort port = findPort(m_sensorsPort);
 				System.out.println("found robot");
 				try {
 					int iterations = 0;
@@ -51,43 +65,14 @@ public class RobotServer {
 					port.setDTR(true);
 					Thread.sleep(10);
 					port.setDTR(false);
+					boolean quit = false;
+					do {
+						
+						quit = communicate(clientSocket, 
+								keepAliveSent, port, iterations);
+					} while(quit != true);
 					
-					while(true) {
-						
-						int d;
-						if ( port.getInputStream().available() > 0) {
-							d = port.getInputStream().read();
-							clientSocket.getOutputStream().write(1);
-							clientSocket.getOutputStream().write(d);
-						}
-
-						if ( clientSocket.getInputStream().available() > 1) {
-							int protocol = clientSocket.getInputStream().read();
-							if (protocol == 0) {
-								clientSocket.getInputStream().read();
-								//keep alive
-								keepAliveReceived = System.currentTimeMillis();
-								//System.out.println("keep alive received");
-							} else {
-								d = clientSocket.getInputStream().read();
-								port.getOutputStream().write(d);
-							}
-						}
-						Thread.sleep(10);
-						
-						//Send keep alive
-						iterations++;
-						if (System.currentTimeMillis() - keepAliveSent > 1000) {
-							clientSocket.getOutputStream().write(0);
-							clientSocket.getOutputStream().write(0);
-							//System.out.println("keep alive sent");
-							keepAliveSent = System.currentTimeMillis();
-						}
-						
-						if (System.currentTimeMillis() - keepAliveReceived > 10000) {
-							break;
-						}
-					}
+					System.out.println("stopped communicating");
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (InterruptedException e) {
@@ -102,11 +87,53 @@ public class RobotServer {
 			}
 		}
 	}
+
+	private boolean communicate(Socket clientSocket,
+			long keepAliveSent, SerialPort port, int iterations)
+			throws IOException, InterruptedException {
+		int d;
+		if ( port.getInputStream().available() > 0) {
+			d = port.getInputStream().read();
+			clientSocket.getOutputStream().write(1);
+			clientSocket.getOutputStream().write(d);
+		} else 	if ( clientSocket.getInputStream().available() > 1) {
+			int protocol = clientSocket.getInputStream().read();
+			if (protocol == 0) {
+				clientSocket.getInputStream().read();
+				//keep alive
+				keepAliveReceived = System.currentTimeMillis();
+			} else {
+				d = clientSocket.getInputStream().read();
+				port.getOutputStream().write(d);
+			}
+		} else {
+			Thread.sleep(10);
+		}
+		//
+		
+		//Send keep alive
+		iterations++;
+		if (System.currentTimeMillis() - keepAliveSent > 1000) {
+			clientSocket.getOutputStream().write(0);
+			clientSocket.getOutputStream().write(0);
+			//System.out.println("keep alive sent");
+			keepAliveSent = System.currentTimeMillis();
+			//Thread.sleep(10);
+		}
+		
+		if (System.currentTimeMillis() - keepAliveReceived > 10000) {
+			
+			System.out.println("Timeout :"  + (int)(System.currentTimeMillis() - keepAliveReceived));
+			return true;
+		}
+		
+		return false;
+	}
 	
 	
 	
 	@SuppressWarnings("unchecked")
-	private SerialPort findRobots() throws Exception {
+	private SerialPort findPort(String portID) throws Exception {
 		Enumeration<CommPortIdentifier> identifiers = CommPortIdentifier.getPortIdentifiers();
 		
 		while(identifiers.hasMoreElements()) {
@@ -130,9 +157,7 @@ public class RobotServer {
     								        		gnu.io.SerialPort.STOPBITS_1,
     								        		gnu.io.SerialPort.PARITY_NONE);
                     
-            		if (serialPort.getName().equals("COM14") || 
-            				serialPort.getName().equals("/dev/ttyUSB0") ||
-            				serialPort.getName().equals("/dev/ttyUSB1")) {
+            		if (serialPort.getName().equals(portID)) {
             		
             			
 	                    return serialPort;
@@ -148,9 +173,17 @@ public class RobotServer {
 	}
 
 	public static void main(String argv[]) throws Exception {
-		RobotServer server =  new RobotServer();
 		
-		server.run();
+		String sensorsPort = "/dev/ttyACM0";
+		RobotServer sensorServer =  new RobotServer(sensorsPort, 6789);
+		
+		String motorPort = "/dev/ttyUSB0";
+		RobotServer motorServer =  new RobotServer(motorPort, 6790);
+		
+		Thread sensors = new Thread(sensorServer);
+		sensors.start();
+		Thread motor = new Thread(motorServer);
+		motor.start();
 		
 	}
 

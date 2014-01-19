@@ -36,7 +36,7 @@ class Sensor {
            accum += samples[i];
            samplesSampled++;
            
-           Serial.println(samples[i], 3);
+           //Serial.println(samples[i], 3);
         }
    
         return accum / (float)samplesSampled;

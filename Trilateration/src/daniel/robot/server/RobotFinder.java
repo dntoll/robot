@@ -28,6 +28,6 @@ public class RobotFinder {
 		}
 		throw new Exception("No robot found");*/
 		
-		return new IPSerialPort();
+		return new IPSerialPort("192.168.1.8", 6789);
 	}
 }
