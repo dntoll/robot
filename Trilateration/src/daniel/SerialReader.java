@@ -28,7 +28,7 @@ public class SerialReader implements Runnable
             	//System.out.println("read : " + readFrom);
             }
             
-            Thread.sleep(10);
+            Thread.sleep(1);
         }
         catch ( IOException e )
         {

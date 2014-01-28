@@ -63,9 +63,11 @@ public class Direction {
 	}
 	
 	private void wrap() {
-		if (m_heading > 360) {
+		while (m_heading > 360) {
 			m_heading -= 360;
-		} else if (m_heading < 0) {
+		}
+
+		while (m_heading < 0) {
 			m_heading += 360;
 		}
 	}

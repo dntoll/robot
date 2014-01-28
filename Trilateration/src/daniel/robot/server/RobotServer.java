@@ -109,6 +109,7 @@ public class RobotServer implements Runnable {
 		} else {
 			Thread.sleep(10);
 		}
+		Thread.sleep(0, 10);
 		//
 		
 		//Send keep alive
@@ -141,33 +142,34 @@ public class RobotServer implements Runnable {
     		
     		System.out.println("Found identifier" + identifier.getName());
     		
-    		if ( identifier.isCurrentlyOwned() )
-            {
-                throw new Exception("Error: Port is currently in use " + identifier.getName());
-            }
-            else
-            {
-                CommPort commPort =  identifier.open(this.getClass().getName(), 2000);
-                
-                if ( commPort instanceof gnu.io.SerialPort )
-                {
-            		SerialPort serialPort = (gnu.io.SerialPort) commPort;
-            		serialPort.setSerialPortParams( 57600,
-    								        		gnu.io.SerialPort.DATABITS_8, 
-    								        		gnu.io.SerialPort.STOPBITS_1,
-    								        		gnu.io.SerialPort.PARITY_NONE);
-                    
-            		if (serialPort.getName().equals(portID)) {
-            		
-            			
-	                    return serialPort;
-            		}
-                }
-                else
-                {
-                	throw new Exception("Error: Only serial ports are handled by this example.");
-                }
-            }
+    		if (identifier.getName().equals(portID)) {
+    		
+	    		if ( identifier.isCurrentlyOwned() )
+	            {
+	                throw new Exception("Error: Port is currently in use " + identifier.getName());
+	            }
+	            else
+	            {
+	                CommPort commPort =  identifier.open(this.getClass().getName(), 2000);
+	                
+	                if ( commPort instanceof gnu.io.SerialPort )
+	                {
+	            		SerialPort serialPort = (gnu.io.SerialPort) commPort;
+	            		serialPort.setSerialPortParams( 57600,
+	    								        		gnu.io.SerialPort.DATABITS_8, 
+	    								        		gnu.io.SerialPort.STOPBITS_1,
+	    								        		gnu.io.SerialPort.PARITY_NONE);
+	                    
+	            		//if (serialPort.getName().equals(portID)) {
+	            		    return serialPort;
+	            		//}
+	                }
+	                else
+	                {
+	                	throw new Exception("Error: Only serial ports are handled by this example.");
+	                }
+	            }
+    		}
 		}
 		throw new Exception("Error: No ports found");
 	}

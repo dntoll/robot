@@ -29,7 +29,7 @@ public class IPSerialPort extends RobotPort implements Runnable{
         		server.getOutputStream().write(1);
 				server.getOutputStream().write(d);
 			}
-			if ( server.getInputStream().available() > 1) {
+			while ( server.getInputStream().available() > 1) {
 				int protocol = server.getInputStream().read();
 				if (protocol == 0) {
 					server.getInputStream().read();
@@ -45,7 +45,7 @@ public class IPSerialPort extends RobotPort implements Runnable{
 					
 				}
 			}
-			Thread.sleep(1);
+			Thread.sleep(0, 100);
 		}
         } catch (Exception e) {
         	System.err.println(e.getStackTrace());

@@ -30,13 +30,14 @@ public class Main {
 	        	
 	        	RobotModel model;
 				try {
-					model = new RobotModel();
+					model = new RobotModel("127.0.0.1");
 				
-		        	MetaView canvas = new MetaView(model);
+					Dimension windowSize = new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT);
+		        	MetaView canvas = new MetaView(model, windowSize);
 		        	
 		        	MetaController controller = new MetaController(canvas, model);
 		            
-		            canvas.setPreferredSize(new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT));
+		            canvas.setPreferredSize(windowSize);
 	
 		            // Create a animator that drives canvas' display() at the specified FPS. 
 		            final FPSAnimator animator = new FPSAnimator(new MVCAdapter(controller, canvas), FPS, true);
@@ -64,7 +65,6 @@ public class Main {
 		            frame.setVisible(true);
 		            animator.start(); // start the animation loop
 				} catch (Exception e1) {
-					// TODO Auto-generated catch block
 					e1.printStackTrace();
 				}
 	            

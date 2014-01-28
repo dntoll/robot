@@ -28,7 +28,7 @@ public class SerialWriter implements Runnable
             		this.out.write(buffer.charAt(i));
             	}
             	
-            	Thread.sleep(100);
+            	Thread.sleep(1);
             	
             }                
         }
