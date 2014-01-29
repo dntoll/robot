@@ -3,17 +3,10 @@ package daniel.robot.server;
 import gnu.io.CommPort;
 import gnu.io.CommPortIdentifier;
 import gnu.io.SerialPort;
-import gnu.io.UnsupportedCommOperationException;
-
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Enumeration;
-
-import daniel.SerialReader;
-import daniel.SerialWriter;
 
 
 
@@ -120,7 +113,7 @@ public class RobotServer implements Runnable {
 		
 		//Send keep alive
 		iterations++;
-		if (System.currentTimeMillis() - keepAliveSent > 1000) {
+		if (System.currentTimeMillis() - keepAliveSent > 2000) {
 			clientSocket.getOutputStream().write(0);
 			clientSocket.getOutputStream().write(0);
 			//System.out.println("keep alive sent");
@@ -166,9 +159,7 @@ public class RobotServer implements Runnable {
 	    								        		gnu.io.SerialPort.STOPBITS_1,
 	    								        		gnu.io.SerialPort.PARITY_NONE);
 	                    
-	            		//if (serialPort.getName().equals(portID)) {
-	            		    return serialPort;
-	            		//}
+	            		return serialPort;
 	                }
 	                else
 	                {

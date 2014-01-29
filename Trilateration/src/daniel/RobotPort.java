@@ -18,20 +18,4 @@ public abstract class RobotPort {
 		writeBuffer.write(data);
 	}
 	
-	/* (non-Javadoc)
-	 * @see daniel.RobotPort#readSyncronosly()
-	 */
-	/*public String readSyncronosly() throws Exception {
-		while(true) {
-			String data = read();
-			
-			if (data.equals("") == false) {
-				return data;
-			} else {
-				Thread.sleep(10);
-			
-			}
-		}
-	}*/
-
 }

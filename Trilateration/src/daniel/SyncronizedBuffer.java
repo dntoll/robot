@@ -20,7 +20,7 @@ class SyncronizedBuffer {
 		return "";
 	}
 
-	public void write(byte d) {
+	public synchronized void write(byte d) {
 		
 		buffer += (char)d;
 	}
