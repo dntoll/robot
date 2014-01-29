@@ -30,7 +30,8 @@ public class Main {
 	        	
 	        	RobotModel model;
 				try {
-					model = new RobotModel("127.0.0.1");
+					//model = new RobotModel("127.0.0.1");
+					model = new RobotModel("192.168.2.3");
 				
 					Dimension windowSize = new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT);
 		        	MetaView canvas = new MetaView(model, windowSize);

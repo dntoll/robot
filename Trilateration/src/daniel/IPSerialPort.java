@@ -33,10 +33,11 @@ public class IPSerialPort extends RobotPort implements Runnable{
 				int protocol = server.getInputStream().read();
 				if (protocol == 0) {
 					server.getInputStream().read();
+					
 					//keep alive
 					server.getOutputStream().write(0);
 					server.getOutputStream().write(0);
-					
+					System.out.println("Keep alive sent to " + server.getPort());
 				} else {
 				//	System.out.println("got a byte");
 					d = server.getInputStream().read();

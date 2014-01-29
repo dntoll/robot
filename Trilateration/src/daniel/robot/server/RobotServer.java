@@ -37,6 +37,7 @@ public class RobotServer implements Runnable {
 	}
 	
 	long keepAliveReceived;
+	long keepAliveSent;
 	public void run() {
 		
 		
@@ -53,7 +54,7 @@ public class RobotServer implements Runnable {
 			System.out.println("accepted connection");
 		
 			keepAliveReceived = System.currentTimeMillis();
-			long keepAliveSent = System.currentTimeMillis();
+			keepAliveSent = System.currentTimeMillis();
 			
 				
 			try {
@@ -69,7 +70,7 @@ public class RobotServer implements Runnable {
 					do {
 						
 						quit = communicate(clientSocket, 
-								keepAliveSent, port, iterations);
+								port, iterations);
 					} while(quit != true);
 					
 					System.out.println("stopped communicating");
@@ -89,27 +90,32 @@ public class RobotServer implements Runnable {
 	}
 
 	private boolean communicate(Socket clientSocket,
-			long keepAliveSent, SerialPort port, int iterations)
+			SerialPort port, int iterations)
 			throws IOException, InterruptedException {
 		int d;
 		if ( port.getInputStream().available() > 0) {
-			d = port.getInputStream().read();
-			clientSocket.getOutputStream().write(1);
-			clientSocket.getOutputStream().write(d);
+			while ( port.getInputStream().available() > 0) {
+				d = port.getInputStream().read();
+				clientSocket.getOutputStream().write(1);
+				clientSocket.getOutputStream().write(d);
+			}
 		} else 	if ( clientSocket.getInputStream().available() > 1) {
-			int protocol = clientSocket.getInputStream().read();
-			if (protocol == 0) {
-				clientSocket.getInputStream().read();
-				//keep alive
-				keepAliveReceived = System.currentTimeMillis();
-			} else {
-				d = clientSocket.getInputStream().read();
-				port.getOutputStream().write(d);
+
+			while ( clientSocket.getInputStream().available() > 1) {
+				int protocol = clientSocket.getInputStream().read();
+				if (protocol == 0) {
+					clientSocket.getInputStream().read();
+					//keep alive
+					keepAliveReceived = System.currentTimeMillis();
+				} else {
+					d = clientSocket.getInputStream().read();
+					port.getOutputStream().write(d);
+				}
 			}
 		} else {
 			Thread.sleep(10);
 		}
-		Thread.sleep(0, 10);
+		Thread.sleep(0, 150);
 		//
 		
 		//Send keep alive
@@ -122,7 +128,7 @@ public class RobotServer implements Runnable {
 			//Thread.sleep(10);
 		}
 		
-		if (System.currentTimeMillis() - keepAliveReceived > 10000) {
+		if (System.currentTimeMillis() - keepAliveReceived > 20000) {
 			
 			System.out.println("Timeout :"  + (int)(System.currentTimeMillis() - keepAliveReceived));
 			return true;

@@ -144,6 +144,7 @@ implements GLEventListener, KeyListener {
 	    float direction = model.getCompassDirection().getHeadingDegrees();
 	    String out = "Temperature " + temp + " direction " + direction; 
 	    core.renderStrokeString(gl, GLUT.STROKE_ROMAN, out); // Print GL Text To The Screen
+	    
 	}
 
 	
