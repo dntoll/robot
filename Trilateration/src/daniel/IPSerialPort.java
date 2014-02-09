@@ -37,7 +37,7 @@ public class IPSerialPort extends RobotPort implements Runnable{
 					//keep alive
 					server.getOutputStream().write(0);
 					server.getOutputStream().write(0);
-					System.out.println("Keep alive sent to " + server.getPort());
+					//System.out.println("Keep alive sent to " + server.getPort());
 				} else {
 				//	System.out.println("got a byte");
 					d = server.getInputStream().read();

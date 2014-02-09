@@ -1,7 +1,6 @@
 package daniel.robot.glWindow.view;
 
 import static javax.media.opengl.GL.GL_LINES;
-import static javax.media.opengl.GL.GL_TRIANGLE_FAN;
 import javax.media.opengl.GL2;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
@@ -16,10 +15,6 @@ public class DistanceMeasurementView {
 	}
 	
 	void drawTopDown(GL2 gl, DistanceSensorReadings reading) {
-		
-	    
-		    
-		    
 		gl.glLoadIdentity();  
 		
 		gl.glColor3f(0, 1, 0);
@@ -28,36 +23,23 @@ public class DistanceMeasurementView {
 		float cy = 320;
 		
 		
-		for(DirectionalReading reading1 : reading.getReadings()) {
-			float sonar1 = reading1.getSonar1Distance();
-			float sonar2 = reading1.getSonar2Distance();
-			
-			Direction direction = reading1.getDirection();
+		for(DirectionalReading reading1 : reading.getReadings().values()) {
+			Direction direction = reading1.getServoDirection();
 			Direction opposite = new Direction(direction.getHeadingDegrees() + 180);
 			
 			
-			gl.glColor4f(0, 1, 0, 0.5f);
-			core.drawArc(gl, cx, cy, sonar1, direction, 15);
-			
-			gl.glColor4f(0, 1, 0, 0.5f);
-			core.drawArc(gl, cx, cy, sonar2, opposite, 15);
+			gl.glColor4f(0, 1, 0, 0.1f);
+			core.drawArc(gl, cx, cy, reading1.getSonar1Distance(), direction, 15);
 		}
 		
-		for(DirectionalReading reading1 : reading.getReadings()) {
-			
-			
-			float sharp1 = reading1.getSharp1Distance();
-			float sharp2 = reading1.getSharp2Distance();
-		
-			Direction direction = reading1.getDirection();
+		for(DirectionalReading reading1 : reading.getReadings().values()) {
+			Direction direction = reading1.getServoDirection();
 			Direction opposite = new Direction(direction.getHeadingDegrees() + 180);
 			
 			gl.glColor4f(1, 0, 0, 1.0f);
-			core.drawArc(gl, cx, cy, sharp1, direction, 1);
-			
-			gl.glColor4f(1, 0, 0, 1.0f);
-			core.drawArc(gl, cx, cy, sharp2, opposite, 1);
-			
+			core.drawArc(gl, cx, cy, reading1.getSharp1Distance(), direction, 3);
+			gl.glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
+			core.fillArc(gl, cx, cy, reading1.getSharp1Distance(), direction, 3);
 		}
 		
 		gl.glBegin(GL_LINES);
@@ -70,6 +52,10 @@ public class DistanceMeasurementView {
 		
 		
 		
+		
 		gl.glEnd();
+		
+		core.drawText(gl, reading.getSonarString(), 30, 60);
+		core.drawText(gl, reading.getSharpString(), 30, 30);
 	}
 }

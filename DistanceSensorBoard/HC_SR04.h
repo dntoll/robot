@@ -6,7 +6,7 @@
 
 #include "Sensor.h"
 
-#define MAX_DISTANCE 200 
+#define MAX_DISTANCE 360 
 #define SAMPLES 3
 #define DELAY_BETWEEN_SAMPLES 30
 
@@ -38,9 +38,11 @@ class HC_SR04 : public Sensor  {
     long microsecondsToCentimeters(long microseconds)
     {
       return microseconds / 29 / 2;
+
     }
     
     float distance() {
+      //return 0.0f;
       long duration, inches, cm;
     
       digitalWrite(trigger, LOW);
@@ -49,7 +51,13 @@ class HC_SR04 : public Sensor  {
       delayMicroseconds(5);
       digitalWrite(trigger, LOW);
     
-      duration = pulseIn(echo, HIGH);
+      duration = pulseIn(echo, HIGH, 20600);
+      
+      if (duration == 0) {
+        return MAX_DISTANCE;
+      }
+      
+      //Serial.println(duration);
     
       cm = microsecondsToCentimeters(duration);
       

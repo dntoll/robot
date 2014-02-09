@@ -73,7 +73,7 @@ class Robot {
       #endif
     }
     
-    void sonarSweep() {
+    /*void sonarSweep() {
        Serial.print("Servo:Sonar");
 
        int minAngle = MIN_DEGREES;
@@ -110,7 +110,7 @@ class Robot {
        Serial.println("");
        
        moveServo(90);
-    }
+    }*/
     
     void calibrate() {
       #ifdef COMPASS
@@ -130,97 +130,6 @@ class Robot {
       m_pCompass->printCalibration();
       Serial.println("DONE");
       #endif
-    }
-    
-    
-    void calibrateIR() {
-      Serial.print("Calibration");
-      while (Serial.available() <= 0) {
-        measureDistance(90);
-        delay(300);
-      }
-    }
-    
-    void irSweep() {
-       Serial.print("Servo:Sharp");
-       int minAngle = MIN_DEGREES;
-       int maxAngle = MAX_DEGREES;
-       float sharpMeasurement, sharpcm, sonarMeasurement = 0, sonarcm = 0;
-       
-       shutdownAll();
-       startUpSensor(SHARP1_ENABLE_PIN);
-       for(int pos = maxAngle; pos >= minAngle; pos -= 1)  // goes from 0 degrees to 180 degrees 
-       { 
-          moveServo(pos);
-          sharpMeasurement = m_sharp1.getMedian(10,1);
-          sharpcm = m_sharp1.transformToCM(sharpMeasurement);
-          
-          Serial.print(":");
-          Serial.print(m_servoPos);
-          Serial.print(":");
-          Serial.print(sharpcm);
-       }  
-       
-       shutdownAll();
-       startUpSensor(SHARP2_ENABLE_PIN);
-       
-       for(int pos = maxAngle; pos >= minAngle; pos -= 1)  // goes from 0 degrees to 180 degrees 
-       { 
-          moveServo(pos);
-          
-          sharpMeasurement = m_sharp2.getMedian(10,1);
-          sharpcm = m_sharp2.transformToCM(sharpMeasurement);
-          
-          Serial.print(":");
-          Serial.print((m_servoPos+180)%360);
-          Serial.print(":");
-          Serial.print(sharpcm);
-       }
-       Serial.println("");
-       
-       moveServo(90);
-    }
-    
-    void measureDistance(int a_pos) {
-      float sharpMeasurement, sharpcm, sonarMeasurement = 0, sonarcm = 0;
-      
-      Serial.println("Sharp:Sonar");
-      moveServo(a_pos);
-      
-      
-      shutdownAll();
-      startUpSensor(SHARP1_ENABLE_PIN);
-      
-      sharpMeasurement = m_sharp1.getMedian(5,40);
-      sharpcm = m_sharp1.transformToCM(sharpMeasurement);
-      Serial.print("s1:");
-      Serial.println(sharpcm, 1);
-      
-      shutdownAll();
-      startUpSensor(SONAR1_ENABLE_PIN);
-      sonarMeasurement = m_sonar1.getMedian(5,30);
-      sonarcm = m_sonar1.transformToCM(sonarMeasurement);
-      Serial.print("u1:");
-      Serial.println(sonarcm, 1);
-      
-      shutdownAll();
-      startUpSensor(SHARP2_ENABLE_PIN);
-      sharpMeasurement = m_sharp2.getMedian(5,40);
-      sharpcm = m_sharp2.transformToCM(sharpMeasurement);
-      Serial.print("s2:");
-      Serial.println(sharpcm, 1);
-      
-      
-      
-      shutdownAll();
-      startUpSensor(SONAR2_ENABLE_PIN);
-      sonarMeasurement = m_sonar2.getMedian(5,30);
-      sonarcm = m_sonar2.transformToCM(sonarMeasurement);
-      Serial.print("u2:");
-      Serial.println(sonarcm, 1);
-      
-      Serial.println("");
-      
     }
     
     void measureGyro() {
@@ -267,10 +176,12 @@ class Robot {
     }
     
     void measureCompass() {
-       float deg = m_pCompass->measure();
+   /*    float deg = m_pCompass->measure();
        Serial.print("Compass:");
        Serial.print(deg);
-       Serial.println("");
+       Serial.println("");*/
+       Serial.print("Compass:");
+       m_pCompass->measureRaw();
     }
     
     void left(int a_time) {

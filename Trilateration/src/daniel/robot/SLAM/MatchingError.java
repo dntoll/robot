@@ -1,8 +1,12 @@
 package daniel.robot.SLAM;
 
+import daniel.robot.Direction;
+import daniel.robot.glWindow.model.DirectionalReading;
+import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.Measurement;
+import daniel.robot.glWindow.model.SharpMeasurement;
 import daniel.robot.sensors.DistanceBase;
 import daniel.robot.sensors.IRReading;
-import daniel.robot.sensors.SensorReading;
 import daniel.robot.statistics.Gaussian;
 
 public class MatchingError {
@@ -38,37 +42,40 @@ public class MatchingError {
 	}
 	
 	
-	public static MatchingError getMatchingError(Map a_known, State a_newState, SensorReading a_reading) {
+	public static MatchingError getMatchingError(Map a_known, State a_newState, DistanceSensorReadings sense) {
 		MatchingError error = new MatchingError();
 		
-		error.m_directionalError = a_newState.m_heading.GetDifferenceInDegrees(a_reading.m_compassDirection);
+		error.m_directionalError = a_newState.m_heading.GetDifferenceInDegrees(sense.getCompassDirection());
 		error.m_numMatching = 0;
 		error.m_irError = 0.0f;
 		error.m_sonarError = 0.0f;
 		
-		for (IRReading ir : a_reading.m_ir) {
-			error.m_irError += MatchReading(a_known, a_newState, error, ir);
+		int numIrReadings = 0;
+		for (DirectionalReading dr : sense.getReadings().values()) {
+			
+			if (dr.getSharp1Distance().okDistance()) {
+				error.m_irError += matchReading(a_known, a_newState, error, dr.getSharp1Distance(), dr.getServoDirection());
+				numIrReadings++;
+			}
 		}
-		/*for (SonarReading sonar : a_reading.m_sonar) {
-			error.m_sonarError += MatchReading(a_known, a_newState, error, sonar);
-		}*/
-		
-		error.m_overlap = (float)error.m_numMatching/(float)a_reading.m_ir.length;
+		if (numIrReadings > 0)		
+			error.m_overlap = (float)error.m_numMatching/(float)numIrReadings;
 		
 		return error;
 	}
 
-	private static float MatchReading(Map a_known, State a_newState,
-			MatchingError error, DistanceBase ir) {
+	
+	private static float matchReading(Map a_known, State a_newState,
+			MatchingError error, SharpMeasurement measurement, Direction direction) {
 		float ret = 0;
 		try {
-			float degrees = ir.getBeamWidth();
-			float expectedDistance = a_known.getDistance(a_newState, ir.m_servo, degrees);
-			float distance = ir.m_distance;
-			if (ir.okDistance()) {
-				error.m_numMatching++;
-				ret += Math.sqrt((distance - expectedDistance)*(distance - expectedDistance));
-			}
+			float degrees = measurement.getBeamWidth();
+			float expectedDistance = a_known.getDistance(a_newState, direction, degrees);
+			float distance = measurement.getMedian();
+			
+			error.m_numMatching++;
+			ret += Math.sqrt((distance - expectedDistance)*(distance - expectedDistance));
+			
 		} catch (Exception e) {
 			
 		}

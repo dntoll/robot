@@ -6,10 +6,11 @@ import java.util.List;
 import daniel.robot.Direction;
 
 public class Compass {
-
+	
 	List<CompassReading> allReadings = new ArrayList<CompassReading>();
 	
 	public void add(CompassReading compassReading) {
+		
 		allReadings.add(compassReading);
 	}
 
@@ -18,7 +19,7 @@ public class Compass {
 		if (allReadings.size() > 0)
 			return allReadings.get(allReadings.size()-1).getHeading();
 		else 
-			return new Direction(0);
+			return null;
 	}
 
 	public List<CompassReading> getAllReadings() {

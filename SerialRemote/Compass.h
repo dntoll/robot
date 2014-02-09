@@ -65,6 +65,17 @@ void printCalibration() {
   Serial.println(maxY);
 }
 
+void measureRaw() {
+  MagnetometerRaw raw = compass.ReadRawAxis();
+
+  Serial.print(raw.XAxis);
+  Serial.print(":");
+  Serial.print(raw.YAxis);
+  Serial.print(":");
+  Serial.println(raw.ZAxis);
+  
+}
+
   // Our main program loop.
 float measure()
 {

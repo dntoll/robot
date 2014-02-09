@@ -4,6 +4,11 @@
 
 class Sensor {
   public:
+  
+    float measureCM() {
+          float measurement = getRawMeasurement();
+          return transformToCM(measurement);
+    }
     float getMedian(int a_samples, int a_delay) {
         float samples[a_samples];
         for (int i = 0; i< a_samples; i++) {
@@ -37,6 +42,7 @@ class Sensor {
            samplesSampled++;
            
            //Serial.println(samples[i], 3);
+           
         }
    
         return accum / (float)samplesSampled;

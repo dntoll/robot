@@ -8,8 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import daniel.robot.Direction;
+import daniel.robot.glWindow.model.DirectionalReading;
+import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.sensors.IRReading;
-import daniel.robot.sensors.SensorReading;
 
 /**
  * Bitmap map of robot world, starts with 0.0 in the middle
@@ -22,7 +23,7 @@ public class Map {
 	
 	public List<Line2D.Float> m_lines = new ArrayList<Line2D.Float>();
 	
-	public Map(State a_bestGuess, SensorReading a_reading, Map a_parentMap) {
+	public Map(State a_bestGuess, DistanceSensorReadings sense, Map a_parentMap) {
 		
 		if (a_parentMap != null) {
 			m_landmarks.addAll(a_parentMap.m_landmarks);
@@ -34,22 +35,22 @@ public class Map {
 		Point2D.Float prevprevPosition = new Point2D.Float();
 		
 		
-		for (IRReading distanceReading : a_reading.m_ir) {
-			
+		for (DirectionalReading distanceReading : sense.getReadings().values()) {
+
 			Point2D.Float position = getIRPosition(a_bestGuess, distanceReading);
 			
 			//only points within range and that is consistant with last reading
-			if (distanceReading.okDistance() && 
+			if (distanceReading.getSharp1Distance().okDistance() && 
 				position.distance(prevPosition) < 4.0f &&
 				prevprevPosition.distance(prevPosition) < 4.0f)
 			{
 				
-				if (a_reading.hasCloseSonar(distanceReading)) {
+			//	if (sense.hasCloseSonar(distanceReading)) {
 					
 					try {
-						float oldDistance = getDistance(a_bestGuess, distanceReading.m_servo, distanceReading.getBeamWidth());
+						float oldDistance = getDistance(a_bestGuess, distanceReading.getServoDirection(), distanceReading.getSharp1Distance().getBeamWidth());
 						
-						float difference = distanceReading.m_distance - oldDistance;
+						float difference = distanceReading.getSharp1Distance().getMedian() - oldDistance;
 						if (difference * difference > 10.0f*IRReading.IR_DISTANCE_NOISE * IRReading.IR_DISTANCE_NOISE) {
 							m_landmarks.add(position);	
 						}
@@ -58,7 +59,7 @@ public class Map {
 					}
 					
 					
-				}
+			//	}
 			}
 			prevprevPosition = prevPosition;
 			prevPosition = position;
@@ -141,9 +142,9 @@ public class Map {
 
 
 	private Point2D.Float getIRPosition(State a_bestGuess,
-			IRReading distanceReading) {
-		float distance = distanceReading.m_distance;
-		Direction direction = a_bestGuess.m_heading.getHeadDirection(distanceReading.m_servo);
+			DirectionalReading distanceReading) {
+		float distance = distanceReading.getSharp1Distance().getMedian();
+		Direction direction = a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection());
 		Point2D.Float headPosition = a_bestGuess.getRobotPosition();
 		
 		float x = headPosition.x + direction.getX() * distance;
@@ -152,9 +153,9 @@ public class Map {
 		return position;
 	}
 
-	public float getDistance(State state, float a_servoDirection, float a_beamWidth) throws Exception {
+	public float getDistance(State state, Direction direction2, float a_beamWidth) throws Exception {
 		//WritableRaster raster = m_image.getRaster();
-		Direction direction = state.m_heading.getHeadDirection(a_servoDirection);
+		Direction direction = state.m_heading.getHeadDirection(direction2);
 		
 		Point2D.Float headPosition = state.getRobotPosition();
 		Point2D.Float start = headPosition;

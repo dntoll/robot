@@ -1,53 +1,60 @@
 package daniel.robot.SLAM;
 
 import java.awt.geom.Point2D.Float;
-import daniel.robot.Direction;
 import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
-import daniel.robot.sensors.SensorReading;
+import daniel.robot.glWindow.model.DistanceSensorReadings;
 
-public class SLAM {
+public class SLAM implements Runnable{
 	
 	public PoseCollection m_world;
-	//Robot 		   m_robot;
+	IRobotInterface 		   m_robot;
+	private Thread m_myThread;
 	
-	/*public SLAM(Robot a_robot) throws Exception {
+	public SLAM(IRobotInterface a_robot){
 		m_robot = a_robot;
 		
-	}*/
+		m_myThread = new Thread(this);
+		m_myThread.start();
+		
+	}
 
-	public void startUp() throws Exception {
-		//Direction compassDirection = m_robot.SenseSome().m_compassDirection;
-		//State startState = new State(new Float(0.0f, 0.0f), compassDirection);
-		
-		//SensorReading reading = m_robot.SenseAll();
-		
-		//ParticleFilter startPosition = new ParticleFilter(startState, reading);
+	
+	public void run() {
+		//Direction compassDirection;
 		
 		
 		
-		//m_world = new PoseCollection(startPosition, reading);
-		
-		//MatchingError error = MatchingError.getMatchingError( m_world.getLastPose().getBestMap(), startState, reading);
-		//System.out.println(error);
-		
+		try {
+			
+			DistanceSensorReadings startUpReading = m_robot.makeReading();
+			
+			State startState = new State(new Float(0.0f, 0.0f), startUpReading.getCompassDirection());
+			ParticleFilter startPosition = new ParticleFilter(startState, startUpReading);
+			
+			m_world = new PoseCollection(startPosition, startUpReading);
+			
+			for (int i =0 ;i< 3; i++) {
+				
+				
+				
+				Movement move = m_robot.makeMove();
+				DistanceSensorReadings Z = m_robot.makeReading();
+				m_world.moveAndSense(move, Z);
+				
+				
+				//View...
+				MatchingError error = MatchingError.getMatchingError( m_world.getLastPose().getBestMap(), m_world.getLastPose().getBestGuess().getState(), Z);
+				System.out.println(error);
+				Float bestGuessPos = m_world.getLastPose().getBestGuess().getState().getRobotPosition();
+				System.out.println(String.format("x=%f y=%f", bestGuessPos.x, bestGuessPos.y));
+				System.out.println(String.format("dir=%f", m_world.getLastPose().getBestGuess().getState().m_heading.getHeadingDegrees()));
+				
+				Thread.sleep(1000);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public void updateAfterMovement() throws Exception {
-		
-		
-		float distance = -13.0f;
-		float turn = 0.0f;
-		
-		Movement move = new Movement(distance, turn);
-		//m_robot.move(move);
-		//Wake up and sense!
-		//SensorReading Z = m_robot.SenseAll();
-		
-		//m_world.moveAndSense(move, Z);
-		
-		
-		
-		//MatchingError error = MatchingError.getMatchingError( m_world.getLastPose().getBestMap(), m_world.getLastPose().getBestGuess().getState(), Z);
-		//System.out.println(error);
-	}
+	
 }

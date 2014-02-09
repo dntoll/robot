@@ -3,8 +3,6 @@ package daniel.robot.sensors;
 import java.util.ArrayList;
 import java.util.List;
 
-import daniel.robot.Direction;
-
 public class GyroAccelerometer {
 	List<GyroAccelerometerReading> allReadings = new ArrayList<GyroAccelerometerReading>();
 	

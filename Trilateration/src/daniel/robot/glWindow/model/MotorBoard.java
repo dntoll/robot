@@ -2,6 +2,7 @@ package daniel.robot.glWindow.model;
 
 import daniel.IPSerialPort;
 import daniel.robot.Direction;
+import daniel.robot.SLAM.Movement;
 import daniel.robot.sensors.Compass;
 import daniel.robot.sensors.CompassReading;
 import daniel.robot.sensors.GyroAccelerometer;
@@ -13,6 +14,7 @@ public class MotorBoard {
 	Compass compass = new Compass();
 	float temperature = 0;
 	GyroAccelerometer gyro = new GyroAccelerometer();
+	private boolean isStillMoving;
 	
 	public MotorBoard(String serverAdress) throws Exception {
 		port = new IPSerialPort(serverAdress, 6790);
@@ -24,6 +26,8 @@ public class MotorBoard {
 		String data = port.read();
 		
 		if (data.equals("")) {
+		} else if (data.equals("")) {
+			isStillMoving = false;
 		} else {
 			String[] parts = data.split(":");
 			
@@ -72,6 +76,16 @@ public class MotorBoard {
 
 	public Compass getCompass() {
 		return compass;
+	}
+
+	public void askForMovement(Movement move) {
+		port.write("");
+		isStillMoving = false;
+		
+	}
+
+	public boolean isStillMoving() {
+		return isStillMoving;
 	}
 
 }

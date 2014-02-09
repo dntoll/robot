@@ -6,7 +6,7 @@ import static javax.media.opengl.GL.GL_LEQUAL;
 import static javax.media.opengl.GL.GL_NICEST;
 import static javax.media.opengl.GL.GL_ONE;
 import static javax.media.opengl.GL.GL_SRC_ALPHA;
-import static javax.media.opengl.GL.GL_TRIANGLE_FAN;
+import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
 import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHTING;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
@@ -18,6 +18,7 @@ import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 import daniel.robot.Direction;
+import daniel.robot.glWindow.model.Measurement;
 
 public class ViewCore {
 	
@@ -42,19 +43,45 @@ public class ViewCore {
 	}
 	
 	
+		
 
-	void drawArc(GL2 gl, float cx, float cy, float distance, Direction direction, float degrees) {
-		gl.glBegin(GL_TRIANGLE_FAN);
-		gl.glVertex2f(cx, cy);
+	public void drawArc(GL2 gl, float cx, float cy, Measurement distance,
+			Direction direction, int degrees) {
+		gl.glBegin(GL_TRIANGLE_STRIP);
+		
+		if (distance.getStdev() > 35.0f) {
+			return;
+		}
 		
 		Direction left = new Direction(direction.getHeadingDegrees()-degrees/2);
 		Direction middle = direction;
 		Direction right = new Direction(direction.getHeadingDegrees()+degrees/2);
-		
-		drawPoint(gl, cx, cy, distance, left);
-		drawPoint(gl, cx, cy, distance, middle);
-		drawPoint(gl, cx, cy, distance, right);
+		drawPoint(gl, cx, cy, distance.getQ1(), left);
+		drawPoint(gl, cx, cy, distance.getQ3(), left);
+		drawPoint(gl, cx, cy, distance.getQ1(), middle);
+		drawPoint(gl, cx, cy, distance.getQ3(), middle);
+		drawPoint(gl, cx, cy, distance.getQ1(), right);
+		drawPoint(gl, cx, cy, distance.getQ3(), right);
 		gl.glEnd();
+	}
+	
+	public void fillArc(GL2 gl, float cx, float cy, Measurement distance,
+			Direction direction, int degrees) {
+		gl.glBegin(GL_TRIANGLE_STRIP);
+		//gl.glVertex2f(cx, cy);
+		
+		
+		Direction left = new Direction(direction.getHeadingDegrees()-degrees/2);
+		Direction middle = direction;
+		Direction right = new Direction(direction.getHeadingDegrees()+degrees/2);
+		drawPoint(gl, cx, cy, 0, left);
+		drawPoint(gl, cx, cy, distance.getMin(), left);
+		drawPoint(gl, cx, cy, 0, middle);
+		drawPoint(gl, cx, cy, distance.getMin(), middle);
+		drawPoint(gl, cx, cy, 0, right);
+		drawPoint(gl, cx, cy, distance.getMin(), right);
+		gl.glEnd();
+		
 	}
 
 
@@ -78,15 +105,16 @@ public class ViewCore {
 		gl.glVertex2f(px, py);
 	}
 	
-	void renderStrokeString(GL gl, int font, String string) {
+	void renderStrokeString(GL gl, String string) {
+		((GLMatrixFunc) gl).glLoadIdentity();
         // Center Our Text On The Screen
         //float width = glut.glutStrokeLength(font, string);
-        ((GLMatrixFunc) gl).glTranslatef(0.5f, 0, 0);
-        ((GLMatrixFunc) gl).glScalef(0.1f, 0.1f, 1.0f);
+        ((GLMatrixFunc) gl).glTranslatef(25.75f, 540, 0);
+        ((GLMatrixFunc) gl).glScalef(0.08f, 0.08f, 1.0f);
         // Render The Text
         for (int i = 0; i < string.length(); i++) {
             char c = string.charAt(i);
-            glut.glutStrokeCharacter(font, c);
+            glut.glutStrokeCharacter(GLUT.STROKE_ROMAN, c);
         }
     }
 
@@ -100,6 +128,33 @@ public class ViewCore {
 			//gl.glVertex2f(x, y);
 		}
 	}
+
+
+
+
+	public void drawText(GL gl, String string, int x, int y) {
+		//System.out.println(string);
+		
+		((GLMatrixFunc) gl).glLoadIdentity();
+		// Center Our Text On The Screen
+        //float width = glut.glutStrokeLength(font, string);
+        ((GLMatrixFunc) gl).glTranslatef(x, y, 0.5f);
+        ((GLMatrixFunc) gl).glScalef(0.2f, 0.2f, 1.0f);
+        // Render The Text
+        for (int i = 0; i < string.length(); i++) {
+            char c = string.charAt(i);
+            glut.glutStrokeCharacter(GLUT.STROKE_ROMAN, c);
+        }
+	}
+
+
+
+
+	
+
+
+
+	
 
 
 

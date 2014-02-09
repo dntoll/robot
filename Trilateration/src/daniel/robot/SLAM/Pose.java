@@ -2,7 +2,7 @@ package daniel.robot.SLAM;
 
 import daniel.robot.SLAM.ParticleFilter.Particle;
 import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
-import daniel.robot.sensors.SensorReading;
+import daniel.robot.glWindow.model.DistanceSensorReadings;
 
 
 /**
@@ -13,11 +13,11 @@ import daniel.robot.sensors.SensorReading;
  */
 public class Pose {
 	public ParticleFilter m_position;
-	public SensorReading  m_sensorReading;
+	public DistanceSensorReadings  m_sensorReading;
 	public Movement		  m_movement;
 	
 	
-	public Pose(ParticleFilter a_particles, SensorReading a_reading, Movement a_movement) {
+	public Pose(ParticleFilter a_particles, DistanceSensorReadings a_reading, Movement a_movement) {
 		m_position = a_particles;
 		m_sensorReading = a_reading;
 		m_movement = a_movement;

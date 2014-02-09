@@ -2,7 +2,7 @@ package daniel.robot.sensors;
 
 import daniel.robot.Direction;
 
-
+/*
 public class SensorReading {
 	public Direction m_compassDirection;
 	public float m_temperature;
@@ -54,4 +54,4 @@ public class SensorReading {
 
 
 	
-}
+}*/

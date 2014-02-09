@@ -11,6 +11,7 @@ import static javax.media.opengl.GL.GL_NICEST;
 import static javax.media.opengl.GL.GL_ONE;
 import static javax.media.opengl.GL.*;
 import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
+import static javax.media.opengl.GL2GL3.GL_QUADS;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHTING;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
@@ -26,15 +27,23 @@ import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
+import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
 
 import com.jogamp.opengl.util.gl2.GLUT;
+import com.jogamp.opengl.util.texture.Texture;
+import com.jogamp.opengl.util.texture.TextureCoords;
+import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 
 
 import daniel.robot.Direction;
+import daniel.robot.SLAM.IRobotInterface;
+import daniel.robot.SLAM.SLAM;
+import daniel.robot.SLAM.SavedRobotReadings;
+import daniel.robot.SLAM.TrueRobotReadings;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.glWindow.model.RobotModel;
@@ -46,7 +55,7 @@ import daniel.robot.sensors.GyroAccelerometerReading;
 public class MetaView extends GLCanvas  
 implements GLEventListener, KeyListener {
 
-	private RobotModel model;
+	private SLAM slam;
 	private static final long serialVersionUID = -5995442581511590711L;
 	
 	private ViewCore core = new ViewCore();
@@ -54,9 +63,13 @@ implements GLEventListener, KeyListener {
 	private DistanceMeasurementView distances = new DistanceMeasurementView(core);
 	private CompassView compass = new CompassView(core);
 	private Dimension windowSize;
+	private CameraView cameraView = new CameraView();
+	private IRobotInterface model;
 
 
-	public  MetaView(RobotModel model, Dimension windowSize ) {
+	public  MetaView(IRobotInterface model, Dimension windowSize ) {
+		//
+		
 		this.model = model;
 		this.addGLEventListener(this);
 	    // For Handling KeyEvents
@@ -136,14 +149,27 @@ implements GLEventListener, KeyListener {
 	    gl.glLoadIdentity();             // reset projection matrix
 	    glu.gluOrtho2D(0, windowSize.width, 0, windowSize.height); 
 	    gl.glMatrixMode(GL_MODELVIEW);
+	    gl.glLoadIdentity(); 
 
-	    distances.drawTopDown(gl, model.getDistanceSensorReadings());
+	    if (model.getDistanceSensorReadings() != null) {
+	    	distances.drawTopDown(gl, model.getDistanceSensorReadings());
+	    }
+	    
 	    compass.drawCompassArrow(gl, model.getCompass());
 	    
 	    float temp = model.getTemperature();
-	    float direction = model.getCompassDirection().getHeadingDegrees();
-	    String out = "Temperature " + temp + " direction " + direction; 
-	    core.renderStrokeString(gl, GLUT.STROKE_ROMAN, out); // Print GL Text To The Screen
+	    if (model.getCompassDirection() != null) {
+		    float direction = model.getCompassDirection().getHeadingDegrees();
+		    String out = "Temperature " + temp + " direction " + direction; 
+		    core.renderStrokeString(gl, out); // Print GL Text To The Screen
+		   // cameraView.updateCameraTexture(gl, model.getPanoramaImage(), windowSize);
+	    }
+	    gl.glLoadIdentity(); 
+	    
+	    
+	//    cameraView.drawCamera(gl, glu, windowSize);
+	 //   cameraView.drawPerspective(gl, glu, windowSize, model.getDistanceSensorReadings());
+	    
 	    
 	}
 
@@ -183,6 +209,10 @@ implements GLEventListener, KeyListener {
 	
 
 	
+	
+
+
+
 
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,

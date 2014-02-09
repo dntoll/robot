@@ -23,8 +23,8 @@ public class Direction {
 		return getDegreeDifference(m_heading, a_compassDirection.m_heading);
 	}
 	
-	public Direction getHeadDirection(float a_servo) {
-		Direction dir = new Direction(m_heading - a_servo + 90);
+	public Direction getHeadDirection(Direction servo) {
+		Direction dir = new Direction(m_heading - servo.getHeadingDegrees() + 90.0f);
 		return dir;
 	}
 

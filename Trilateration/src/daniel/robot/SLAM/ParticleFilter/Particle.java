@@ -3,7 +3,7 @@ package daniel.robot.SLAM.ParticleFilter;
 import daniel.robot.SLAM.Map;
 import daniel.robot.SLAM.MatchingError;
 import daniel.robot.SLAM.State;
-import daniel.robot.sensors.SensorReading;
+import daniel.robot.glWindow.model.DistanceSensorReadings;
 
 public class Particle {
 	
@@ -13,7 +13,7 @@ public class Particle {
 	private Map m_map = null;
 	private Particle m_parent;
 	
-	Particle(State a_state, float a_weight, SensorReading a_reading) {
+	Particle(State a_state, float a_weight, DistanceSensorReadings a_reading) {
 		m_state = a_state;
 		m_weight = a_weight;
 		
@@ -42,8 +42,8 @@ public class Particle {
 		m_weight = a_weight;
 	}
 	
-	public void calculateWeight(SensorReading a_reading) throws Exception {
-		m_error = MatchingError.getMatchingError(m_parent.m_map, m_state, a_reading);
+	public void calculateWeight(DistanceSensorReadings sense) throws Exception {
+		m_error = MatchingError.getMatchingError(m_parent.m_map, m_state, sense);
 		m_weight = m_error.getError();
 		
 		if (Float.isNaN(getWeight())) {
@@ -51,12 +51,12 @@ public class Particle {
 		}
 	}
 
-	public void addMap(SensorReading a_sense) {
+	public void addMap(DistanceSensorReadings sense) {
 		if (m_map == null) {
 			if (m_parent != null) {
-				m_map = new Map(m_state, a_sense, m_parent.m_map);
+				m_map = new Map(m_state, sense, m_parent.m_map);
 			} else {
-				m_map = new Map(m_state, a_sense, null);
+				m_map = new Map(m_state, sense, null);
 			}
 		}
 	}

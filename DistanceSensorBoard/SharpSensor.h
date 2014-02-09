@@ -16,12 +16,14 @@ class SharpSensor : public Sensor {
     
       analogRead(m_analogPin);
       int sensorValue = analogRead(m_analogPin);
-      float value= (float)sensorValue * (5.0f / 1023.0f);
-      return value;
+      return sensorValue;
+      //float value= (float)sensorValue * (4.85f / 1023.0f);
+     // return value;
   }
   
   
   float transformToCM(float a_voltage) {
+    return a_voltage;
       static const int numDots = 13;
       static const float voltages[numDots]= {0.52,  0.58, 0.60f, 0.65f,  0.71f, 0.77f, 0.85, 0.95f, 1.09, 1.31, 1.63f, 2.11f, 2.9f};
       static const float distance[numDots]= {140,    130,    120,    110,    100,    90,    80,   70,  60,   50,      40,    30,   16};

@@ -27,11 +27,11 @@ public class Movement {
 	}
 	
 	private float getHeadingVariance() {
-		return 15;
+		return 10;
 	}
 
 	private float getPositionVariance() {
-		return 5;
+		return 6;
 	}
 
 	//https://docs.google.com/spreadsheet/ccc?key=0AssbuCblTdssdGU4TFVSZlBINWptMS1ZbmRNUUVoNHc#gid=0

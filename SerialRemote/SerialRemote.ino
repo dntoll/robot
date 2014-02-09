@@ -16,6 +16,7 @@
 
 Robot *pRobot;
 
+long lastUpdateTime =0;
 void setup() {
   
   
@@ -33,7 +34,7 @@ void setup() {
   
   establishContact();
   
-  
+  lastUpdateTime = millis();
 }
 
 void establishContact() {
@@ -60,29 +61,26 @@ void loop() {
                  break;
       case  's': pRobot->backward(time);
                  break;
-      case  'm': pRobot->measureDistance(90);
-                 break;
       case  'g': pRobot->measureGyro();
                  break;
       case  'c': pRobot->measureCompass();
                  break;
-      case  'q': pRobot->sonarSweep();
-                 break;
-      case  'i': pRobot->irSweep();
-                 break;  
       case  't': pRobot->measureTemperature();
                  break;    
       case  'n': pRobot->calibrate();
                  break;   
-      case  'p': pRobot->calibrateIR();
-                 break;  
       case  'z': establishContact();
                  break;           
       default : 
-              ;//  Serial.println("unknown character");      
+             ;      
                 
     }
     
     
+  } else if (millis() > lastUpdateTime + 500) {
+    pRobot->measureGyro();
+    pRobot->measureCompass();
+    pRobot->measureTemperature();
+    lastUpdateTime = millis();
   }
 }
