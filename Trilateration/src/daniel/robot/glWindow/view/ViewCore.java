@@ -49,9 +49,7 @@ public class ViewCore {
 			Direction direction, int degrees) {
 		gl.glBegin(GL_TRIANGLE_STRIP);
 		
-		if (distance.getStdev() > 35.0f) {
-			return;
-		}
+		
 		
 		Direction left = new Direction(direction.getHeadingDegrees()-degrees/2);
 		Direction middle = direction;

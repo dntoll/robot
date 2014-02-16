@@ -58,7 +58,7 @@ public class SharpMeasurement extends Measurement {
 			return false;
 		if (getMedian() > MAX_DISTANCE)
 			return false;
-		if (getStdev() > 10)
+		if (getStdev() > 5.0f)
 			return false;
 		
 		return true;

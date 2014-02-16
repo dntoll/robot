@@ -1,9 +1,10 @@
-package daniel.robot.SLAM;
+package daniel.robot.glWindow.model;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import daniel.robot.Direction;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.SLAM.Movement;
 import daniel.robot.sensors.Compass;
 
 public interface IRobotInterface {
@@ -23,4 +24,5 @@ public interface IRobotInterface {
 	public float getTemperature();
 
 	public Direction getCompassDirection();
+
 }

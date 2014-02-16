@@ -3,13 +3,13 @@ package daniel.robot.SLAM.ParticleFilter;
 import java.util.Random;
 
 import daniel.robot.SLAM.Movement;
-import daniel.robot.SLAM.State;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.State;
 
 public class ParticleFilter {
 	
 	private static Random RANDOM = new Random();
-	private static int NUMBER_OF_PARTICLES = 2250;
+	private static int NUMBER_OF_PARTICLES = 1000;
 	private Particle[] m_particles;
 	
 	public ParticleFilter(State a_startState, DistanceSensorReadings sense) {

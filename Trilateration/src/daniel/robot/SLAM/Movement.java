@@ -1,12 +1,8 @@
 package daniel.robot.SLAM;
 
-import java.util.Random;
-
 import daniel.robot.statistics.Gaussian;
 
 public class Movement {
-
-	private static Random rand = new Random();
 
 	public float m_distance;
 	public float m_turnRight;
@@ -27,11 +23,11 @@ public class Movement {
 	}
 	
 	private float getHeadingVariance() {
-		return 10;
+		return 6;
 	}
 
 	private float getPositionVariance() {
-		return 6;
+		return 4;
 	}
 
 	//https://docs.google.com/spreadsheet/ccc?key=0AssbuCblTdssdGU4TFVSZlBINWptMS1ZbmRNUUVoNHc#gid=0

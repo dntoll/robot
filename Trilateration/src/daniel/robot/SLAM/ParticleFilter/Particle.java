@@ -2,8 +2,8 @@ package daniel.robot.SLAM.ParticleFilter;
 
 import daniel.robot.SLAM.Map;
 import daniel.robot.SLAM.MatchingError;
-import daniel.robot.SLAM.State;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.State;
 
 public class Particle {
 	

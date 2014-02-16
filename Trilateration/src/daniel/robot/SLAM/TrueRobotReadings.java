@@ -2,10 +2,14 @@ package daniel.robot.SLAM;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.IPose;
+import daniel.robot.glWindow.model.IRobotInterface;
+import daniel.robot.glWindow.model.PoseCollection;
 import daniel.robot.glWindow.model.RobotModel;
 import daniel.robot.glWindow.model.SavedReadings;
 import daniel.robot.sensors.Compass;
@@ -34,9 +38,9 @@ public class TrueRobotReadings implements IRobotInterface{
 
 	@Override
 	public Movement makeMove() throws InterruptedException {
-		System.out.println("Move now");
-		Thread.sleep(10000);
-		float distance = 11.5f;
+		//System.out.println("Move now");
+		//Thread.sleep(10000);
+		float distance = 0.0f;
 		float turn = 0.0f;
 		Movement move = new Movement(distance, turn);
 		model.waitForMove(move);
@@ -68,4 +72,6 @@ public class TrueRobotReadings implements IRobotInterface{
 	public Direction getCompassDirection() {
 		return model.getCompassDirection();
 	}
+
+	
 }

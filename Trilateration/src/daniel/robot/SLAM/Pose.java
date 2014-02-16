@@ -1,8 +1,9 @@
 package daniel.robot.SLAM;
 
-import daniel.robot.SLAM.ParticleFilter.Particle;
 import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.IPose;
+import daniel.robot.glWindow.model.State;
 
 
 /**
@@ -11,7 +12,7 @@ import daniel.robot.glWindow.model.DistanceSensorReadings;
  * A Pose can create a map 
  * @author Daniel
  */
-public class Pose {
+public class Pose implements IPose {
 	public ParticleFilter m_position;
 	public DistanceSensorReadings  m_sensorReading;
 	public Movement		  m_movement;
@@ -25,16 +26,24 @@ public class Pose {
 	}
 	
 	
-	public Particle getBestGuess() {
-		return m_position.getBestGuess();
+	public State getBestGuessPosition() {
+		return m_position.getBestGuess().getState();
+	}
+
+	public Map getBestMap() {
+		return m_position.getBestGuess().getMap();
 	}
 
 
-	
+	@Override
+	public DistanceSensorReadings getDistanceSensorReadings() {
+		return m_sensorReading;
+	}
 
 
-	public Map getBestMap() {
-		return getBestGuess().getMap();
+	@Override
+	public float getError() {
+		return m_position.getBestGuess().getWeight();
 	}
 	
 }

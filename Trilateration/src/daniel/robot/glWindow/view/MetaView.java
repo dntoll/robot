@@ -20,6 +20,7 @@ import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import java.util.List;
 
@@ -40,12 +41,15 @@ import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 
 import daniel.robot.Direction;
-import daniel.robot.SLAM.IRobotInterface;
+import daniel.robot.SLAM.Map;
 import daniel.robot.SLAM.SLAM;
 import daniel.robot.SLAM.SavedRobotReadings;
 import daniel.robot.SLAM.TrueRobotReadings;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.IPose;
+import daniel.robot.glWindow.model.IRobotInterface;
+import daniel.robot.glWindow.model.PoseCollection;
 import daniel.robot.glWindow.model.RobotModel;
 import daniel.robot.sensors.Compass;
 import daniel.robot.sensors.CompassReading;
@@ -55,7 +59,6 @@ import daniel.robot.sensors.GyroAccelerometerReading;
 public class MetaView extends GLCanvas  
 implements GLEventListener, KeyListener {
 
-	private SLAM slam;
 	private static final long serialVersionUID = -5995442581511590711L;
 	
 	private ViewCore core = new ViewCore();
@@ -64,13 +67,13 @@ implements GLEventListener, KeyListener {
 	private CompassView compass = new CompassView(core);
 	private Dimension windowSize;
 	private CameraView cameraView = new CameraView();
-	private IRobotInterface model;
+	private IRobotInterface robot;
+	PoseCollection world;
 
-
-	public  MetaView(IRobotInterface model, Dimension windowSize ) {
+	public  MetaView(IRobotInterface model, PoseCollection world, Dimension windowSize ) {
 		//
-		
-		this.model = model;
+		this.world = world;
+		this.robot = model;
 		this.addGLEventListener(this);
 	    // For Handling KeyEvents
 	    this.addKeyListener(this);
@@ -138,7 +141,7 @@ implements GLEventListener, KeyListener {
 
 	@Override
 	public void display(GLAutoDrawable drawable) {
-		model.update();
+		robot.update();
 		
 		GL2 gl = drawable.getGL().getGL2();  // get the OpenGL 2 graphics context
 	    gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
@@ -150,16 +153,26 @@ implements GLEventListener, KeyListener {
 	    glu.gluOrtho2D(0, windowSize.width, 0, windowSize.height); 
 	    gl.glMatrixMode(GL_MODELVIEW);
 	    gl.glLoadIdentity(); 
-
-	    if (model.getDistanceSensorReadings() != null) {
-	    	distances.drawTopDown(gl, model.getDistanceSensorReadings());
+	    
+	    try {
+		    for (IPose pose : world.poses) {
+			   distances.drawTopDown(gl, pose.getDistanceSensorReadings(), pose.getBestGuessPosition());
+		    }
+		    if (world.getLastPose() != null) {
+			    Map lastMap = world.getLastPose().getBestMap();
+			    distances.drawMap(gl,lastMap); 
+		    }
+	    } catch (Exception e) {
+	    	System.err.println(e.getMessage());
 	    }
+	    if (robot.getDistanceSensorReadings() != null)
+	    	distances.drawTopDown(gl, robot.getDistanceSensorReadings(), new daniel.robot.glWindow.model.State(new Point2D.Float(0,0), new Direction(0)));
 	    
-	    compass.drawCompassArrow(gl, model.getCompass());
+	    compass.drawCompassArrow(gl, robot.getCompass());
 	    
-	    float temp = model.getTemperature();
-	    if (model.getCompassDirection() != null) {
-		    float direction = model.getCompassDirection().getHeadingDegrees();
+	    float temp = robot.getTemperature();
+	    if (robot.getCompassDirection() != null) {
+		    float direction = robot.getCompassDirection().getHeadingDegrees();
 		    String out = "Temperature " + temp + " direction " + direction; 
 		    core.renderStrokeString(gl, out); // Print GL Text To The Screen
 		   // cameraView.updateCameraTexture(gl, model.getPanoramaImage(), windowSize);
@@ -217,7 +230,7 @@ implements GLEventListener, KeyListener {
 	@Override
 	public void reshape(GLAutoDrawable drawable, int x, int y, int width,
 			int height) {
-	  GL2 gl = drawable.getGL().getGL2();  // get the OpenGL 2 graphics context
+	  drawable.getGL().getGL2();
 	  
 	  if (height == 0) 
     	  height = 1;   // prevent divide by zero

@@ -9,11 +9,11 @@ import javax.swing.SwingUtilities;
 
 import com.jogamp.opengl.util.FPSAnimator;
 
-import daniel.robot.SLAM.IRobotInterface;
 import daniel.robot.SLAM.SLAM;
 import daniel.robot.SLAM.SavedRobotReadings;
 import daniel.robot.SLAM.TrueRobotReadings;
 import daniel.robot.glWindow.controller.MetaController;
+import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.RobotModel;
 import daniel.robot.glWindow.view.MetaView;
 
@@ -36,16 +36,19 @@ public class Main {
 				try {
 					//model = new RobotModel("127.0.0.1");
 					//robotInterface = new SavedRobotReadings("Sun Feb 09 20:33:38 CET 2014");
-					robotInterface = new SavedRobotReadings("Sun Feb 09 21:33:37 CET 2014");
+					//robotInterface = new SavedRobotReadings("Sun Feb 09 21:33:37 CET 2014");
 					
 					//robotInterface = new TrueRobotReadings(new RobotModel("127.0.0.1"));
+					robotInterface = new TrueRobotReadings(new RobotModel("192.168.1.6"));
 					SLAM slam = new SLAM(robotInterface);
+					
+					
 					//SLAM slam = new SLAM(new TrueRobotReadings(model));
 					//model = new RobotModel("192.168.2.3");
 					//model = new RobotModel("192.168.1.6");
 				
 					Dimension windowSize = new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT);
-		        	MetaView canvas = new MetaView(robotInterface, windowSize);
+		        	MetaView canvas = new MetaView(robotInterface, slam.m_world, windowSize);
 		        	
 		        	MetaController controller = new MetaController();
 		            

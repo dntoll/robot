@@ -1,11 +1,11 @@
 package daniel.robot.SLAM;
 
 import daniel.robot.Direction;
+import daniel.robot.SLAM.Map.Pair;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
-import daniel.robot.glWindow.model.Measurement;
 import daniel.robot.glWindow.model.SharpMeasurement;
-import daniel.robot.sensors.DistanceBase;
+import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.IRReading;
 import daniel.robot.statistics.Gaussian;
 
@@ -68,16 +68,13 @@ public class MatchingError {
 	private static float matchReading(Map a_known, State a_newState,
 			MatchingError error, SharpMeasurement measurement, Direction direction) {
 		float ret = 0;
-		try {
-			float degrees = measurement.getBeamWidth();
-			float expectedDistance = a_known.getDistance(a_newState, direction, degrees);
+		float degrees = measurement.getBeamWidth();
+		Pair expectedDistance = a_known.getDistance(a_newState, direction, degrees);
+		if (expectedDistance != null) {
 			float distance = measurement.getMedian();
 			
 			error.m_numMatching++;
-			ret += Math.sqrt((distance - expectedDistance)*(distance - expectedDistance));
-			
-		} catch (Exception e) {
-			
+			ret += Math.sqrt((distance - expectedDistance.getDistance())*(distance - expectedDistance.getDistance()));
 		}
 		return ret;
 	}

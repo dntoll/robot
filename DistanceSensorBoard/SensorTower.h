@@ -42,13 +42,13 @@ class SensorTower {
        { 
           measure(pos, m_sharp1, m_sharp2, "sh", 40);
        }
-       Serial.println("DONE");
-       /*delay(100);
+//       Serial.println("DONE");
+       delay(100);
        for(int pos = MAX_DEGREES; pos > MIN_DEGREES; pos -= 15)  // goes from 0 degrees to 180 degrees 
        { 
-          measure(pos, m_sonar1, m_sonar2, "so", 100);
+          measure(pos, m_sharp1, m_sharp2, "sh", 40);
        }
-       Serial.println("DONE");*/
+       Serial.println("DONE");
     }
     
     void measure(int pos, Sensor &front, Sensor &back, const String &code, int delayMilliseconds) {
@@ -75,7 +75,7 @@ class SensorTower {
       
       m_servoPos = pos;
       m_servo.write(m_servoPos);
-      delay(SERVO_DELAY_TIME * distanceMoved);
+      delay(SERVO_DELAY_TIME * distanceMoved+SERVO_DELAY_TIME);
     }
     
     Servo m_servo;  // create servo object to control a servo 
