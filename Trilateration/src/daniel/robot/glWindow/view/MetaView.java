@@ -2,18 +2,8 @@ package daniel.robot.glWindow.view;
 
 import static java.awt.event.KeyEvent.VK_B;
 import static java.awt.event.KeyEvent.VK_L;
-import static javax.media.opengl.GL.GL_BLEND;
 import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
-import static javax.media.opengl.GL.GL_DEPTH_TEST;
-import static javax.media.opengl.GL.GL_LEQUAL;
-import static javax.media.opengl.GL.GL_NICEST;
-import static javax.media.opengl.GL.GL_ONE;
-import static javax.media.opengl.GL.*;
-import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
-import static javax.media.opengl.GL2GL3.GL_QUADS;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHTING;
-import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 
@@ -22,39 +12,16 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
-import java.util.List;
-
-import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
-import javax.media.opengl.GLProfile;
 import javax.media.opengl.awt.GLCanvas;
-import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import javax.media.opengl.glu.GLU;
-
-import com.jogamp.opengl.util.gl2.GLUT;
-import com.jogamp.opengl.util.texture.Texture;
-import com.jogamp.opengl.util.texture.TextureCoords;
-import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
-
-
 
 import daniel.robot.Direction;
 import daniel.robot.SLAM.Map;
-import daniel.robot.SLAM.SLAM;
-import daniel.robot.SLAM.SavedRobotReadings;
-import daniel.robot.SLAM.TrueRobotReadings;
-import daniel.robot.glWindow.model.DirectionalReading;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
-import daniel.robot.glWindow.model.IPose;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
-import daniel.robot.glWindow.model.RobotModel;
-import daniel.robot.sensors.Compass;
-import daniel.robot.sensors.CompassReading;
-import daniel.robot.sensors.GyroAccelerometer;
-import daniel.robot.sensors.GyroAccelerometerReading;
 
 public class MetaView extends GLCanvas  
 implements GLEventListener, KeyListener {
@@ -155,9 +122,9 @@ implements GLEventListener, KeyListener {
 	    gl.glLoadIdentity(); 
 	    
 	    try {
-		    for (IPose pose : world.poses) {
+		   /* for (IPose pose : world.poses) {
 			   distances.drawTopDown(gl, pose.getDistanceSensorReadings(), pose.getBestGuessPosition());
-		    }
+		    }*/
 		    if (world.getLastPose() != null) {
 			    Map lastMap = world.getLastPose().getBestMap();
 			    distances.drawMap(gl,lastMap); 
@@ -166,7 +133,7 @@ implements GLEventListener, KeyListener {
 	    	System.err.println(e.getMessage());
 	    }
 	    if (robot.getDistanceSensorReadings() != null)
-	    	distances.drawTopDown(gl, robot.getDistanceSensorReadings(), new daniel.robot.glWindow.model.State(new Point2D.Float(0,0), new Direction(0)));
+	    	distances.drawTopDown(gl, robot.getDistanceSensorReadings(), new daniel.robot.glWindow.model.State(new Point2D.Float(450,0), new Direction(0)));
 	    
 	    compass.drawCompassArrow(gl, robot.getCompass());
 	    
