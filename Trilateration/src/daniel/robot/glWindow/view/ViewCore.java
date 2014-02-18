@@ -148,6 +148,20 @@ public class ViewCore {
 
 
 
+	public void drawQuad(GL2 gl, float vx, float vy, float cellSize,
+			float cellSize2) {
+		gl.glVertex2f(vx, vy);
+		gl.glVertex2f(vx, vy+cellSize);
+		gl.glVertex2f(vx+cellSize, vy+cellSize);
+		
+		gl.glVertex2f(vx+cellSize, vy+cellSize);
+		gl.glVertex2f(vx+cellSize, vy);
+		gl.glVertex2f(vx, vy);
+	}
+
+
+
+
 	
 
 

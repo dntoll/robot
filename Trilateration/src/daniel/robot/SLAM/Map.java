@@ -1,7 +1,6 @@
 package daniel.robot.SLAM;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Float;
 import java.util.ArrayList;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
@@ -15,56 +14,28 @@ import daniel.robot.sensors.IRReading;
  *
  */ 
 public class Map {
-	public class Landmark {
-		private float measuredFromDistance;
-		public Point2D.Float pos;
-		public float deviation;
-		
-		public Landmark(Float position, float stdv, float fromDistance) {
-			pos = position;
-			deviation = stdv;
-			measuredFromDistance = fromDistance;
-		}
-
-
-		public boolean isBetter(Pair prediction) {
-			if (deviation < prediction.landmark.deviation ) {
-				return true;
-			}
-			
-			if (measuredFromDistance < prediction.landmark.measuredFromDistance ) {
-				return true;
-			}
-			
-			return true;
-		}
-
-
-	/*	public boolean isMuchCloser(Pair prediction) {
-			float difference = measuredFromDistance - prediction.getDistance();
-			
-			return  difference * difference > 4.0f*IRReading.IR_DISTANCE_NOISE * IRReading.IR_DISTANCE_NOISE;
-			
-			
-		}*/
-
-		
-	}
 	public ArrayList<Landmark> m_landmarks = new ArrayList<Landmark>();
+	MapData freeArea;
 	
-	public Map(State a_bestGuess, DistanceSensorReadings sense, Map a_parentMap) {
+	public Map(State a_bestGuess, DistanceSensorReadings sense, Map parentMap) {
 		
-		if (a_parentMap != null) {
-			m_landmarks.addAll(a_parentMap.m_landmarks);
+		if (parentMap != null) {
+			m_landmarks.addAll(parentMap.m_landmarks);
+			freeArea = new MapData(parentMap.freeArea);
+		} else {
+			freeArea = new MapData();
 		}
 		
 		for (DirectionalReading distanceReading : sense.getReadings().values()) {
+			freeArea.draw(distanceReading.getSharp1Distance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
+			
+			
 			if (distanceReading.getSharp1Distance().okDistance())
 			{
 				Point2D.Float position = getIRPosition(a_bestGuess, distanceReading);
-				float fromDistance= distanceReading.getSharp1Distance().getMedian();
+				//float fromDistance= distanceReading.getSharp1Distance().getMedian();
 				float deviation = distanceReading.getSharp1Distance().getStdev();
-				Landmark lm = new Landmark(position, deviation, fromDistance);
+				Landmark lm = new Landmark(position, deviation);
 				
 				Pair prediction = getDistance(a_bestGuess, distanceReading.getServoDirection(), distanceReading.getSharp1Distance().getBeamWidth());
 				//no prediction is found
@@ -93,21 +64,8 @@ public class Map {
 		return position;
 	}
 	
-	class Pair {
-		public Pair(float minLenSquare, Landmark end) {
-			minLenSquareDistance = minLenSquare;
-			landmark = end;
-		}
-		
-		public float getDistance() {
-			return (float) Math.sqrt(minLenSquareDistance);
-		}
-		private float minLenSquareDistance;
-		Landmark landmark;
-	}
-
-	public Pair getDistance(State state, Direction direction2, float a_beamWidth) {
-		Direction direction = state.m_heading.getHeadDirection(direction2);
+	public Pair getDistance(State state, Direction servo, float a_beamWidth) {
+		Direction direction = state.m_heading.getHeadDirection(servo);
 
 		Point2D.Float robotPosition = state.getRobotPosition();
 		
@@ -135,5 +93,18 @@ public class Map {
 		//raster.getPixels(x, y, w, h, iArray);
 		return ret;
 	}
+
+
+	public boolean isFree(int x, int y) {
+		return freeArea.isFree(x, y);
+	}
+
+
+	public boolean isBlocked(int x, int y) {
+		return freeArea.isBlocked(x, y);
+	}
+
+	
+	
 
 }

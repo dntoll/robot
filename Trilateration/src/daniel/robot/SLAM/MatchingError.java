@@ -1,7 +1,6 @@
 package daniel.robot.SLAM;
 
 import daniel.robot.Direction;
-import daniel.robot.SLAM.Map.Pair;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.glWindow.model.SharpMeasurement;
@@ -74,7 +73,10 @@ public class MatchingError {
 			float distance = measurement.getMedian();
 			
 			error.m_numMatching++;
-			ret += Math.sqrt((distance - expectedDistance.getDistance())*(distance - expectedDistance.getDistance()));
+			float delta = distance - expectedDistance.getDistance();
+			
+			
+			ret += Math.sqrt(delta*delta);// * (measurement.getStdev() * expectedDistance.landmark.deviation);
 		}
 		return ret;
 	}

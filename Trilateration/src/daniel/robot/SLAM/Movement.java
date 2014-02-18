@@ -23,11 +23,19 @@ public class Movement {
 	}
 	
 	private float getHeadingVariance() {
-		return 6;
+		return m_turnRight/2.0f + 2.0f;
 	}
 
 	private float getPositionVariance() {
-		return 4;
+		return m_distance / 3.0f;
+	}
+
+	public float getAngle() {
+		return m_turnRight;
+	}
+	
+	public float getDistance() {
+		return m_distance;
 	}
 
 	//https://docs.google.com/spreadsheet/ccc?key=0AssbuCblTdssdGU4TFVSZlBINWptMS1ZbmRNUUVoNHc#gid=0

@@ -43,9 +43,7 @@ public class SLAM implements Runnable{
 			m_world.add(startPose);
 			Pose lastPose = startPose;
 			
-			for (int i =0 ;i< 3; i++) {
-				
-				
+			for (int i =0 ;i< 15; i++) {
 				
 				Movement move = m_robot.makeMove();
 				DistanceSensorReadings Z = m_robot.makeReading();

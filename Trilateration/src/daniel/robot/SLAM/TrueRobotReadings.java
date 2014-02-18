@@ -2,14 +2,11 @@ package daniel.robot.SLAM;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Collection;
 import java.util.Date;
 
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
-import daniel.robot.glWindow.model.IPose;
 import daniel.robot.glWindow.model.IRobotInterface;
-import daniel.robot.glWindow.model.PoseCollection;
 import daniel.robot.glWindow.model.RobotModel;
 import daniel.robot.glWindow.model.SavedReadings;
 import daniel.robot.sensors.Compass;

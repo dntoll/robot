@@ -38,8 +38,8 @@ public class SavedRobotReadings implements IRobotInterface {
 
 	@Override
 	public Movement makeMove() throws InterruptedException {
-		//float distance = 10.5f;
-		float distance = 0.0f;
+		float distance = 10.5f;
+		//float distance = 0.0f;
 		float turn = 0.0f;
 		Movement move = new Movement(distance, turn);
 		//model.waitForMove(move);

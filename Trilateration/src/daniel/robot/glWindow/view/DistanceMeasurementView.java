@@ -1,12 +1,15 @@
 package daniel.robot.glWindow.view;
 
 import static javax.media.opengl.GL.GL_LINES;
+import static javax.media.opengl.GL.GL_TRIANGLES;
 
 import java.awt.geom.Point2D.Float;
 
 import javax.media.opengl.GL2;
 import daniel.robot.Direction;
+import daniel.robot.SLAM.Landmark;
 import daniel.robot.SLAM.Map;
+import daniel.robot.SLAM.MapData;
 
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
@@ -84,19 +87,49 @@ public class DistanceMeasurementView {
 		core.drawText(gl, reading.getSharpString(), 30, 30);
 	}
 
-	public void drawMap(GL2 gl, Map lastMap) {
+	public void drawMap(GL2 gl, Map lastMap, State bestKnownPosition) {
 		gl.glLoadIdentity(); 
 		gl.glColor4f(1, 1, 1, 1.0f);
 		gl.glBegin(GL_LINES);
-		for ( Map.Landmark l : lastMap.m_landmarks) {
+		for ( Landmark l : lastMap.m_landmarks) {
 			float cx = CenterX + l.pos.x;
 			float cy = CenterY + l.pos.y;
 			core.drawCircle(gl, cx, cy, l.deviation);
 			
 		}
 		gl.glEnd();
-		gl.glColor4f(1, 1, 1, 1.0f);
-		core.drawText(gl, "" + lastMap.m_landmarks.size(), 30, 400);
 		
+		
+		gl.glBegin(GL_TRIANGLES);
+		gl.glColor4f(0.1f, 0.1f, 0.1f, 1.0f);
+		for (int x = 0; x < MapData.getSize(); x++) {
+			for (int y = 0; y < MapData.getSize(); y++) {
+				float vx = CenterX + (x - MapData.getSize()/2.0f) * MapData.getCellSize();
+				float vy = CenterY + (y - MapData.getSize()/2.0f) * MapData.getCellSize();
+				
+				if (lastMap.isFree(x,y)) {
+					gl.glColor4f(0.1f, 0.1f, 0.1f, 1.0f);
+					core.drawQuad(gl, vx, vy, MapData.getCellSize(), MapData.getCellSize());
+				}
+				if (lastMap.isBlocked(x,y)) {
+					gl.glColor4f(0.5f, 0.1f, 0.1f, 1.0f);
+					core.drawQuad(gl, vx, vy, MapData.getCellSize(), MapData.getCellSize());
+				}
+			}
+		}
+		
+		float x = bestKnownPosition.getRobotPosition().x;
+		float y = bestKnownPosition.getRobotPosition().y;
+		float vx = CenterX + (x );// / MapData.getCellSize();
+		float vy = CenterY + (y);// / MapData.getCellSize();
+		gl.glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
+		core.drawQuad(gl, vx, vy, MapData.getCellSize(), MapData.getCellSize());
+		
+		gl.glEnd();
+		
+		
+		
+		gl.glColor4f(1, 1, 1, 1.0f);
+		core.drawText(gl, "" + lastMap.m_landmarks.size()+ " x: " + x + " y: " + y, 30, 400);
 	}
 }

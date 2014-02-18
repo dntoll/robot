@@ -43,8 +43,8 @@ class SensorTower {
           measure(pos, m_sharp1, m_sharp2, "sh", 40);
        }
 //       Serial.println("DONE");
-       delay(100);
-       for(int pos = MAX_DEGREES; pos > MIN_DEGREES; pos -= 15)  // goes from 0 degrees to 180 degrees 
+       delay(10);
+       for(int pos = MAX_DEGREES; pos > MIN_DEGREES; pos -= 1)  // goes from 0 degrees to 180 degrees 
        { 
           measure(pos, m_sharp1, m_sharp2, "sh", 40);
        }

@@ -47,6 +47,17 @@ public class State {
 		m_position.y = m_position.y + y;// + rand.nextFloat() * (a_positionVariance*2.0f)-a_positionVariance;
 	}
 	
+	public void moveFlawLess(Movement a_move) {
+		m_heading.Turn(a_move.getAngle());
+		
+		float x = m_heading.getX() * a_move.getDistance(); 
+		float y = m_heading.getY() * a_move.getDistance();
+		
+		//m_position = new Float();
+		m_position.x = m_position.x + x;// + rand.nextFloat() * (a_positionVariance*2.0f)-a_positionVariance;
+		m_position.y = m_position.y + y;// + rand.nextFloat() * (a_positionVariance*2.0f)-a_positionVariance;
+	}
+	
 	public String toString() {
 		return 
 		" x : "  + m_position.x +

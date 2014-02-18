@@ -22,6 +22,7 @@ import daniel.robot.Direction;
 import daniel.robot.SLAM.Map;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
+import daniel.robot.glWindow.model.State;
 
 public class MetaView extends GLCanvas  
 implements GLEventListener, KeyListener {
@@ -127,7 +128,8 @@ implements GLEventListener, KeyListener {
 		    }*/
 		    if (world.getLastPose() != null) {
 			    Map lastMap = world.getLastPose().getBestMap();
-			    distances.drawMap(gl,lastMap); 
+			    State bestKnownPosition = world.getLastPose().getBestGuessPosition();
+			    distances.drawMap(gl,lastMap, bestKnownPosition); 
 		    }
 	    } catch (Exception e) {
 	    	System.err.println(e.getMessage());

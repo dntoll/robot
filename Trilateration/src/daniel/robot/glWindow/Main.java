@@ -13,7 +13,10 @@ import daniel.robot.SLAM.SLAM;
 import daniel.robot.SLAM.SavedRobotReadings;
 import daniel.robot.glWindow.controller.MetaController;
 import daniel.robot.glWindow.model.IRobotInterface;
+import daniel.robot.glWindow.model.RobotModel;
 import daniel.robot.glWindow.view.MetaView;
+import daniel.robot.simulation.SimulationReadings;
+import daniel.robot.SLAM.TrueRobotReadings;
 
 public class Main {
 	protected static final int CANVAS_WIDTH = 1024;
@@ -33,11 +36,14 @@ public class Main {
 	        	IRobotInterface robotInterface;
 				try {
 					//model = new RobotModel("127.0.0.1");
-					robotInterface = new SavedRobotReadings("Sun Feb 09 20:33:38 CET 2014");
+					//robotInterface = new SavedRobotReadings("Sun Feb 09 20:33:38 CET 2014");
+					
 					//robotInterface = new SavedRobotReadings("Sun Feb 09 21:33:37 CET 2014");
 					
 					//robotInterface = new TrueRobotReadings(new RobotModel("127.0.0.1"));
 					//robotInterface = new TrueRobotReadings(new RobotModel("192.168.1.6"));
+					
+					robotInterface = new SimulationReadings();
 					SLAM slam = new SLAM(robotInterface);
 					
 					
