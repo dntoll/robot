@@ -9,7 +9,7 @@ import daniel.robot.glWindow.model.State;
 
 public class World {
 
-	int size = 200;
+	int size = 50;
 	boolean[] grid = new boolean[size * size];
 	
 	public World() {
@@ -17,10 +17,12 @@ public class World {
 		for (int x = 0;x< size; x++) {
 			for (int y = 0; y < size; y++) {
 				if (x == 0 || y == 0 || x == size-1 || y == size-1) {
-					grid[getIndex(x, y)] = false;
+					grid[getIndex(x, y)] = true;
 				} else {
-					if (rand.nextInt(20) == 0) {
-						grid[getIndex(x, y)] = true;
+					if (rand.nextInt(100) == 0) {
+						grid[getIndex(x, y)] = false;
+					} else {
+						grid[getIndex(x, y)] = false;
 					}
 				}
 			}
@@ -28,11 +30,14 @@ public class World {
 	}
 	
 	private int getIndex(int x, int y) {
+		if (x < 0 || y < 0 || x > size-1 || y > size-1) {
+			return 0;
+		}
 		return y * size + x;
 	}
 	
 	public Float getStartPosition() {
-		return new Float(100,100);
+		return new Float(size/2,size/2);
 	}
 
 	public Direction getStartDirection() {
@@ -65,38 +70,74 @@ public class World {
 	private float getDistance(State robot, Direction servo) {
 		
 		
-		Float position = robot.getRobotPosition();
+		Float from = robot.getRobotPosition();
 		
 		Direction worldDirection = robot.m_heading.getHeadDirection(servo);
 		
 		float xdir = worldDirection.getX();
 		float ydir = worldDirection.getY();
 		
-		float u[] = new float[4];
-		for(int i = 0;i< 4; i++) {
-			u[i]= java.lang.Float.MAX_VALUE;
-		}
 		
-		//find u > 0;
-		
-		if (xdir != 0.0f) {
-			//u * xdir +position.x = 0; 
-			u[0] = -position.x / xdir;
-			//u * xdir +position.x = width;
-			u[1] = (size -position.x) / xdir;
-		}
-		if (ydir != 0.0f) {
-			u[2] = -position.y / ydir;
-			u[3] = (size-position.y) / ydir;
-		}
 		
 		float minu = java.lang.Float.MAX_VALUE;
-		for(int i = 0;i< 4; i++) {
-			
-			if (u[i] > 0 && u[i] < minu) {
-				minu = u[i];
+		
+		if (xdir > 0) {
+			for (int x = (int)from.x+1; (float)x < size; x++) {
+				float u = ((float)x - from.x) / xdir;
+				float y = from.y + ydir * u;
+				if ( y < 0 || y > size-1)
+					break;
+				if (grid[getIndex((int)x, (int)y)] == true) {
+					if (u < minu)
+						minu = u;
+					break;
+				}
+				
+			}
+		} else if (xdir < 0) {
+			for (int x = (int)from.x; (float)x > 0; x--) {
+				float u = ((float)x - from.x) / xdir;
+				float y = from.y + ydir * u;
+				if ( y < 0 || y > size-1)
+					istället returnera u för max y...
+					break;
+				if (grid[getIndex((int)x, (int)y)] == true) {
+					if (u < minu)
+						minu = u;
+					break;
+				}
 			}
 		}
+		
+		if (ydir > 0) {
+			for (int y = (int)from.y+1; (float)y < size; y++) {
+				float u = ((float)y - from.y) / ydir;
+				float x = from.x + xdir * u;
+				if ( x < 0 || x > size-1)
+					break;
+				if (grid[getIndex((int)x, (int)y)] == true) {
+					if (u < minu)
+						minu = u;
+					break;
+				}
+				
+			}
+		} else if (ydir < 0) {
+			for (int y = (int)from.y; (float)y > 0; y--) {
+				float u = ((float)y - from.y) / ydir;
+				float x = from.x + xdir * u;
+				if ( x < 0 || x > size-1)
+					break;
+				if (grid[getIndex((int)x, (int)y)] == true) {
+					if (u < minu)
+						minu = u;
+					break;
+				}
+			}
+		}
+		
+		if (minu > size)
+			minu = size;
 		
 		return minu;
 		
