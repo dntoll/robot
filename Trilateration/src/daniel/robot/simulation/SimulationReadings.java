@@ -27,7 +27,7 @@ public class SimulationReadings implements IRobotInterface {
 	@Override
 	public Movement makeMove() throws InterruptedException {
 		float distance = 15.0f;
-		float turn = -3.0f;
+		float turn = -15.0f;
 		Movement move = new Movement(distance, turn);
 		
 		robot.moveFlawLess(move);

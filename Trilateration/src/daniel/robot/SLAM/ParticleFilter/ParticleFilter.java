@@ -9,7 +9,7 @@ import daniel.robot.glWindow.model.State;
 public class ParticleFilter {
 	
 	private static Random RANDOM = new Random();
-	private static int NUMBER_OF_PARTICLES = 300;
+	private static int NUMBER_OF_PARTICLES = 400;
 	private Particle[] m_particles;
 	
 	public ParticleFilter(State a_startState, DistanceSensorReadings sense) {
