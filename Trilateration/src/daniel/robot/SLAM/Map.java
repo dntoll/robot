@@ -15,19 +15,19 @@ import daniel.robot.sensors.IRReading;
  */ 
 public class Map {
 	public ArrayList<Landmark> m_landmarks = new ArrayList<Landmark>();
-	//MapData freeArea;
+	MapData freeArea;
 	
 	public Map(State a_bestGuess, DistanceSensorReadings sense, Map parentMap) {
 		
 		if (parentMap != null) {
 			m_landmarks.addAll(parentMap.m_landmarks);
-	//		freeArea = new MapData(parentMap.freeArea);
+			freeArea = new MapData(parentMap.freeArea);
 		} else {
-	//		freeArea = new MapData();
+			freeArea = new MapData();
 		}
 		
 		for (DirectionalReading distanceReading : sense.getReadings().values()) {
-	//		freeArea.draw(distanceReading.getSharp1Distance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
+			freeArea.draw(distanceReading.getSharp1Distance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
 			
 			
 			if (distanceReading.getSharp1Distance().okDistance())
@@ -96,12 +96,12 @@ public class Map {
 
 
 	public boolean isFree(int x, int y) {
-		return false; //freeArea.isFree(x, y);
+		return freeArea.isFree(x, y);
 	}
 
 
 	public boolean isBlocked(int x, int y) {
-		return false;//freeArea.isBlocked(x, y);
+		return freeArea.isBlocked(x, y);
 	}
 
 	
