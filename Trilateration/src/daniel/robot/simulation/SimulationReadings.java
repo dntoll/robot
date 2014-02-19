@@ -11,7 +11,7 @@ import daniel.robot.sensors.Compass;
 
 public class SimulationReadings implements IRobotInterface {
 	
-	World surroundings = new World();
+	World surroundings = new World(250);
 	private State robot = new State(surroundings.getStartPosition(), surroundings.getStartDirection() );
 	Compass compass = new Compass();
 	DistanceSensorReadings latest = null;

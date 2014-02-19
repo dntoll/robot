@@ -8,16 +8,23 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import daniel.robot.Bitmap;
 import daniel.robot.Direction;
+import daniel.robot.SLAM.MapData;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.glWindow.model.State;
 
-public class World {
+public class World extends Bitmap {
 
-	int size = 250;
-	boolean[] grid = new boolean[size * size];
+	//int size = 250;
+	//boolean[] grid = new boolean[size * size];
 	
-	public World() {
+	public World(int size) {
+		super(size);
+		loadFromImage();
+	}
+
+	private void loadFromImage() {
 		BufferedImage image = null;
 		try {
 			image = ImageIO.read(new File("level.bmp"));
@@ -30,25 +37,21 @@ public class World {
 		Random rand = new Random();
 		for (int x = 0;x< size; x++) {
 			for (int y = 0; y < size; y++) {
+				grid[getIndex(x, y)] = CellContent.empty;
 				if (x == 0 || y == 0 || x == size-1 || y == size-1) {
-					grid[getIndex(x, y)] = true;
+					grid[getIndex(x, y)] = CellContent.blocked;
 				} else {
 					if (pixels[getIndex(x,y)] == -16777216) {
-						grid[getIndex(x, y)] = true;
+						grid[getIndex(x, y)] = CellContent.blocked;
 					} else {
-						grid[getIndex(x, y)] = false;
+						grid[getIndex(x, y)] = CellContent.empty;
 					}
 				}
 			}
 		}
 	}
 	
-	private int getIndex(int x, int y) {
-		if (x < 0 || y < 0 || x > size-1 || y > size-1) {
-			return 0;
-		}
-		return y * size + x;
-	}
+	
 	
 	public Float getStartPosition() {
 		return new Float(size/2,size/2);
@@ -64,7 +67,8 @@ public class World {
 		Random rand = new Random();
 		
 		for (int servoDegrees = 0; servoDegrees< 360; servoDegrees++) {
-			float distance = getDistance(robot, new Direction(servoDegrees));
+			Direction worldDirection = robot.m_heading.getHeadDirection(new Direction(servoDegrees));
+			float distance = getDistance(robot.getRobotPosition(), worldDirection);
 			for (int i  =0; i< 4; i++) {
 				if (distance < 100) {
 					ret.addSharpDistance(new Direction(servoDegrees), distance + rand.nextFloat() * 4.0f - 2.0f);
@@ -81,92 +85,7 @@ public class World {
 		return ret;
 	}
 
-	private float getDistance(State robot, Direction servo) {
-		
-		
-		Float from = robot.getRobotPosition();
-		
-		Direction worldDirection = robot.m_heading.getHeadDirection(servo);
-		
-		float xdir = worldDirection.getX();
-		float ydir = worldDirection.getY();
-		
-		
-		
-		float minu = java.lang.Float.MAX_VALUE;
-		
-		if (xdir > 0) {
-			for (int x = (int)from.x+1; (float)x < size; x++) {
-				float u = ((float)x - from.x) / xdir;
-				float y = from.y + ydir * u;
-				if ( y < 0 || y > size-1) {
-					if (u < minu)
-						minu = u;
-					break;
-				}
-				if (grid[getIndex((int)x, (int)y)] == true || grid[getIndex((int)x+1, (int)y)] == true) {
-					if (u < minu)
-						minu = u;
-					break;
-				}
-				
-			}
-		} else if (xdir < 0) {
-			for (int x = (int)from.x; (float)x > 0; x--) {
-				float u = ((float)x - from.x) / xdir;
-				float y = from.y + ydir * u;
-				if ( y < 0 || y > size-1) {
-					if (u < minu)
-						minu = u;
-					break;
-				}
-				if (grid[getIndex((int)x, (int)y)] == true || grid[getIndex((int)x-1, (int)y)] == true) {
-					if (u < minu)
-						minu = u;
-					break;
-				}
-			}
-		}
-		
-		if (ydir > 0) {
-			for (int y = (int)from.y+1; (float)y < size; y++) {
-				float u = ((float)y - from.y) / ydir;
-				float x = from.x + xdir * u;
-				if ( x < 0 || x > size-1) {
-					if (u < minu)
-						minu = u;
-					break;
-				}
-				if (grid[getIndex((int)x, (int)y)] == true || grid[getIndex((int)x, (int)y+1)] == true) {
-					if (u < minu)
-						minu = u;
-					break;
-				}
-				
-			}
-		} else if (ydir < 0) {
-			for (int y = (int)from.y; (float)y > 0; y--) {
-				float u = ((float)y - from.y) / ydir;
-				float x = from.x + xdir * u;
-				if ( x < 0 || x > size-1){
-					if (u < minu)
-						minu = u;
-					break;
-				}
-				if (grid[getIndex((int)x, (int)y)] == true || grid[getIndex((int)x, (int)y-1)] == true) {
-					if (u < minu)
-						minu = u;
-					break;
-				}
-			}
-		}
-		
-		if (minu > size)
-			minu = size;
-		
-		return minu;
-		
-	}
+	
 
 	
 }

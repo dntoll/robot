@@ -100,20 +100,21 @@ public class DistanceMeasurementView {
 		gl.glEnd();
 		
 		
+		MapData map = lastMap.getMap();
 		gl.glBegin(GL_TRIANGLES);
 		gl.glColor4f(0.1f, 0.1f, 0.1f, 1.0f);
-		for (int x = 0; x < MapData.getSize(); x++) {
-			for (int y = 0; y < MapData.getSize(); y++) {
-				float vx = CenterX + (x - MapData.getSize()/2.0f) * MapData.getCellSize();
-				float vy = CenterY + (y - MapData.getSize()/2.0f) * MapData.getCellSize();
+		for (int x = 0; x < map.getSize(); x++) {
+			for (int y = 0; y < map.getSize(); y++) {
+				float vx = CenterX + (x - map.getSize()/2.0f) * map.getCellSize();
+				float vy = CenterY + (y - map.getSize()/2.0f) * map.getCellSize();
 				
 				if (lastMap.isFree(x,y)) {
 					gl.glColor4f(0.1f, 0.1f, 0.1f, 1.0f);
-					core.drawQuad(gl, vx, vy, MapData.getCellSize(), MapData.getCellSize());
+					core.drawQuad(gl, vx, vy, map.getCellSize(), map.getCellSize());
 				}
 				if (lastMap.isBlocked(x,y)) {
 					gl.glColor4f(0.5f, 0.1f, 0.1f, 1.0f);
-					core.drawQuad(gl, vx, vy, MapData.getCellSize(), MapData.getCellSize());
+					core.drawQuad(gl, vx, vy, map.getCellSize(), map.getCellSize());
 				}
 			}
 		}
@@ -123,13 +124,13 @@ public class DistanceMeasurementView {
 		float vx = CenterX + (x );// / MapData.getCellSize();
 		float vy = CenterY + (y);// / MapData.getCellSize();
 		gl.glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-		core.drawQuad(gl, vx, vy, MapData.getCellSize(), MapData.getCellSize());
+		core.drawQuad(gl, vx, vy, map.getCellSize(), map.getCellSize());
 		
 		gl.glEnd();
 		
 		
 		
 		gl.glColor4f(1, 1, 1, 1.0f);
-		core.drawText(gl, "" + lastMap.m_landmarks.size()+ " x: " + x + " y: " + y, 30, 400);
+		core.drawText(gl, "" + lastMap.m_landmarks.size()+ " x: " + x + " y: " + y, 30, 450);
 	}
 }

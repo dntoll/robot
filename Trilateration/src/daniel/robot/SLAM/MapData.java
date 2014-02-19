@@ -2,46 +2,31 @@ package daniel.robot.SLAM;
 
 import java.awt.geom.Point2D.Float;
 
+import daniel.robot.Bitmap;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.SharpMeasurement;
 
-public class MapData {
-	static int size = 200; 
-	static float cellSize = 3.0f;
+public class MapData extends Bitmap{
 	
-	int[] openSpace = new int[size * size]; 
 	
-	public MapData() {
-		for (int i = 0;i< size*size; i++) {
-			openSpace[i] = 0;
-		}
+	protected float cellSize;
+	
+	public MapData(int size, float cellSize) {
+		super(size);
+		this.cellSize = cellSize;
 	}
 	
 	public MapData(MapData freeArea) {
+		super(freeArea.size);
+		
+		cellSize = freeArea.cellSize;
 		for (int i = 0;i< size*size; i++) {
-			openSpace[i] = freeArea.openSpace[i];
+			grid[i] = freeArea.grid[i];
 		}
 	}
 
-	public static int getSize() {
-		return size;
-	}
-
-
-	public static float getCellSize() {
+	public float getCellSize() {
 		return cellSize;
-	}
-
-
-	public boolean isFree(int x, int y) {
-		return openSpace[getIndex(x, y)] == 1;
-	}
-	public boolean isBlocked(int x, int y) {
-		return openSpace[getIndex(x, y)] == 2;
-	}
-
-	private int getIndex(int x, int y) {
-		return y * size + x;
 	}
 
 	public void draw(SharpMeasurement sharp1Distance, Float robotPosition,
@@ -54,27 +39,35 @@ public class MapData {
 		for (int i = 0; i< dist; i++) {
 			float x = robotPosition.x + headDirection.getX() * (float)i;
 			float y = robotPosition.y + headDirection.getY() * (float)i;
-			draw(x, y, 1);
+			draw(x, y, CellContent.empty);
 		}
 		
 		if (sharp1Distance.okDistance()) {
 			float blockLen = sharp1Distance.getMedian();
 			float x = robotPosition.x + headDirection.getX() * blockLen;
 			float y = robotPosition.y + headDirection.getY() * blockLen;
-			draw(x, y, 2);
+			draw(x, y, CellContent.blocked);
 		}
 		
 	}
 	
-	private void draw(float rx, float ry, int type) {
+	private void draw(float rx, float ry, CellContent type) {
 		int x = (int) (rx / cellSize + size/2);
 		int y = (int) (ry / cellSize + size/2);
 		
 		if (x >= 0 && x < size && y >= 0 && y < size) {
-			if (openSpace[getIndex(x, y)] < 2) {
-				openSpace[getIndex(x, y)] = type;
+			if (grid[getIndex(x, y)] != CellContent.blocked) {
+				grid[getIndex(x, y)] = type;
 			}
 		}
 	}
+	
+	public float  getDistance(Float from, Direction worldDirection) {
+		
+		Float scaled = new Float(from.x/cellSize + size/2, from.y/cellSize + size/2);
+		return super.getDistance(scaled, worldDirection);
+	}
+	
+	
 
 }

@@ -23,7 +23,7 @@ public class Map {
 			m_landmarks.addAll(parentMap.m_landmarks);
 			freeArea = new MapData(parentMap.freeArea);
 		} else {
-			freeArea = new MapData();
+			freeArea = new MapData(60, 5);
 		}
 		
 		for (DirectionalReading distanceReading : sense.getReadings().values()) {
@@ -102,6 +102,12 @@ public class Map {
 
 	public boolean isBlocked(int x, int y) {
 		return freeArea.isBlocked(x, y);
+	}
+
+
+	public MapData getMap() {
+		// TODO Auto-generated method stub
+		return freeArea;
 	}
 
 	
