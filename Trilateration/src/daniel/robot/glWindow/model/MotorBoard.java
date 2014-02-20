@@ -26,7 +26,7 @@ public class MotorBoard {
 		String data = port.read();
 		
 		if (data.equals("")) {
-		} else if (data.equals("")) {
+		} else if (data.equals("DONE")) {
 			isStillMoving = false;
 		} else {
 			String[] parts = data.split(":");
@@ -79,7 +79,7 @@ public class MotorBoard {
 	}
 
 	public void askForMovement(Movement move) {
-		port.write("");
+		port.write("w\n");
 		isStillMoving = false;
 		
 	}

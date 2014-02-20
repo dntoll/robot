@@ -81,7 +81,7 @@ public class RobotModel {
 	public void waitForMove(Movement move) throws InterruptedException {
 		board.askForMovement(move);
 		
-		DistanceSensorReadings ret = null;
+		
 		while(board.isStillMoving()) {
 			Thread.sleep(100);
 		}

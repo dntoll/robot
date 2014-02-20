@@ -37,7 +37,7 @@ public class TrueRobotReadings implements IRobotInterface{
 	public Movement makeMove() throws InterruptedException {
 		//System.out.println("Move now");
 		//Thread.sleep(10000);
-		float distance = 0.0f;
+		float distance = 5.0f;
 		float turn = 0.0f;
 		Movement move = new Movement(distance, turn);
 		model.waitForMove(move);
