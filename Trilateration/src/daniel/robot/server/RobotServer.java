@@ -1,12 +1,12 @@
 package daniel.robot.server;
 
-import gnu.io.CommPort;
-import gnu.io.CommPortIdentifier;
-import gnu.io.SerialPort;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Enumeration;
+
+import jssc.SerialPort;
+import jssc.SerialPortException;
 
 
 
@@ -73,7 +73,7 @@ public class RobotServer implements Runnable {
 					e.printStackTrace();
 				}
 				System.out.println("closed robot");
-				port.close();
+				port.closePort();
 				
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
@@ -84,11 +84,14 @@ public class RobotServer implements Runnable {
 
 	private boolean communicate(Socket clientSocket,
 			SerialPort port, int iterations)
-			throws IOException, InterruptedException {
-		int d;
-		if ( port.getInputStream().available() > 0) {
-			while ( port.getInputStream().available() > 0) {
-				d = port.getInputStream().read();
+			throws IOException, InterruptedException, SerialPortException {
+		byte d;
+		
+		;
+		
+		if ( port.getInputBufferBytesCount() > 0) {
+			while ( port.getInputBufferBytesCount() > 0) {
+				d = port.readBytes(1)[0] ;;
 				clientSocket.getOutputStream().write(1);
 				clientSocket.getOutputStream().write(d);
 			}
@@ -101,8 +104,8 @@ public class RobotServer implements Runnable {
 					//keep alive
 					keepAliveReceived = System.currentTimeMillis();
 				} else {
-					d = clientSocket.getInputStream().read();
-					port.getOutputStream().write(d);
+					d = (byte) clientSocket.getInputStream().read();
+					port.writeByte(d);
 				}
 			}
 		} else {
@@ -134,41 +137,10 @@ public class RobotServer implements Runnable {
 	
 	@SuppressWarnings("unchecked")
 	private SerialPort findPort(String portID) throws Exception {
-		Enumeration<CommPortIdentifier> identifiers = CommPortIdentifier.getPortIdentifiers();
-		
-		while(identifiers.hasMoreElements()) {
-    		CommPortIdentifier identifier = identifiers.nextElement();
-    		
-    		System.out.println("Found identifier" + identifier.getName());
-    		
-    		if (identifier.getName().equals(portID)) {
-    		
-	    		if ( identifier.isCurrentlyOwned() )
-	            {
-	                throw new Exception("Error: Port is currently in use " + identifier.getName());
-	            }
-	            else
-	            {
-	                CommPort commPort =  identifier.open(this.getClass().getName(), 2000);
-	                
-	                if ( commPort instanceof gnu.io.SerialPort )
-	                {
-	            		SerialPort serialPort = (gnu.io.SerialPort) commPort;
-	            		serialPort.setSerialPortParams( 57600,
-	    								        		gnu.io.SerialPort.DATABITS_8, 
-	    								        		gnu.io.SerialPort.STOPBITS_1,
-	    								        		gnu.io.SerialPort.PARITY_NONE);
-	                    
-	            		return serialPort;
-	                }
-	                else
-	                {
-	                	throw new Exception("Error: Only serial ports are handled by this example.");
-	                }
-	            }
-    		}
-		}
-		throw new Exception("Error: No ports found");
+		 SerialPort serialPort = new SerialPort(portID);
+		 serialPort.openPort();
+         serialPort.setParams(57600, 8, 1, 0);
+         return serialPort;
 	}
 
 	public static void main(String argv[]) throws Exception {
