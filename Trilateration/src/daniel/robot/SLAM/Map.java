@@ -23,7 +23,7 @@ public class Map {
 			m_landmarks.addAll(parentMap.m_landmarks);
 			freeArea = new MapData(parentMap.freeArea);
 		} else {
-			freeArea = new MapData(60, 5);
+			freeArea = new MapData(100, 5);
 		}
 		
 		for (DirectionalReading distanceReading : sense.getReadings().values()) {

@@ -48,7 +48,7 @@ void loop() {
   if (Serial.available() > 0) {
     // get incoming byte:
     char inByte = Serial.read();
-    int time = 250;
+    int time = 500;
     
 
     

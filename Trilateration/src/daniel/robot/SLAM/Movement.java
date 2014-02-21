@@ -23,7 +23,7 @@ public class Movement {
 	}
 	
 	private float getHeadingVariance() {
-		return m_turnRight/2.0f + 2.0f;
+		return m_turnRight/2.0f + 5.0f;
 	}
 
 	private float getPositionVariance() {

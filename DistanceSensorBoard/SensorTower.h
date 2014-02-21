@@ -29,6 +29,7 @@ class SensorTower {
     SensorTower() : m_sharp1(SHARP_PIN1), m_sharp2(SHARP_PIN2), m_sonar1(SONAR1_TRIGGER_PIN, SONAR1_ECHO_PIN), m_sonar2(SONAR2_TRIGGER_PIN, SONAR2_ECHO_PIN)  {
       m_servo.attach(SERVO_PIN);       
       moveServo(MIN_DEGREES+5);
+      m_servo.detach(); 
     }
     
     ~SensorTower() {
@@ -38,17 +39,20 @@ class SensorTower {
 
     
     void sweep() {
+       m_servo.attach(SERVO_PIN); 
        for(int pos = MIN_DEGREES; pos <= MAX_DEGREES; pos += 1)  // goes from 0 degrees to 180 degrees 
        { 
           measure(pos, m_sharp1, m_sharp2, "sh", 40);
        }
-//       Serial.println("DONE");
+       Serial.println("DONE");
        delay(10);
        for(int pos = MAX_DEGREES; pos > MIN_DEGREES; pos -= 1)  // goes from 0 degrees to 180 degrees 
        { 
-          measure(pos, m_sharp1, m_sharp2, "sh", 40);
+//          measure(pos, m_sharp1, m_sharp2, "sh", 40);
+            moveServo(pos); // move it back slow...
        }
-       Serial.println("DONE");
+      // Serial.println("DONE");
+       m_servo.detach(); 
     }
     
     void measure(int pos, Sensor &front, Sensor &back, const String &code, int delayMilliseconds) {

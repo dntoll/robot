@@ -218,7 +218,8 @@ class Robot {
       delay(a_time);
       m_hBridge.stopAll();
    //   measureGyro();
-      Serial.println("");
+      Serial.println("DONE");
+      
     }
     
     void moveServo(int pos) {
