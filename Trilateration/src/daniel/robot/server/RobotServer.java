@@ -156,6 +156,12 @@ public class RobotServer implements Runnable {
 		Thread motor = new Thread(motorServer);
 		motor.start();
 		
+		String cameraPort = "/dev/video0";
+		ImageServer cameraServer =  new ImageServer(cameraPort, 6791);
+		
+		
+		Thread camera = new Thread(cameraServer);
+		camera.start();
 	}
 
 	

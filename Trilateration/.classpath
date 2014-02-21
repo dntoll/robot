@@ -9,5 +9,6 @@
 			<attribute name="javadoc_location" value="jar:file:/home/daniel/programming/jSSC-2.6.0-Release/javadoc/jssc-2.6.0-javadoc.jar!/javadoc"/>
 		</attributes>
 	</classpathentry>
+	<classpathentry kind="lib" path="/home/daniel/workspace/Webcam/webcam-capture-0.3.10-RC6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

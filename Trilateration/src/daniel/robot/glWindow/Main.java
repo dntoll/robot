@@ -40,8 +40,8 @@ public class Main {
 					
 					//robotInterface = new SavedRobotReadings("Sun Feb 09 21:33:37 CET 2014");
 					
-					robotInterface = new TrueRobotReadings(new RobotModel("127.0.0.1"));
-					//robotInterface = new TrueRobotReadings(new RobotModel("192.168.1.6"));
+					//robotInterface = new TrueRobotReadings(new RobotModel("127.0.0.1"));
+					robotInterface = new TrueRobotReadings(new RobotModel("192.168.1.6"));
 					
 					//robotInterface = new SimulationReadings();
 					SLAM slam = new SLAM(robotInterface);
