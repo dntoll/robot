@@ -1,5 +1,6 @@
 package daniel.robot.simulation;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import daniel.robot.Direction;
@@ -57,6 +58,12 @@ public class SimulationReadings implements IRobotInterface {
 	@Override
 	public Direction getCompassDirection() {
 		return robot.m_heading;
+	}
+
+	@Override
+	public BufferedImage getPanoramaImage() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

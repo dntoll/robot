@@ -1,5 +1,6 @@
 package daniel.robot.glWindow.model;
 
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.Collection;
 
@@ -24,5 +25,7 @@ public interface IRobotInterface {
 	public float getTemperature();
 
 	public Direction getCompassDirection();
+
+	public BufferedImage getPanoramaImage();
 
 }

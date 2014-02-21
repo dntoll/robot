@@ -122,6 +122,11 @@ implements GLEventListener, KeyListener {
 	    gl.glMatrixMode(GL_MODELVIEW);
 	    gl.glLoadIdentity(); 
 	    
+	    gl.glLoadIdentity(); 
+	    
+	    
+	    cameraView.drawCamera(gl, glu, windowSize);
+	    
 	    try {
 		   /* for (IPose pose : world.poses) {
 			   distances.drawTopDown(gl, pose.getDistanceSensorReadings(), pose.getBestGuessPosition());
@@ -144,12 +149,12 @@ implements GLEventListener, KeyListener {
 		    float direction = robot.getCompassDirection().getHeadingDegrees();
 		    String out = "Temperature " + temp + " direction " + direction; 
 		    core.renderStrokeString(gl, out); // Print GL Text To The Screen
-		   // cameraView.updateCameraTexture(gl, model.getPanoramaImage(), windowSize);
+		    cameraView.updateCameraTexture(gl, robot.getPanoramaImage(), windowSize);
 	    }
 	    gl.glLoadIdentity(); 
 	    
 	    
-	//    cameraView.drawCamera(gl, glu, windowSize);
+	    cameraView.drawCamera(gl, glu, windowSize);
 	 //   cameraView.drawPerspective(gl, glu, windowSize, model.getDistanceSensorReadings());
 	    
 	    

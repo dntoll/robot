@@ -1,5 +1,6 @@
 package daniel.robot.SLAM;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
@@ -68,6 +69,11 @@ public class TrueRobotReadings implements IRobotInterface{
 	@Override
 	public Direction getCompassDirection() {
 		return model.getCompassDirection();
+	}
+
+	@Override
+	public BufferedImage getPanoramaImage() {
+		return model.getPanoramaImage();
 	}
 
 	

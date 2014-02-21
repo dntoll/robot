@@ -8,9 +8,6 @@ import static javax.media.opengl.GL.GL_TEXTURE_MAG_FILTER;
 import static javax.media.opengl.GL.GL_TEXTURE_MIN_FILTER;
 import static javax.media.opengl.GL2GL3.GL_QUADS;
 
-import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
-import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
-
 import java.awt.Dimension;
 import java.awt.image.BufferedImage;
 
@@ -23,9 +20,7 @@ import com.jogamp.opengl.util.texture.TextureCoords;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 import daniel.robot.Direction;
-import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
-import daniel.robot.glWindow.model.Measurement;
 
 public class CameraView {
 	BufferedImage oldImage = null;
@@ -38,18 +33,18 @@ public class CameraView {
 	
 	void drawCamera(GL2 gl, GLU glu, Dimension windowSize) {
 		
-	     
-	     cameraTexture.enable(gl);
-	     cameraTexture.bind(gl);
-		  gl.glEnable(GL_BLEND);       // Turn blending on
-		  gl.glDisable(GL_DEPTH_TEST); // Turn depth testing off
-	      gl.glBegin(GL_QUADS); // of the color cube
-	      gl.glColor3f(1, 1, 1);
-	      drawQuad(gl, 0, windowSize.height-imageHeight, imageWidth, imageHeight);
-	      gl.glEnd();
-	      cameraTexture.disable(gl);
+	     if (cameraTexture != null) {
+		     cameraTexture.enable(gl);
+		     cameraTexture.bind(gl);
+			  gl.glEnable(GL_BLEND);       // Turn blending on
+			  gl.glDisable(GL_DEPTH_TEST); // Turn depth testing off
+		      gl.glBegin(GL_QUADS); // of the color cube
+		      gl.glColor3f(1, 1, 1);
+		      drawQuad(gl, 0, windowSize.height-imageHeight, imageWidth, imageHeight);
+		      gl.glEnd();
+		      cameraTexture.disable(gl);
 	      
-	      
+	     }
 	      
 	}
 

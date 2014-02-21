@@ -10,5 +10,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/home/daniel/workspace/Webcam/webcam-capture-0.3.10-RC6.jar"/>
+	<classpathentry kind="lib" path="/home/daniel/programming/slf4j/slf4j-1.7.5/slf4j-api-1.7.5.jar"/>
+	<classpathentry kind="lib" path="/home/daniel/programming/webcam/libs/bridj-0.7-20131007.003529-54.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
