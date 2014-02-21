@@ -20,7 +20,7 @@ public class ImageServer implements Runnable {
 	int m_socketPort;
 	public ImageServer(String cameraPort, int port) throws IOException {
 		m_socketPort = port;
-		m_serverSocket = new ServerSocket(m_socketPort); 
+		
 	}
 
 	public static void main(String argv[]) throws Exception {
@@ -42,6 +42,7 @@ public class ImageServer implements Runnable {
 			Socket clientSocket;
 			DataOutputStream out;
 			try {
+				m_serverSocket = new ServerSocket(m_socketPort); 
 				clientSocket = m_serverSocket.accept();
 				out = new DataOutputStream(clientSocket.getOutputStream());
 			} catch (IOException e2) {

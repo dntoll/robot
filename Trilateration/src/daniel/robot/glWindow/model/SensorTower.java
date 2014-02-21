@@ -35,7 +35,7 @@ public class SensorTower  {
 			timeReceived =  System.currentTimeMillis();
 			String[] parts = data.split(":");
 			
-			System.out.println(data);
+			//System.out.println(data);
 			if (parts.length == 4) {
 				String code= parts[0];
 				int direction = Integer.parseInt(parts[1]);
