@@ -144,11 +144,11 @@ public class RobotServer implements Runnable {
 	}
 
 	public static void main(String argv[]) throws Exception {
-		/*String cameraPort = "/dev/video0";
+		String cameraPort = "/dev/video0";
 		ImageServer cameraServer =  new ImageServer(cameraPort, 6791);
 		Thread camera = new Thread(cameraServer);
 		camera.start();
-		*/
+		
 		String sensorsPort = "/dev/ttyACM0";
 		RobotServer sensorServer =  new RobotServer(sensorsPort, 6789);
 		
