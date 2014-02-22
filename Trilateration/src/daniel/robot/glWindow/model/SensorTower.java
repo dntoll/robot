@@ -36,7 +36,7 @@ public class SensorTower  {
 			String[] parts = data.split(":");
 			
 			//System.out.println(data);
-			if (parts.length == 4) {
+			if (parts.length == 4 && reading != null) {
 				String code= parts[0];
 				int direction = Integer.parseInt(parts[1]);
 				Direction front = new Direction(direction);

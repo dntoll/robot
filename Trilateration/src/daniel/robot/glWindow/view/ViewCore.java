@@ -54,12 +54,20 @@ public class ViewCore {
 		Direction left = new Direction(direction.getHeadingDegrees()-degrees/2);
 		Direction middle = direction;
 		Direction right = new Direction(direction.getHeadingDegrees()+degrees/2);
-		drawPoint(gl, cx, cy, distance.getQ1(), left);
-		drawPoint(gl, cx, cy, distance.getQ3(), left);
-		drawPoint(gl, cx, cy, distance.getQ1(), middle);
-		drawPoint(gl, cx, cy, distance.getQ3(), middle);
-		drawPoint(gl, cx, cy, distance.getQ1(), right);
-		drawPoint(gl, cx, cy, distance.getQ3(), right);
+		float q1 = distance.getQ1();
+		float q3 = distance.getQ3();
+		if (q1 > 200)
+			q1 = 200;
+		if (q3 > 200)
+			q3 = 200;
+		
+		drawPoint(gl, cx, cy, q1, left);
+		
+		drawPoint(gl, cx, cy, q3, left);
+		drawPoint(gl, cx, cy, q1, middle);
+		drawPoint(gl, cx, cy, q3, middle);
+		drawPoint(gl, cx, cy, q1, right);
+		drawPoint(gl, cx, cy, q3, right);
 		gl.glEnd();
 	}
 	
@@ -73,11 +81,15 @@ public class ViewCore {
 		Direction middle = direction;
 		Direction right = new Direction(direction.getHeadingDegrees()+degrees/2);
 		drawPoint(gl, cx, cy, 0, left);
-		drawPoint(gl, cx, cy, distance.getMin(), left);
+		float min = distance.getMin();
+		
+		if (min > 200)
+			min = 200;
+		drawPoint(gl, cx, cy, min, left);
 		drawPoint(gl, cx, cy, 0, middle);
-		drawPoint(gl, cx, cy, distance.getMin(), middle);
+		drawPoint(gl, cx, cy, min, middle);
 		drawPoint(gl, cx, cy, 0, right);
-		drawPoint(gl, cx, cy, distance.getMin(), right);
+		drawPoint(gl, cx, cy, min, right);
 		gl.glEnd();
 		
 	}
