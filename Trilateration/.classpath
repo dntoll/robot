@@ -9,8 +9,11 @@
 			<attribute name="javadoc_location" value="jar:file:/home/daniel/programming/jSSC-2.6.0-Release/javadoc/jssc-2.6.0-javadoc.jar!/javadoc"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="/home/daniel/workspace/Webcam/webcam-capture-0.3.10-RC6.jar"/>
 	<classpathentry kind="lib" path="/home/daniel/programming/slf4j/slf4j-1.7.5/slf4j-api-1.7.5.jar"/>
 	<classpathentry kind="lib" path="/home/daniel/programming/webcam/libs/bridj-0.7-20131007.003529-54.jar"/>
+	<classpathentry kind="lib" path="/home/daniel/programming/webcam-capture-driver-gstreamer-0.3.10-RC6.jar"/>
+	<classpathentry kind="lib" path="/home/daniel/programming/webcam/webcam-capture-0.3.10-RC6.jar"/>
+	<classpathentry kind="lib" path="/home/daniel/programming/libs/jna-3.4.0.jar"/>
+	<classpathentry kind="lib" path="/home/daniel/programming/libs/gstreamer-java-1.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

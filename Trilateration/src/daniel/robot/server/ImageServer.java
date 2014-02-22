@@ -12,10 +12,15 @@ import java.net.Socket;
 import javax.imageio.ImageIO;
 
 import com.github.sarxos.webcam.Webcam;
+import com.github.sarxos.webcam.ds.gstreamer.GStreamerDriver;
 
 
 
 public class ImageServer implements Runnable {
+	static {
+	    Webcam.setDriver(new GStreamerDriver());
+	}
+	
 	private ServerSocket m_serverSocket;
 	int m_socketPort;
 	public ImageServer(String cameraPort, int port) throws IOException {
