@@ -11,15 +11,12 @@ import java.net.Socket;
 
 import javax.imageio.ImageIO;
 
-import com.github.sarxos.webcam.Webcam;
-import com.github.sarxos.webcam.ds.gstreamer.GStreamerDriver;
-
 
 
 public class ImageServer implements Runnable {
-	static {
+	/*static {
 	    Webcam.setDriver(new GStreamerDriver());
-	}
+	}*/
 	
 	private ServerSocket m_serverSocket;
 	int m_socketPort;
@@ -56,7 +53,7 @@ public class ImageServer implements Runnable {
 				break;
 			}
 			System.out.println("camera accepted connection");
-		
+		/*
 			try {
  				Webcam camera = Webcam.getDefault();
  				
@@ -96,7 +93,7 @@ public class ImageServer implements Runnable {
 			} catch (Exception e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			}
+			}*/
 		}
 	}
 }
