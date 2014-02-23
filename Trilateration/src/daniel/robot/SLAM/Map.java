@@ -17,6 +17,7 @@ public class Map {
 	public ArrayList<Landmark> m_landmarks = new ArrayList<Landmark>();
 	MapData freeArea;
 	
+	
 	public Map(State a_bestGuess, DistanceSensorReadings sense, Map parentMap) {
 		
 		if (parentMap != null) {
@@ -30,21 +31,42 @@ public class Map {
 			freeArea.draw(distanceReading.getSharp1Distance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
 			
 			
-			if (distanceReading.getSharp1Distance().okDistance())
+			//if (distanceReading.getSharp1Distance().wit())
 			{
 				Point2D.Float position = getIRPosition(a_bestGuess, distanceReading);
-				//float fromDistance= distanceReading.getSharp1Distance().getMedian();
+				float distanceMeasured= distanceReading.getSharp1Distance().getMedian();
+				
 				float deviation = distanceReading.getSharp1Distance().getStdev();
-				Landmark lm = new Landmark(position, deviation);
+				
+				Landmark lm = new Landmark(position, deviation, distanceReading.getSharp1Distance().getMin());
 				
 				Pair prediction = getDistance(a_bestGuess, distanceReading.getServoDirection(), distanceReading.getSharp1Distance().getBeamWidth());
 				//no prediction is found
 				if (prediction == null) {
+					//no prediction in this direction just add...
 					m_landmarks.add(lm);
 				} else {
-					if (lm.isBetter(prediction)) {
-						m_landmarks.remove(prediction.landmark);
+					
+					//the new prediction should be added if its closer
+//					boolean newLandMarkIsCloser;
+					boolean newLandMarkIsFurtherAway = lm.getDifference(prediction.landmark) > 100;
+//					boolean newLandMarkIsHasBetterSTDEV;
+					
+					if (distanceMeasured < prediction.getDistance() && lm.deviation < 10) {
 						m_landmarks.add(lm);
+					} else {
+					
+						//Improvements
+						if (lm.isBetter(prediction) && distanceMeasured < 150) 
+						{
+							//replace
+							m_landmarks.remove(prediction.landmark);
+							m_landmarks.add(lm);
+						} else  if(newLandMarkIsFurtherAway && distanceMeasured < 150) {
+							//remove false landmarks
+							m_landmarks.remove(prediction.landmark);
+						}
+						
 					}
 				}
 			}

@@ -131,6 +131,6 @@ public class DistanceMeasurementView {
 		
 		
 		gl.glColor4f(1, 1, 1, 1.0f);
-		core.drawText(gl, "" + lastMap.m_landmarks.size()+ " x: " + x + " y: " + y, 30, 450);
+		core.drawText(gl, "" + lastMap.m_landmarks.size()+ " x: " + x + " y: " + y, 30, 550);
 	}
 }

@@ -2,7 +2,7 @@ package daniel.robot.glWindow.model;
 
 public class SharpMeasurement extends Measurement {
 	private static final int MIN_DISTANCE = 0;
-	private static final int MAX_DISTANCE = 180;
+	private static final int MAX_DISTANCE = 220;
 	public static final float BEAM_WIDTH = 1;
 
 	public void add(float value) {
@@ -58,9 +58,20 @@ public class SharpMeasurement extends Measurement {
 			return false;
 		if (getMedian() > MAX_DISTANCE)
 			return false;
-		if (getStdev() > 5.0f)
+		if (getStdev() > 15.0f)
 			return false;
 		
 		return true;
 	}
+	
+	/*public boolean okDistance() {
+		if (values.size() < 2)
+			return false;
+		if (getMedian() > MAX_DISTANCE)
+			return false;
+		if (getStdev() > 5.0f)
+			return false;
+		
+		return true;
+	}*/
 }

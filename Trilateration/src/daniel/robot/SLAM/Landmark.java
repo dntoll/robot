@@ -6,11 +6,13 @@ import java.awt.geom.Point2D.Float;
 public class Landmark {
 	public Point2D.Float pos;
 	public float deviation;
+	public float distanceMeasureFrom;
 	
 	
-	public Landmark(Float position, float stdv) {
+	public Landmark(Float position, float stdv, float distanceMeasureFrom) {
 		pos = position;
 		deviation = stdv;
+		this.distanceMeasureFrom = distanceMeasureFrom;
 	}
 
 
@@ -20,5 +22,11 @@ public class Landmark {
 		}
 		
 		return false;
+	}
+
+
+	public float getDifference(Landmark landmark) {
+		// TODO Auto-generated method stub
+		return (float) Math.sqrt((landmark.distanceMeasureFrom - distanceMeasureFrom)*(landmark.distanceMeasureFrom - distanceMeasureFrom));
 	}
 }

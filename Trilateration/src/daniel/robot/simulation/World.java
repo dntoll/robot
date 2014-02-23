@@ -54,7 +54,7 @@ public class World extends Bitmap {
 	
 	
 	public Float getStartPosition() {
-		return new Float(size/2,size/2);
+		return new Float(size/4,size/2);
 	}
 
 	public Direction getStartDirection() {
@@ -71,13 +71,15 @@ public class World extends Bitmap {
 			float distance = getDistance(robot.getRobotPosition(), worldDirection);
 			for (int i  =0; i< 4; i++) {
 				if (distance < 100) {
-					ret.addSharpDistance(new Direction(servoDegrees), distance + rand.nextFloat() * 4.0f - 2.0f);
+					ret.addSharpDistance(new Direction(servoDegrees + rand.nextFloat() * 2-1 ), distance + rand.nextFloat() * 8.0f - 4.0f);
 				} else if (distance < 150) {
-					ret.addSharpDistance(new Direction(servoDegrees), distance + rand.nextFloat() * 10.0f - 5.0f);
+					ret.addSharpDistance(new Direction(servoDegrees + rand.nextFloat() * 2-1), distance + rand.nextFloat() * 30.0f - 15.0f);
 				} else if (distance < 200) {
-					ret.addSharpDistance(new Direction(servoDegrees), distance + rand.nextFloat() * 32.0f - 16.0f);
-				} else {
-					ret.addSharpDistance(new Direction(servoDegrees), distance + rand.nextFloat() * 100.0f - 50.0f);
+					ret.addSharpDistance(new Direction(servoDegrees + rand.nextFloat() * 2-1), distance + rand.nextFloat() * 60.0f - 30.0f);
+				} else if (distance < 300) {
+					ret.addSharpDistance(new Direction(servoDegrees + rand.nextFloat() * 2-1), distance + rand.nextFloat() * 120.0f - 60.0f);
+				}else {
+					ret.addSharpDistance(new Direction(servoDegrees + rand.nextFloat() * 2-1), 300 + rand.nextFloat() * 120.0f - 60.0f);
 				}
 			}
 		}

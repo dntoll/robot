@@ -12,7 +12,8 @@ import daniel.robot.sensors.Compass;
 
 public class SimulationReadings implements IRobotInterface {
 	
-	World surroundings = new World(250);
+	World surroundings = new World(512);
+	
 	private State robot = new State(surroundings.getStartPosition(), surroundings.getStartDirection() );
 	Compass compass = new Compass();
 	DistanceSensorReadings latest = null;
@@ -25,10 +26,34 @@ public class SimulationReadings implements IRobotInterface {
 		return latest;
 	}
 
+	
+	int state = 0;
 	@Override
 	public Movement makeMove() throws InterruptedException {
+		
 		float distance = 15.0f;
-		float turn = -15.0f;
+		float turn = 0.0f;
+		
+		if (state == 0) {
+			if (robot.getRobotPosition().x > 420) {
+				turn = 90.0f;
+				state++;
+			}
+		} else if (state == 1) {
+			if (robot.getRobotPosition().y > 460) {
+				turn = 90.0f;
+				state++;
+			}
+		}  else if (state == 2) {
+			if (robot.getRobotPosition().x < 50) {
+				turn = 180.0f;
+				state++;
+			}
+		}
+		
+		
+		
+		
 		Movement move = new Movement(distance, turn);
 		
 		robot.moveFlawLess(move);
