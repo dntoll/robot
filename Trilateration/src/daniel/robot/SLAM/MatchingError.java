@@ -68,7 +68,7 @@ public class MatchingError {
 			MatchingError error, SharpMeasurement measurement, Direction direction) {
 		float ret = 0;
 		float degrees = measurement.getBeamWidth();
-		Pair expectedDistance = a_known.getDistance(a_newState, direction, degrees);
+		Prediction expectedDistance = a_known.getDistance(a_newState, direction, degrees);
 		if (expectedDistance != null) {
 			float distance = measurement.getMedian();
 			

@@ -14,17 +14,17 @@ import daniel.robot.sensors.IRReading;
  *
  */ 
 public class Map {
-	public ArrayList<Landmark> m_landmarks = new ArrayList<Landmark>();
+	LandmarkCollection m_landmarks = new LandmarkCollection();
 	MapData freeArea;
 	
 	
 	public Map(State a_bestGuess, DistanceSensorReadings sense, Map parentMap) {
 		
 		if (parentMap != null) {
-			m_landmarks.addAll(parentMap.m_landmarks);
+			m_landmarks.copy(parentMap.m_landmarks);
 			freeArea = new MapData(parentMap.freeArea);
 		} else {
-			freeArea = new MapData(100, 5);
+			freeArea = new MapData(100, 10);
 		}
 		
 		for (DirectionalReading distanceReading : sense.getReadings().values()) {
@@ -40,7 +40,7 @@ public class Map {
 				
 				Landmark lm = new Landmark(position, deviation, distanceReading.getSharp1Distance().getMin());
 				
-				Pair prediction = getDistance(a_bestGuess, distanceReading.getServoDirection(), distanceReading.getSharp1Distance().getBeamWidth());
+				Prediction prediction = getDistance(a_bestGuess, distanceReading.getServoDirection(), distanceReading.getSharp1Distance().getBeamWidth());
 				//no prediction is found
 				if (prediction == null) {
 					//no prediction in this direction just add...
@@ -52,7 +52,8 @@ public class Map {
 					boolean newLandMarkIsFurtherAway = lm.getDifference(prediction.landmark) > 100;
 //					boolean newLandMarkIsHasBetterSTDEV;
 					
-					if (distanceMeasured < prediction.getDistance() && lm.deviation < 10) {
+					if (distanceMeasured < 150 && 
+						distanceMeasured < prediction.getDistance() + 30 && lm.deviation < 10) {
 						m_landmarks.add(lm);
 					} else {
 					
@@ -86,35 +87,18 @@ public class Map {
 		return position;
 	}
 	
-	public Pair getDistance(State state, Direction servo, float a_beamWidth) {
+	public Prediction getDistance(State state, Direction servo, float a_beamWidth) {
 		Direction direction = state.m_heading.getHeadDirection(servo);
 
 		Point2D.Float robotPosition = state.getRobotPosition();
 		
-		float minLenSquare = java.lang.Float.MAX_VALUE;
-		Pair ret = null;
-		
-		for (Landmark obstacle : m_landmarks ) {
-			float dx = (obstacle.pos.x - robotPosition.x);
-			float dy = (obstacle.pos.y - robotPosition.y);
-			
-			Direction toObstacle = Direction.RadiansToDegrees((float) Math.atan2(dy, dx));
-			
-			float degreesDifference = toObstacle.GetDifferenceInDegrees(direction);
-			
-			if (degreesDifference < a_beamWidth / 2.0f) {
-				float distanceSquare = dx * dx + dy * dy;
-				if (distanceSquare  < minLenSquare) {
-					minLenSquare = distanceSquare;
-					ret = new Pair(minLenSquare, obstacle);
-				}
-			}
-			//Point2D.Float end = state.m_position.x + Math.cos(direction) * ;
-		}
+		Prediction ret = m_landmarks.getClosestLandMark(a_beamWidth, direction, robotPosition);
 				
-		//raster.getPixels(x, y, w, h, iArray);
 		return ret;
 	}
+
+
+	
 
 
 	public boolean isFree(int x, int y) {
@@ -130,6 +114,11 @@ public class Map {
 	public MapData getMap() {
 		// TODO Auto-generated method stub
 		return freeArea;
+	}
+
+
+	public Landmark[] getAllLandmarks() {
+		return m_landmarks.getAllLandmarks();
 	}
 
 	

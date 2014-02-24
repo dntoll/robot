@@ -16,7 +16,7 @@ public class Landmark {
 	}
 
 
-	public boolean isBetter(Pair prediction) {
+	public boolean isBetter(Prediction prediction) {
 		if (deviation < prediction.landmark.deviation ) {
 			return true;
 		}

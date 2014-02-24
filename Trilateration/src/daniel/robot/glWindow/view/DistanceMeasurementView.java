@@ -18,7 +18,7 @@ import daniel.robot.glWindow.model.State;
 public class DistanceMeasurementView {
 	
 	private static final int CenterY = 320;
-	private static final int CenterX = 320;
+	private static final int CenterX = 200;
 	private ViewCore core;
 
 	DistanceMeasurementView(ViewCore core) {
@@ -34,7 +34,7 @@ public class DistanceMeasurementView {
 		Float pos = position.getRobotPosition();
 		Direction robotDirection = position.m_heading;
 		
-		float cx = CenterX + pos.x;
+		float cx = CenterX + pos.x+175;
 		float cy = CenterY + pos.y;
 		
 		
@@ -91,10 +91,17 @@ public class DistanceMeasurementView {
 		gl.glLoadIdentity(); 
 		gl.glColor4f(1, 1, 1, 1.0f);
 		gl.glBegin(GL_LINES);
-		for ( Landmark l : lastMap.m_landmarks) {
+		
+		Landmark[] bestGuess = lastMap.getAllLandmarks();
+		for ( Landmark l : bestGuess) {
 			float cx = CenterX + l.pos.x;
 			float cy = CenterY + l.pos.y;
-			core.drawCircle(gl, cx, cy, l.deviation);
+			float deviation = l.deviation / 10.0f;
+			if (deviation > 1.0f) {
+				deviation = 1.0f;
+			}
+			gl.glColor4f(deviation, 1.0f, deviation, 1.0f);
+			core.drawCircle(gl, cx, cy, 2);
 			
 		}
 		gl.glEnd();
@@ -131,6 +138,6 @@ public class DistanceMeasurementView {
 		
 		
 		gl.glColor4f(1, 1, 1, 1.0f);
-		core.drawText(gl, "" + lastMap.m_landmarks.size()+ " x: " + x + " y: " + y, 30, 550);
+		core.drawText(gl, "" + bestGuess.length+ " x: " + x + " y: " + y, 30, 550);
 	}
 }
