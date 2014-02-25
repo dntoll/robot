@@ -43,8 +43,9 @@ public class SLAM implements Runnable{
 			m_world.add(startPose);
 			Pose lastPose = startPose;
 			
-			for (int i =0 ;i< 100; i++) {
+			for (int i =0 ;i< 150; i++) {
 				
+				Long startTime = System.currentTimeMillis();
 				Movement move = m_robot.makeMove();
 				DistanceSensorReadings Z = m_robot.makeReading();
 				ParticleFilter newFilter = new ParticleFilter(lastPose.m_position, move, Z);
@@ -62,7 +63,9 @@ public class SLAM implements Runnable{
 				System.out.println(String.format("x=%f y=%f", bestGuessPos.x, bestGuessPos.y));
 				System.out.println(String.format("dir=%f", m_world.getLastPose().getBestGuessPosition().m_heading.getHeadingDegrees()));
 				
-				Thread.sleep(1000);
+				Long endTime = System.currentTimeMillis();
+				
+				System.out.println("Time " + (endTime-startTime)/1000.0f);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

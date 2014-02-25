@@ -101,14 +101,14 @@ public class DistanceMeasurementView {
 				deviation = 1.0f;
 			}
 			gl.glColor4f(deviation, 1.0f, deviation, 1.0f);
-			core.drawCircle(gl, cx, cy, 2);
+			core.drawCircle(gl, cx, cy, 1);
 			
 		}
 		gl.glEnd();
-		
-		
-		MapData map = lastMap.getMap();
 		gl.glBegin(GL_TRIANGLES);
+		/*
+		MapData map = lastMap.getMap();
+		
 		gl.glColor4f(0.1f, 0.1f, 0.1f, 1.0f);
 		for (int x = 0; x < map.getSize(); x++) {
 			for (int y = 0; y < map.getSize(); y++) {
@@ -126,12 +126,15 @@ public class DistanceMeasurementView {
 			}
 		}
 		
+		*/
+		
+		
 		float x = bestKnownPosition.getRobotPosition().x;
 		float y = bestKnownPosition.getRobotPosition().y;
 		float vx = CenterX + (x );// / MapData.getCellSize();
 		float vy = CenterY + (y);// / MapData.getCellSize();
 		gl.glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-		core.drawQuad(gl, vx, vy, map.getCellSize(), map.getCellSize());
+		core.drawQuad(gl, vx-15, vy-15, 30, 30);
 		
 		gl.glEnd();
 		

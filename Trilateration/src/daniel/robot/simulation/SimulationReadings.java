@@ -49,6 +49,11 @@ public class SimulationReadings implements IRobotInterface {
 				turn = 90.0f;
 				state++;
 			}
+		} else if (state == 3) {
+			if (robot.getRobotPosition().y < 280) {
+				turn = 90.0f;
+				state = 0;
+			}
 		}
 		
 		

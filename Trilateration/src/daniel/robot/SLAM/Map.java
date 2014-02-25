@@ -14,21 +14,21 @@ import daniel.robot.sensors.IRReading;
  *
  */ 
 public class Map {
-	LandmarkCollection m_landmarks = new LandmarkCollection();
-	MapData freeArea;
+	ILandmarkCollection m_landmarks = new LandMarkCollectionTree();
+	//MapData freeArea;
 	
 	
 	public Map(State a_bestGuess, DistanceSensorReadings sense, Map parentMap) {
 		
 		if (parentMap != null) {
 			m_landmarks.copy(parentMap.m_landmarks);
-			freeArea = new MapData(parentMap.freeArea);
+			//freeArea = new MapData(parentMap.freeArea);
 		} else {
-			freeArea = new MapData(100, 10);
+			//freeArea = new MapData(100, 10);
 		}
 		
 		for (DirectionalReading distanceReading : sense.getReadings().values()) {
-			freeArea.draw(distanceReading.getSharp1Distance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
+			//freeArea.draw(distanceReading.getSharp1Distance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
 			
 			
 			//if (distanceReading.getSharp1Distance().wit())
@@ -52,6 +52,8 @@ public class Map {
 					boolean newLandMarkIsFurtherAway = lm.getDifference(prediction.landmark) > 100;
 //					boolean newLandMarkIsHasBetterSTDEV;
 					
+					
+					//add closer landmark
 					if (distanceMeasured < 150 && 
 						distanceMeasured < prediction.getDistance() + 30 && lm.deviation < 10) {
 						m_landmarks.add(lm);
@@ -63,7 +65,7 @@ public class Map {
 							//replace
 							m_landmarks.remove(prediction.landmark);
 							m_landmarks.add(lm);
-						} else  if(newLandMarkIsFurtherAway && distanceMeasured < 150) {
+						} else  if(newLandMarkIsFurtherAway && distanceMeasured > 150 && prediction.getDistance() <150) {
 							//remove false landmarks
 							m_landmarks.remove(prediction.landmark);
 						}
@@ -102,18 +104,18 @@ public class Map {
 
 
 	public boolean isFree(int x, int y) {
-		return freeArea.isFree(x, y);
+		return false;//freeArea.isFree(x, y);
 	}
 
 
 	public boolean isBlocked(int x, int y) {
-		return freeArea.isBlocked(x, y);
+		return false;//freeArea.isBlocked(x, y);
 	}
 
 
 	public MapData getMap() {
 		// TODO Auto-generated method stub
-		return freeArea;
+		return null;
 	}
 
 

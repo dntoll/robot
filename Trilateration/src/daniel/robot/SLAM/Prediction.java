@@ -12,4 +12,9 @@ class Prediction {
 	}
 	private float minLenSquareDistance;
 	Landmark landmark;
+	
+	
+	public boolean isCloserThan(Prediction ret2) {
+		return minLenSquareDistance < ret2.minLenSquareDistance;
+	}
 }
