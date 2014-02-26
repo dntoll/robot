@@ -9,7 +9,7 @@ import daniel.robot.glWindow.model.State;
 public class ParticleFilter {
 	
 	private static Random RANDOM = new Random();
-	private static int NUMBER_OF_PARTICLES = 15;
+	private static int NUMBER_OF_PARTICLES = 100;
 	private Particle[] m_particles;
 	
 	public ParticleFilter(State a_startState, DistanceSensorReadings sense) {
@@ -32,9 +32,31 @@ public class ParticleFilter {
 		move(move);
 		setWeights( sense);
 		
-		ResampleParticles(sense);
+		if (shouldResample()) {
+			ResampleParticles();
+		}
+		AddMaps(sense);
 	}
 	
+	private void AddMaps(DistanceSensorReadings sense) {
+		for (int i= 0; i < NUMBER_OF_PARTICLES; i++) {
+			m_particles[i].addMap(sense);
+		}
+		
+	}
+
+	private boolean shouldResample() {
+		//http://www.informatik.uni-freiburg.de/~stachnis/rbpf-tutorial/iros05tutorial-gridrbpf-handout.pdf
+		float totalWeight = 0.0f;
+		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
+			totalWeight += m_particles[i].getWeight();
+		}
+
+		float neff = 1.0f / (totalWeight * totalWeight);
+		
+		return neff > 5000.0f;
+	}
+
 	public Particle getBestGuess() {
 		
 		int bestIndex = 0;
@@ -55,14 +77,14 @@ public class ParticleFilter {
 		return m_particles[a_index].getState();
 	}
 	
-	private void ResampleParticles(DistanceSensorReadings sense) {
+	private void ResampleParticles() {
 		
 		
 		int newParticleIndex = 0;
-		int N = m_particles.length;
+		int N = m_particles.length + 10;
 		Particle[] newParticles = new Particle[N];
    
-		int index = RANDOM.nextInt(N);
+		int index = RANDOM.nextInt(m_particles.length);
         float beta = 0.0f;
         float mw = max();
 	    for (int i = 0; i < N; i++) {
@@ -70,11 +92,12 @@ public class ParticleFilter {
 	       
 	       while (beta > m_particles[index].getWeight()) {
 	           beta -= m_particles[index].getWeight();
-	           index = (index + 1) % N;
+	           index = (index + 1) % m_particles.length;
 	       }
 	       
-	       m_particles[index].addMap(sense);
+	       //m_particles[index].addMap(sense);
 	       newParticles[newParticleIndex] = m_particles[index];
+	       
 	       newParticleIndex++;
 	    }
 	    m_particles = newParticles;

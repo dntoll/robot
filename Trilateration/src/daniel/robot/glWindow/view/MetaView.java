@@ -134,7 +134,11 @@ implements GLEventListener, KeyListener {
 		    if (world.getLastPose() != null) {
 			    Map lastMap = world.getLastPose().getBestMap();
 			    State bestKnownPosition = world.getLastPose().getBestGuessPosition();
-			    distances.drawMap(gl,lastMap, bestKnownPosition); 
+			    distances.drawMap(gl,lastMap, bestKnownPosition, world.getLastPose().getParticleFilter()); 
+			    
+			    
+			    
+			    
 		    }
 	    } catch (Exception e) {
 	    	System.err.println(e.getMessage());

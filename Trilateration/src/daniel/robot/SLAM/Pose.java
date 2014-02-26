@@ -24,7 +24,10 @@ public class Pose implements IPose {
 		m_movement = a_movement;
 		
 	}
-	
+	@Override
+	public ParticleFilter getParticleFilter() {
+		return m_position;
+	}
 	
 	public State getBestGuessPosition() {
 		return m_position.getBestGuess().getState();

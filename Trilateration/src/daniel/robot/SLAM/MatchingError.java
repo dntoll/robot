@@ -52,7 +52,10 @@ public class MatchingError {
 		int numIrReadings = 0;
 		for (DirectionalReading dr : sense.getReadings().values()) {
 			
-			if (dr.getSharp1Distance().okDistance()) {
+			if (dr.getSharp1Distance().okDistance()) 
+			{
+				
+				//Gaussian.gaussian(0, IRReading.IR_DISTANCE_NOISE, (float)m_irError / (float)m_numMatching);
 				error.m_irError += matchReading(a_known, a_newState, error, dr.getSharp1Distance(), dr.getServoDirection());
 				numIrReadings++;
 			}
@@ -76,7 +79,7 @@ public class MatchingError {
 			float delta = distance - expectedDistance.getDistance();
 			
 			
-			ret += Math.sqrt(delta*delta);// * (measurement.getStdev() * expectedDistance.landmark.deviation);
+			ret += Math.sqrt(delta*delta);//*4.0f / (measurement.getStdev() + expectedDistance.landmark.deviation);
 		}
 		return ret;
 	}

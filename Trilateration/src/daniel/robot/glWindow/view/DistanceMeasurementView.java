@@ -10,6 +10,7 @@ import daniel.robot.Direction;
 import daniel.robot.SLAM.Landmark;
 import daniel.robot.SLAM.Map;
 import daniel.robot.SLAM.MapData;
+import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
 
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
@@ -85,9 +86,11 @@ public class DistanceMeasurementView {
 		
 		core.drawText(gl, reading.getSonarString(), 30, 60);
 		core.drawText(gl, reading.getSharpString(), 30, 30);
+		
+		gl.glLoadIdentity();  
 	}
 
-	public void drawMap(GL2 gl, Map lastMap, State bestKnownPosition) {
+	public void drawMap(GL2 gl, Map lastMap, State bestKnownPosition, ParticleFilter diveristy) {
 		gl.glLoadIdentity(); 
 		gl.glColor4f(1, 1, 1, 1.0f);
 		gl.glBegin(GL_LINES);
@@ -128,19 +131,30 @@ public class DistanceMeasurementView {
 		
 		*/
 		
+		for (int i = 0; i<  diveristy.getSize(); i++) {
+			
+			drawState(gl, diveristy.getState(i));
+		}
 		
-		float x = bestKnownPosition.getRobotPosition().x;
-		float y = bestKnownPosition.getRobotPosition().y;
-		float vx = CenterX + (x );// / MapData.getCellSize();
-		float vy = CenterY + (y);// / MapData.getCellSize();
-		gl.glColor4f(0.0f, 1.0f, 0.0f, 1.0f);
-		core.drawQuad(gl, vx-15, vy-15, 30, 30);
+		
+		drawState(gl, bestKnownPosition);
 		
 		gl.glEnd();
 		
 		
 		
 		gl.glColor4f(1, 1, 1, 1.0f);
-		core.drawText(gl, "" + bestGuess.length+ " x: " + x + " y: " + y, 30, 550);
+		float x = bestKnownPosition.getRobotPosition().x;
+		float y = bestKnownPosition.getRobotPosition().y;
+		core.drawText(gl, "" + bestGuess.length+ " x: " + x + " y: " + y, 30, 580);
+	}
+	
+	void drawState(GL2 gl, State pos) {
+		float x = pos.getRobotPosition().x;
+		float y = pos.getRobotPosition().y;
+		float vx = CenterX + x;// / MapData.getCellSize();
+		float vy = CenterY + y;// / MapData.getCellSize();
+		gl.glColor4f(1.0f, 0.0f, 0.0f, 0.2f);
+		core.drawQuad(gl, vx-1, vy-1, 2, 2);
 	}
 }

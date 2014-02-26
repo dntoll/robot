@@ -38,16 +38,14 @@ public class Particle {
 		return m_state;
 	}
 
-	public void setWeight(float a_weight) {
-		m_weight = a_weight;
-	}
+	
 	
 	public void calculateWeight(DistanceSensorReadings sense) throws Exception {
 		m_error = MatchingError.getMatchingError(m_parent.m_map, m_state, sense);
 		m_weight = m_error.getError();
 		
 		if (Float.isNaN(getWeight())) {
-			setWeight(0.0f);
+			m_weight = 0.0f;
 		}
 	}
 

@@ -1,6 +1,7 @@
 package daniel.robot.glWindow.model;
 
 import daniel.robot.SLAM.Map;
+import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
 
 public interface IPose {
 
@@ -11,5 +12,7 @@ public interface IPose {
 	float getError();
 
 	Map getBestMap();
+
+	ParticleFilter getParticleFilter();
 
 }
