@@ -80,6 +80,7 @@ public class World extends Bitmap {
 	}
 
 	private float getDistanceRandomness(float distance, Random rand) {
+		float multiplier = 1.25f;
 		float randomness = 0;
 		if (distance < 100) {
 			randomness = 5.0f;
@@ -93,7 +94,7 @@ public class World extends Bitmap {
 			randomness = 150.0f;
 			return 300 + rand.nextFloat() * randomness - randomness/2.0f;
 		}
-		
+		randomness *= multiplier; 
 		return distance + rand.nextFloat() * randomness - randomness/2.0f;
 	}
 

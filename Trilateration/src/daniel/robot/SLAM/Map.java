@@ -6,7 +6,6 @@ import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.glWindow.model.State;
-import daniel.robot.sensors.IRReading;
 
 /**
  * Bitmap map of robot world, starts with 0.0 in the middle
@@ -52,20 +51,22 @@ public class Map {
 					boolean newLandMarkIsFurtherAway = lm.getDifference(prediction.landmark) > 100;
 //					boolean newLandMarkIsHasBetterSTDEV;
 					
-					
+					float reliableDistance = 150;
 					//add closer landmark
-					if (distanceMeasured < 150 && 
-						distanceMeasured < prediction.getDistance() + 30 && lm.deviation < 10) {
+					if (distanceMeasured < reliableDistance && 
+						distanceMeasured < prediction.getDistance() + 80 && lm.deviation < 10) {
 						m_landmarks.add(lm);
 					} else {
 					
 						//Improvements
-						if (lm.isBetter(prediction) && distanceMeasured < 150) 
+						if (lm.isBetter(prediction) && distanceMeasured < reliableDistance) 
 						{
 							//replace
-							m_landmarks.remove(prediction.landmark);
-							m_landmarks.add(lm);
-						} else  if(newLandMarkIsFurtherAway && distanceMeasured > 150 && prediction.getDistance() <150) {
+							//m_landmarks.remove(prediction.landmark);
+							//m_landmarks.add(lm);
+						} else  if(newLandMarkIsFurtherAway && 
+								  distanceMeasured > reliableDistance && 
+								  prediction.getDistance() < reliableDistance ) {
 							//remove false landmarks
 							m_landmarks.remove(prediction.landmark);
 						}

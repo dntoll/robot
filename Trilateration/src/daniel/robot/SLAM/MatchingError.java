@@ -5,7 +5,6 @@ import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.glWindow.model.SharpMeasurement;
 import daniel.robot.glWindow.model.State;
-import daniel.robot.sensors.IRReading;
 import daniel.robot.statistics.Gaussian;
 
 public class MatchingError {
@@ -35,9 +34,11 @@ public class MatchingError {
 	
 	public float getError() {
 		float match = 1.0f;//Gaussian.gaussian(0, SonarReading.SONAR_DISTANCE_ERROR, (float)m_sonarError / (float)m_numMatching);
-		float match2 = Gaussian.gaussian(0, IRReading.IR_DISTANCE_NOISE, (float)m_irError / (float)m_numMatching);
+		float match2 = Gaussian.gaussian(0, 5, (float)m_irError / (float)m_numMatching);
 		float directionalProb = 1.0f;// Gaussian.gaussian(0, compassNoise, state.m_directionalError);
 		return directionalProb * (match) *(match2) * m_overlap;
+		
+	//	return m_overlap * m_irError;
 	}
 	
 	
@@ -54,9 +55,9 @@ public class MatchingError {
 			
 			if (dr.getSharp1Distance().okDistance()) 
 			{
-				
-				//Gaussian.gaussian(0, IRReading.IR_DISTANCE_NOISE, (float)m_irError / (float)m_numMatching);
-				error.m_irError += matchReading(a_known, a_newState, error, dr.getSharp1Distance(), dr.getServoDirection());
+				float directionalError = matchReading(a_known, a_newState, error, dr.getSharp1Distance(), dr.getServoDirection());
+				//
+				error.m_irError += directionalError;
 				numIrReadings++;
 			}
 		}
@@ -78,9 +79,9 @@ public class MatchingError {
 			error.m_numMatching++;
 			float delta = distance - expectedDistance.getDistance();
 			
-			
-			ret += Math.sqrt(delta*delta);//*4.0f / (measurement.getStdev() + expectedDistance.landmark.deviation);
+			return (float) Math.sqrt(delta*delta);
+			//return  Gaussian.gaussian(0, (measurement.getStdev() + expectedDistance.landmark.deviation), distanceDifference); 
 		}
-		return ret;
+		return 0;
 	}
 }

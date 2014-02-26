@@ -9,7 +9,7 @@ import daniel.robot.glWindow.model.State;
 public class ParticleFilter {
 	
 	private static Random RANDOM = new Random();
-	private static int NUMBER_OF_PARTICLES = 100;
+	private static int NUMBER_OF_PARTICLES = 10;
 	private Particle[] m_particles;
 	
 	public ParticleFilter(State a_startState, DistanceSensorReadings sense) {
@@ -47,14 +47,16 @@ public class ParticleFilter {
 
 	private boolean shouldResample() {
 		//http://www.informatik.uni-freiburg.de/~stachnis/rbpf-tutorial/iros05tutorial-gridrbpf-handout.pdf
-		float totalWeight = 0.0f;
+		/*float totalWeight = 0.0f;
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
 			totalWeight += m_particles[i].getWeight();
-		}
+		}*/
 
-		float neff = 1.0f / (totalWeight * totalWeight);
+		//float neff = 1.0f / (totalWeight * totalWeight);
 		
-		return neff > 5000.0f;
+		//return totalWeight < 1E-20;
+		
+		return true;
 	}
 
 	public Particle getBestGuess() {
@@ -81,7 +83,7 @@ public class ParticleFilter {
 		
 		
 		int newParticleIndex = 0;
-		int N = m_particles.length + 10;
+		int N = m_particles.length ;
 		Particle[] newParticles = new Particle[N];
    
 		int index = RANDOM.nextInt(m_particles.length);
