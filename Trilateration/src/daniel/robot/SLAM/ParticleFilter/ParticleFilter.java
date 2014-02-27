@@ -4,12 +4,13 @@ import java.util.Random;
 
 import daniel.robot.SLAM.Movement;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.PoseCollection;
 import daniel.robot.glWindow.model.State;
 
 public class ParticleFilter {
 	
 	private static Random RANDOM = new Random();
-	private static int NUMBER_OF_PARTICLES = 250;
+	private static int NUMBER_OF_PARTICLES = 10;
 	private Particle[] m_particles;
 	
 	public ParticleFilter(State a_startState, DistanceSensorReadings sense) {
@@ -22,7 +23,7 @@ public class ParticleFilter {
 		}
 	}
 	
-	public ParticleFilter(ParticleFilter a_parent, Movement move, DistanceSensorReadings sense) throws Exception {
+	public ParticleFilter(ParticleFilter a_parent, Movement move, DistanceSensorReadings sense, PoseCollection world) throws Exception {
 		
 		m_particles = new Particle[NUMBER_OF_PARTICLES];
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
@@ -30,12 +31,15 @@ public class ParticleFilter {
 		}
 		
 		move(move);
-		setWeights( sense);
+		AddMaps(sense);
+		setWeights( sense, world);
+		
+		
 		
 		if (shouldResample()) {
 			ResampleParticles();
 		}
-		AddMaps(sense);
+		
 	}
 	
 	private void AddMaps(DistanceSensorReadings sense) {
@@ -53,10 +57,10 @@ public class ParticleFilter {
 		}
 
 		float neff = 1.0f / (totalWeight * totalWeight);
-		
-		//return totalWeight < 1E-20;
-		
 		System.out.println("totalWeight:" + totalWeight);
+		//return neff < 1;
+		
+		
 		
 		return true;
 	}
@@ -85,7 +89,7 @@ public class ParticleFilter {
 		
 		
 		int newParticleIndex = 0;
-		int N = m_particles.length +10;
+		int N = m_particles.length + 0;
 		Particle[] newParticles = new Particle[N];
    
 		int index = RANDOM.nextInt(m_particles.length);
@@ -118,7 +122,7 @@ public class ParticleFilter {
 		}
 	}
 
-	private void setWeights(DistanceSensorReadings sense) throws Exception {
+	private void setWeights(DistanceSensorReadings sense, PoseCollection world) throws Exception {
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
 			m_particles[i].calculateWeight(sense );
 		}

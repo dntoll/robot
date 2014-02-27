@@ -47,17 +47,21 @@ public class SLAM implements Runnable{
 				
 				Long startTime = System.currentTimeMillis();
 				Movement move = m_robot.makeMove();
-				DistanceSensorReadings Z = m_robot.makeReading();
-				ParticleFilter newFilter = new ParticleFilter(lastPose.m_position, move, Z);
-				Pose newPose = new Pose(newFilter, Z, move);
+				DistanceSensorReadings sense = m_robot.makeReading();
+				
+				ParticleFilter newFilter = new ParticleFilter(lastPose.m_position, move, sense, m_world);
+				Pose newPose = new Pose(newFilter, sense, move);
+				
 				
 				m_world.add(newPose);
+				
+				
 				
 				lastPose = newPose;
 				
 				
 				//View...
-				MatchingError error = MatchingError.getMatchingError( lastPose.getBestMap(), m_world.getLastPose().getBestGuessPosition(), Z);
+				MatchingError error = MatchingError.getMatchingError( lastPose.getBestMap(), m_world.getLastPose().getBestGuessPosition(), sense);
 				System.out.println(error);
 				Float bestGuessPos = m_world.getLastPose().getBestGuessPosition().getRobotPosition();
 				System.out.println(String.format("x=%f y=%f", bestGuessPos.x, bestGuessPos.y));

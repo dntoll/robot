@@ -22,12 +22,14 @@ public class Movement {
 		return distanceMoved;
 	}
 	
+	
+	float randomness = 1.0f;
 	private float getHeadingVariance() {
-		return  m_turnRight/10.0f + 1.0f;
+		return  randomness * (m_turnRight/10.0f + 1.0f);
 	}
 
 	private float getPositionVariance() {
-		return m_distance /5.0f+1.0f;
+		return randomness * (m_distance /5.0f+1.0f);
 	}
 
 	public float getAngle() {

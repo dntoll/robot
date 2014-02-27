@@ -55,7 +55,7 @@ public class Map {
 					
 					//add closer landmark
 					if (distanceMeasured < SharpMeasurement.RELIABLE_DISTANCE && 
-						distanceMeasured < prediction.getDistance() - 80 && lm.deviation < 10) {
+						distanceMeasured < prediction.getDistance() - 15 && lm.deviation < 10) {
 						m_landmarks.add(lm);
 					} else {
 					
