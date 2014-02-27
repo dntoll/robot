@@ -34,7 +34,7 @@ public class MatchingError {
 	
 	public float getError() {
 		float match = 1.0f;//Gaussian.gaussian(0, SonarReading.SONAR_DISTANCE_ERROR, (float)m_sonarError / (float)m_numMatching);
-		float match2 = Gaussian.gaussian(0, 5, (float)m_irError / (float)m_numMatching);
+		float match2 = Gaussian.gaussian(0, 1, (float)m_irError / (float)m_numMatching);
 		float directionalProb = 1.0f;// Gaussian.gaussian(0, compassNoise, state.m_directionalError);
 		return directionalProb * (match) *(match2) * m_overlap;
 		

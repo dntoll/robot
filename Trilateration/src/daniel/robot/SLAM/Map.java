@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.SharpMeasurement;
 import daniel.robot.glWindow.model.State;
 
 /**
@@ -51,22 +52,24 @@ public class Map {
 					boolean newLandMarkIsFurtherAway = lm.getDifference(prediction.landmark) > 100;
 //					boolean newLandMarkIsHasBetterSTDEV;
 					
-					float reliableDistance = 150;
+					
 					//add closer landmark
-					if (distanceMeasured < reliableDistance && 
-						distanceMeasured < prediction.getDistance() + 80 && lm.deviation < 10) {
+					if (distanceMeasured < SharpMeasurement.RELIABLE_DISTANCE && 
+						distanceMeasured < prediction.getDistance() - 80 && lm.deviation < 10) {
 						m_landmarks.add(lm);
 					} else {
 					
 						//Improvements
-						if (lm.isBetter(prediction) && distanceMeasured < reliableDistance) 
+						if (lm.isBetter(prediction) && distanceMeasured < SharpMeasurement.RELIABLE_DISTANCE) 
 						{
 							//replace
-							//m_landmarks.remove(prediction.landmark);
-							//m_landmarks.add(lm);
+							if (distanceMeasured > prediction.getDistance()) { 
+								m_landmarks.remove(prediction.landmark);
+								m_landmarks.add(lm);
+							}
 						} else  if(newLandMarkIsFurtherAway && 
-								  distanceMeasured > reliableDistance && 
-								  prediction.getDistance() < reliableDistance ) {
+								  distanceMeasured > SharpMeasurement.RELIABLE_DISTANCE && 
+								  prediction.getDistance() < SharpMeasurement.RELIABLE_DISTANCE ) {
 							//remove false landmarks
 							m_landmarks.remove(prediction.landmark);
 						}
