@@ -33,10 +33,10 @@ public class MatchingError {
 	
 	
 	public float getError() {
-		float match = 1.0f;//Gaussian.gaussian(0, SonarReading.SONAR_DISTANCE_ERROR, (float)m_sonarError / (float)m_numMatching);
-		float match2 = Gaussian.gaussian(0, 1, (float)m_irError / (float)m_numMatching);
-		float directionalProb = 1.0f;// Gaussian.gaussian(0, compassNoise, state.m_directionalError);
-		return directionalProb * (match) *(match2) * m_overlap;
+		//float match = 1.0f;//Gaussian.gaussian(0, SonarReading.SONAR_DISTANCE_ERROR, (float)m_sonarError / (float)m_numMatching);
+		float mediumIrError = (float)m_irError / (float)m_numMatching;// Gaussian.gaussian(0, 1, (float)m_irError / (float)m_numMatching);
+		//float directionalProb = 1.0f;// Gaussian.gaussian(0, compassNoise, state.m_directionalError);
+		return  mediumIrError;//directionalProb * (match) *(match2) * m_overlap;
 		
 	//	return m_overlap * m_irError;
 	}
@@ -61,8 +61,10 @@ public class MatchingError {
 				numIrReadings++;
 			}
 		}
-		if (numIrReadings > 0)		
-			error.m_overlap = (float)error.m_numMatching/(float)numIrReadings;
+		if (numIrReadings > 0) {		
+			error.m_overlap = (float)error.m_numMatching / 
+							  (float)numIrReadings;
+		}
 		
 		return error;
 	}

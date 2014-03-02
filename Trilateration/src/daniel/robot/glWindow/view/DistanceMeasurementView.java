@@ -131,12 +131,13 @@ public class DistanceMeasurementView {
 		
 		*/
 		
+		gl.glColor4f(1.0f, 0.0f, 0.0f, 0.2f);
 		for (int i = 0; i<  diveristy.getSize(); i++) {
 			
 			drawState(gl, diveristy.getState(i));
 		}
 		
-		
+		gl.glColor4f(0.4f, 0.4f, 1.0f, 1.0f);
 		drawState(gl, bestKnownPosition);
 		
 		gl.glEnd();
@@ -154,7 +155,7 @@ public class DistanceMeasurementView {
 		float y = pos.getRobotPosition().y;
 		float vx = CenterX + x;// / MapData.getCellSize();
 		float vy = CenterY + y;// / MapData.getCellSize();
-		gl.glColor4f(1.0f, 0.0f, 0.0f, 0.2f);
+		
 		core.drawQuad(gl, vx-1, vy-1, 2, 2);
 	}
 }

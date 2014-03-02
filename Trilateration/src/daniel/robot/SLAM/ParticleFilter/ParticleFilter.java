@@ -10,7 +10,7 @@ import daniel.robot.glWindow.model.State;
 public class ParticleFilter {
 	
 	private static Random RANDOM = new Random();
-	private static int NUMBER_OF_PARTICLES = 10;
+	private static int NUMBER_OF_PARTICLES = 100;
 	private Particle[] m_particles;
 	
 	public ParticleFilter(State a_startState, DistanceSensorReadings sense) {
@@ -31,14 +31,20 @@ public class ParticleFilter {
 		}
 		
 		move(move);
+		
 		AddMaps(sense);
+		
 		setWeights( sense, world);
 		
-		
-		
 		if (shouldResample()) {
+			
+			printWeights();
 			ResampleParticles();
+			
+			printWeights();
 		}
+		
+		
 		
 	}
 	
@@ -49,20 +55,22 @@ public class ParticleFilter {
 		
 	}
 
+	int shouldResample = 0;
 	private boolean shouldResample() {
 		//http://www.informatik.uni-freiburg.de/~stachnis/rbpf-tutorial/iros05tutorial-gridrbpf-handout.pdf
-		float totalWeight = 0.0f;
-		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
-			totalWeight += m_particles[i].getWeight();
-		}
-
-		float neff = 1.0f / (totalWeight * totalWeight);
-		System.out.println("totalWeight:" + totalWeight);
-		//return neff < 1;
-		
 		
 		
 		return true;
+	}
+
+	private void printWeights() {
+		float totalWeight = 0.0f;
+		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
+			System.out.print(":" + m_particles[i].getWeight() );
+			totalWeight += m_particles[i].getWeight();
+		}
+		System.out.println();
+		System.out.println("totalWeight:" + totalWeight);
 	}
 
 	public Particle getBestGuess() {
@@ -86,28 +94,24 @@ public class ParticleFilter {
 	}
 	
 	private void ResampleParticles() {
-		
-		
-		int newParticleIndex = 0;
 		int N = m_particles.length + 0;
 		Particle[] newParticles = new Particle[N];
    
 		int index = RANDOM.nextInt(m_particles.length);
         float beta = 0.0f;
         float mw = max();
+        float weight;
 	    for (int i = 0; i < N; i++) {
 	       beta += RANDOM.nextFloat() * 2.0f * mw;
 	       
-	       while (beta > m_particles[index].getWeight()) {
-	           beta -= m_particles[index].getWeight();
+	       weight = m_particles[index].getWeight();
+	       while (beta > weight) {
+	           beta -= weight;
 	           index = (index + 1) % m_particles.length;
 	       }
-	       
-	       //m_particles[index].addMap(sense);
-	       newParticles[newParticleIndex] = m_particles[index];
-	       
-	       newParticleIndex++;
+	       newParticles[i] = m_particles[index];
 	    }
+	    
 	    m_particles = newParticles;
 	    
 	}

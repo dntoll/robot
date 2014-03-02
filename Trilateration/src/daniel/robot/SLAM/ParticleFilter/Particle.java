@@ -56,7 +56,7 @@ public class Particle {
 		} 
 		m_error = MatchingError.getMatchingError(m_map, m_state, sense);
 		float lastError = m_error.getError();
-		m_weight = lastError + accumulatedWeight;
+		m_weight = 1.0f / (lastError + accumulatedWeight);
 		
 		if (Float.isNaN(getWeight())) {
 			m_weight = 0.0f;
