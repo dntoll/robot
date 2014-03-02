@@ -10,7 +10,7 @@ import daniel.robot.glWindow.model.State;
 public class ParticleFilter {
 	
 	private static Random RANDOM = new Random();
-	private static int NUMBER_OF_PARTICLES = 100;
+	private static int NUMBER_OF_PARTICLES = 125;
 	private Particle[] m_particles;
 	
 	public ParticleFilter(State a_startState, DistanceSensorReadings sense) {
@@ -99,17 +99,20 @@ public class ParticleFilter {
    
 		int index = RANDOM.nextInt(m_particles.length);
         float beta = 0.0f;
-        float mw = max();
+        float totalWeight = totalWeight();
         float weight;
 	    for (int i = 0; i < N; i++) {
-	       beta += RANDOM.nextFloat() * 2.0f * mw;
+	    	
+	    	index = 0;
+	    	weight = m_particles[index].getWeight();
 	       
-	       weight = m_particles[index].getWeight();
-	       while (beta > weight) {
-	           beta -= weight;
-	           index = (index + 1) % m_particles.length;
-	       }
-	       newParticles[i] = m_particles[index];
+	    	beta = RANDOM.nextFloat() * totalWeight;
+	       
+	    	while (beta > weight) {
+	    		index++;
+	    		weight += m_particles[index].getWeight();
+	    	}
+	    	newParticles[i] = m_particles[index];
 	    }
 	    
 	    m_particles = newParticles;
@@ -120,6 +123,14 @@ public class ParticleFilter {
 
 	
 	
+	private float totalWeight() {
+		float totalWeight = 0.0f;
+		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
+			totalWeight += m_particles[i].getWeight();
+		}
+		return totalWeight;
+	}
+
 	private void move(Movement a_move) {
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
 			m_particles[i].getState().move(a_move);

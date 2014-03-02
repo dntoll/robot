@@ -10,7 +10,7 @@ import daniel.robot.statistics.Gaussian;
 public class MatchingError {
 	//Error statistics compared to last measurement
 	public float m_directionalError;
-	public float m_irError;
+	public double m_irError;
 	public float m_sonarError;
 	public float m_overlap;
 	public int m_numMatching;
@@ -32,13 +32,8 @@ public class MatchingError {
 	}
 	
 	
-	public float getError() {
-		//float match = 1.0f;//Gaussian.gaussian(0, SonarReading.SONAR_DISTANCE_ERROR, (float)m_sonarError / (float)m_numMatching);
-		float mediumIrError = (float)m_irError / (float)m_numMatching;// Gaussian.gaussian(0, 1, (float)m_irError / (float)m_numMatching);
-		//float directionalProb = 1.0f;// Gaussian.gaussian(0, compassNoise, state.m_directionalError);
-		return  mediumIrError;//directionalProb * (match) *(match2) * m_overlap;
-		
-	//	return m_overlap * m_irError;
+	public float getWeight() {
+		return (float) Gaussian.gaussian(0, 1.1f, (float)m_irError / (float)m_numMatching);
 	}
 	
 	
@@ -47,7 +42,7 @@ public class MatchingError {
 		
 		error.m_directionalError = a_newState.m_heading.GetDifferenceInDegrees(sense.getCompassDirection());
 		error.m_numMatching = 0;
-		error.m_irError = 0.0f;
+		error.m_irError = 1.0f;
 		error.m_sonarError = 0.0f;
 		
 		int numIrReadings = 0;
@@ -56,7 +51,7 @@ public class MatchingError {
 			if (dr.getSharp1Distance().okDistance()) 
 			{
 				float directionalError = matchReading(a_known, a_newState, error, dr.getSharp1Distance(), dr.getServoDirection());
-				//
+			
 				error.m_irError += directionalError;
 				numIrReadings++;
 			}
@@ -82,7 +77,6 @@ public class MatchingError {
 			float delta = distance - expectedDistance.getDistance();
 			
 			return (float) Math.sqrt(delta*delta);
-			//return  Gaussian.gaussian(0, (measurement.getStdev() + expectedDistance.landmark.deviation), distanceDifference); 
 		}
 		return 0;
 	}

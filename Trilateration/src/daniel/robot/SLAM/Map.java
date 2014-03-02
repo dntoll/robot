@@ -22,13 +22,13 @@ public class Map {
 		
 		if (parentMap != null) {
 			m_landmarks.copy(parentMap.m_landmarks);
-			//freeArea = new MapData(parentMap.freeArea);
+	//		freeArea = new MapData(parentMap.freeArea);
 		} else {
-			//freeArea = new MapData(100, 10);
+	//		freeArea = new MapData(300, 5);
 		}
 		
 		for (DirectionalReading distanceReading : sense.getReadings().values()) {
-			//freeArea.draw(distanceReading.getSharp1Distance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
+	//		freeArea.draw(distanceReading.getSharp1Distance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
 			
 			
 			//if (distanceReading.getSharp1Distance().wit())
@@ -119,7 +119,7 @@ public class Map {
 
 	public MapData getMap() {
 		// TODO Auto-generated method stub
-		return null;
+		return null;//freeArea;
 	}
 
 

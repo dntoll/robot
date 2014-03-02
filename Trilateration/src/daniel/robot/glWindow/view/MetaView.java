@@ -150,6 +150,8 @@ implements GLEventListener, KeyListener {
 	    
 	    float temp = robot.getTemperature();
 	    if (robot.getCompassDirection() != null) {
+	    	
+	    	gl.glLoadIdentity(); 
 		    float direction = robot.getCompassDirection().getHeadingDegrees();
 		    String out = "Temperature " + temp + " direction " + direction; 
 		    core.renderStrokeString(gl, out); // Print GL Text To The Screen

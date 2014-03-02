@@ -51,12 +51,12 @@ public class Particle {
 		Particle parent = m_parent;
 		while (parent != null && parent.m_reading != null) {
 			m_error = MatchingError.getMatchingError(m_map, parent.m_state, parent.m_reading);
-			accumulatedWeight += m_error.getError();
+			accumulatedWeight += m_error.getWeight();
 			parent = parent.m_parent;	
 		} 
 		m_error = MatchingError.getMatchingError(m_map, m_state, sense);
-		float lastError = m_error.getError();
-		m_weight = 1.0f / (lastError + accumulatedWeight);
+		float lastError = m_error.getWeight();
+		m_weight = lastError * accumulatedWeight;
 		
 		if (Float.isNaN(getWeight())) {
 			m_weight = 0.0f;

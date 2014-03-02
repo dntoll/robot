@@ -5,12 +5,12 @@ import java.util.Random;
 public class Gaussian {
 	private static Random random = new Random();    // pseudo-random number generator
 	
-	public static float gaussian(float mu, float sigma, float x) {
+	public static double gaussian(float mu, float sigma, float x) {
 		return phi((x - mu) / sigma) / sigma;
 	}
 	
-	public static float phi(float x) {
-        return (float) (Math.exp(-x*x / 2) / Math.sqrt(2.0f * Math.PI));
+	public static double phi(float x) {
+        return (Math.exp(-x*x / 2.0) / Math.sqrt(2.0 * Math.PI));
     }
 	
 	

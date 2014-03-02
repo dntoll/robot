@@ -54,7 +54,7 @@ public class LandMarkLeaf implements ILandmarkNode {
 
 	@Override
 	public boolean canAdd() {
-		return landmarks.size() < 50;
+		return landmarks.size() < 200;
 	}
 
 
