@@ -83,8 +83,6 @@ public class DistanceMeasurementView {
 		
 		
 		gl.glEnd();
-		
-		core.drawText(gl, reading.getSonarString(), 30, 60);
 		core.drawText(gl, reading.getSharpString(), 30, 30);
 		
 		gl.glLoadIdentity();  

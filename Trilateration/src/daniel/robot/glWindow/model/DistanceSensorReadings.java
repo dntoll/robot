@@ -28,9 +28,9 @@ public class DistanceSensorReadings {
 
 	
 	
-	public void addSharpReading(Direction direction, float value) {
+	public void addSharpReading(Direction direction, float value, boolean isLongRange) {
 		DirectionalReading dr = getReading(direction);
-		dr.addSharpReading(value);
+		dr.addSharpReading(value, isLongRange);
 	}
 	
 	public void addSharpDistance(Direction direction, float distance) {
@@ -38,11 +38,6 @@ public class DistanceSensorReadings {
 		dr.addSharCM(distance);
 	}
 	
-	public void addSonar(Direction direction, float distance) {
-		DirectionalReading dr = getReading(direction);
-		dr.addSonar(distance);
-	}
-
 	private DirectionalReading getReading(Direction direction) {
 		Integer key = new Integer((int)direction.getHeadingDegrees());
 		DirectionalReading reading = readings.get(key);
@@ -55,15 +50,10 @@ public class DistanceSensorReadings {
 		return reading;
 	}
 
-	public String getSonarString() {
-		if (latest != null)
-			return latest.sonar1.toString();
-		return "";
-	}
-	
+		
 	public String getSharpString() {
 		if (latest != null)
-			return latest.sharp1.toString();
+			return latest.sharp.toString();
 		return "";
 	}
 

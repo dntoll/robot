@@ -36,21 +36,22 @@ public class SensorTower  {
 			String[] parts = data.split(":");
 			
 			//System.out.println(data);
-			if (parts.length == 4 && reading != null) {
+			if (parts.length == 6 && reading != null) {
 				String code= parts[0];
 				int direction = Integer.parseInt(parts[1]);
 				Direction front = new Direction(direction);
-				Direction back = new Direction(180+direction);
+				Direction left = new Direction(direction+90);
+				Direction back = new Direction(direction+180);
+				Direction right = new Direction(direction+180+90);
 				lastDirection = front;
 				
 				if (code.equals("sh")) {
-					reading.addSharpReading(front, Float.parseFloat(parts[2]));
-					reading.addSharpReading(back, Float.parseFloat(parts[3]));
+					reading.addSharpReading(front, Float.parseFloat(parts[2]), false);
+					reading.addSharpReading(back, Float.parseFloat(parts[3]), false);
+					reading.addSharpReading(left, Float.parseFloat(parts[4]), true);
+					reading.addSharpReading(right, Float.parseFloat(parts[5]), true);
 					
-				} else {
-					reading.addSonar(front, Float.parseFloat(parts[2]));
-					reading.addSonar(back, Float.parseFloat(parts[3]));
-				}
+				} 
 				
 				
 			}

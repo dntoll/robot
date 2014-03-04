@@ -26,7 +26,6 @@ public class SavedReadings {
 	
 	private void save(DirectionalReading dr, FileWriter csvWriter) throws IOException {
 		
-		save(dr.getSonar1Distance(), dr.getServoDirection(), csvWriter, "so");
 		save(dr.getSharp1Distance(), dr.getServoDirection(), csvWriter, "sh");
 	}
 
@@ -57,8 +56,7 @@ public class SavedReadings {
 			
 			if (type.equals("sh"))
 				ret.addSharpDistance(servoDirection, distance);
-			else
-				ret.addSonar(servoDirection, distance);
+			
 			
 			line = in.readLine(); //titles
 		} while (line != null);
