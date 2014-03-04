@@ -1,4 +1,3 @@
-//#include <NewPing.h>
 #include <Servo.h> 
 #include <Arduino.h>
 
@@ -7,8 +6,6 @@
 SensorTower *pRobot;
 
 void setup() {
-  //Serial.println("Sensor Tower starting up");
-  
   pRobot = new SensorTower();
   
   Serial.begin(57600); // Open serial monitor at 115200 baud to see ping results.
