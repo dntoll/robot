@@ -4,7 +4,7 @@ import java.awt.geom.Point2D.Float;
 
 import daniel.robot.Bitmap;
 import daniel.robot.Direction;
-import daniel.robot.glWindow.model.SharpMeasurement;
+import daniel.robot.sensors.SharpMeasurement;
 
 public class MapData extends Bitmap{
 	

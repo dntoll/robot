@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Measurement {
-	List<Float> values = new ArrayList<Float>();
+	protected List<Float> values = new ArrayList<Float>();
 	
 	float min = Float.MAX_VALUE;
 	float max = Float.MIN_VALUE;

@@ -15,6 +15,7 @@ import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.glWindow.model.State;
+import daniel.robot.sensors.SharpMeasurement;
 
 public class DistanceMeasurementView {
 	
@@ -37,6 +38,7 @@ public class DistanceMeasurementView {
 		
 		float cx = CenterX + pos.x+175;
 		float cy = CenterY + pos.y;
+		float scale = 0.6f;
 		
 		
 		/*for(DirectionalReading reading1 : reading.getReadings().values()) {
@@ -54,38 +56,46 @@ public class DistanceMeasurementView {
 			Direction servoDirection = reading1.getServoDirection();
 			
 			Direction direction = robotDirection.getHeadDirection(servoDirection);
-			//Direction opposite = new Direction(direction.getHeadingDegrees() + 180);
 			
-			
-			if (reading1.getSharp1Distance().okDistance()) {
-				gl.glColor4f(0, 1, 0, 1.0f);
-				core.drawArc(gl, cx, cy, reading1.getSharp1Distance(), direction, 3);
-				gl.glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
-				core.fillArc(gl, cx, cy, reading1.getSharp1Distance(), direction, 3);
-				
-			} else {
-				gl.glColor4f(1, 0, 0, 1.0f);
-				core.drawArc(gl, cx, cy, reading1.getSharp1Distance(), direction, 3);
-				gl.glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
-				core.fillArc(gl, cx, cy, reading1.getSharp1Distance(), direction, 3);
-			}
+			//drawDistance(gl, cx, cy, scale, direction, reading1.getBestDistance());
+			drawDistance(gl, cx, cy, scale, direction, reading1.getLongDistance());
 		}
 		
 		gl.glBegin(GL_LINES);
 		gl.glColor4f(1, 1, 1, 0.5f);
-		core.drawCircle(gl, cx, cy, 17.0f);
-		core.drawCircle(gl, cx, cy, 50.0f);
-		core.drawCircle(gl, cx, cy, 100.0f);
-		core.drawCircle(gl, cx, cy, 140.0f);
-		core.drawCircle(gl, cx, cy, 200.0f);
+		core.drawCircle(gl, cx, cy, scale * 17.0f);
+		core.drawCircle(gl, cx, cy, scale * 50.0f);
+		core.drawCircle(gl, cx, cy, scale * 100.0f);
+		core.drawCircle(gl, cx, cy, scale * 150.0f);
+		core.drawCircle(gl, cx, cy, scale * 200.0f);
+		core.drawCircle(gl, cx, cy, scale * 300.0f);
+		core.drawCircle(gl, cx, cy, scale * 400.0f);
+		core.drawCircle(gl, cx, cy, scale * 500.0f);
 		
 		
 		
 		
 		gl.glEnd();
-		core.drawText(gl, reading.getSharpString(), 30, 30);
+		gl.glLoadIdentity(); 
+		core.drawText(gl, "poo" + reading.getSharpString(), 30, 30);
 		
 		gl.glLoadIdentity();  
+	}
+
+	private void drawDistance(GL2 gl, float cx, float cy, float scale, Direction direction,
+			SharpMeasurement distance) {
+		if (distance.okDistance()) {
+			gl.glColor4f(0, 1, 0, 1.0f);
+			core.drawArc(gl, cx, cy, scale, distance, direction, 3);
+			gl.glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
+			core.fillArc(gl, cx, cy, scale, distance, direction, 3);
+			
+		} else {
+			gl.glColor4f(1, 0, 0, 1.0f);
+			core.drawArc(gl, cx, cy, scale, distance, direction, 3);
+			gl.glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
+			core.fillArc(gl, cx, cy, scale, distance, direction, 3);
+		}
 	}
 
 	public void drawMap(GL2 gl, Map lastMap, State bestKnownPosition, ParticleFilter diveristy) {

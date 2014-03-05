@@ -8,7 +8,7 @@ SensorTower *pRobot;
 void setup() {
   pRobot = new SensorTower();
   
-  Serial.begin(57600); // Open serial monitor at 115200 baud to see ping results.
+  Serial.begin(57600); 
   
   
   while (!Serial) {

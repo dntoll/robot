@@ -26,7 +26,8 @@ public class SavedReadings {
 	
 	private void save(DirectionalReading dr, FileWriter csvWriter) throws IOException {
 		
-		save(dr.getSharp1Distance(), dr.getServoDirection(), csvWriter, "sh");
+		save(dr.getShortDistance(), dr.getServoDirection(), csvWriter, "sh");
+		save(dr.getLongDistance(), dr.getServoDirection(), csvWriter, "lo");
 	}
 
 	private void save(Measurement sonar1Distance, Direction servoDirection,	FileWriter csvWriter, String type) throws IOException {
@@ -55,7 +56,9 @@ public class SavedReadings {
 			float distance = Float.parseFloat(parts[2]);
 			
 			if (type.equals("sh"))
-				ret.addSharpDistance(servoDirection, distance);
+				ret.addSharpDistance(servoDirection, distance, false);
+			if (type.equals("lo"))
+				ret.addSharpDistance(servoDirection, distance, true);
 			
 			
 			line = in.readLine(); //titles

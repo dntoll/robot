@@ -31,11 +31,13 @@ public class DistanceSensorReadings {
 	public void addSharpReading(Direction direction, float value, boolean isLongRange) {
 		DirectionalReading dr = getReading(direction);
 		dr.addSharpReading(value, isLongRange);
+		
+		latest = dr;
 	}
 	
-	public void addSharpDistance(Direction direction, float distance) {
+	public void addSharpDistance(Direction direction, float distance, boolean isLongRange) {
 		DirectionalReading dr = getReading(direction);
-		dr.addSharCM(distance);
+		dr.addSharpCM(distance, isLongRange);
 	}
 	
 	private DirectionalReading getReading(Direction direction) {
@@ -53,7 +55,7 @@ public class DistanceSensorReadings {
 		
 	public String getSharpString() {
 		if (latest != null)
-			return latest.sharp.toString();
+			return latest.getLongDistance().toString();
 		return "";
 	}
 

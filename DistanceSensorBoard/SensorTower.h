@@ -1,6 +1,5 @@
 #pragma once
 
-#include "HC_SR04.h"
 #include "SharpSensor.h"
 
 //SERVO

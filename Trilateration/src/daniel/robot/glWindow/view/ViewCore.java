@@ -45,7 +45,7 @@ public class ViewCore {
 	
 		
 
-	public void drawArc(GL2 gl, float cx, float cy, Measurement distance,
+	public void drawArc(GL2 gl, float cx, float cy, float scale, Measurement distance,
 			Direction direction, int degrees) {
 		gl.glBegin(GL_TRIANGLE_STRIP);
 		
@@ -54,8 +54,8 @@ public class ViewCore {
 		Direction left = new Direction(direction.getHeadingDegrees()-degrees/2);
 		Direction middle = direction;
 		Direction right = new Direction(direction.getHeadingDegrees()+degrees/2);
-		float q1 = distance.getQ1();
-		float q3 = distance.getQ3();
+		float q1 = distance.getQ1() * scale;
+		float q3 = distance.getQ3() * scale;
 		if (q1 > 200)
 			q1 = 200;
 		if (q3 > 200)
@@ -71,7 +71,7 @@ public class ViewCore {
 		gl.glEnd();
 	}
 	
-	public void fillArc(GL2 gl, float cx, float cy, Measurement distance,
+	public void fillArc(GL2 gl, float cx, float cy, float scale, Measurement distance,
 			Direction direction, int degrees) {
 		gl.glBegin(GL_TRIANGLE_STRIP);
 		//gl.glVertex2f(cx, cy);
@@ -81,7 +81,7 @@ public class ViewCore {
 		Direction middle = direction;
 		Direction right = new Direction(direction.getHeadingDegrees()+degrees/2);
 		drawPoint(gl, cx, cy, 0, left);
-		float min = distance.getMin();
+		float min = distance.getMin() * scale;
 		
 		if (min > 200)
 			min = 200;

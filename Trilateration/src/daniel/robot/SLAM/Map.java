@@ -1,12 +1,13 @@
 package daniel.robot.SLAM;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Point2D.Float;
 import java.util.ArrayList;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
-import daniel.robot.glWindow.model.SharpMeasurement;
 import daniel.robot.glWindow.model.State;
+import daniel.robot.sensors.SharpMeasurement;
 
 /**
  * Bitmap map of robot world, starts with 0.0 in the middle
@@ -29,62 +30,78 @@ public class Map {
 		
 		for (DirectionalReading distanceReading : sense.getReadings().values()) {
 	//		freeArea.draw(distanceReading.getSharp1Distance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
+
+			SharpMeasurement sharp1Distance = distanceReading.getBestDistance();
+			Point2D.Float position = getIRPosition(a_bestGuess, sharp1Distance, distanceReading.getServoDirection());
 			
+			float deviation = sharp1Distance.getStdev();
 			
-			//if (distanceReading.getSharp1Distance().wit())
-			{
-				Point2D.Float position = getIRPosition(a_bestGuess, distanceReading);
-				float distanceMeasured= distanceReading.getSharp1Distance().getMedian();
-				
-				float deviation = distanceReading.getSharp1Distance().getStdev();
-				
-				Landmark lm = new Landmark(position, deviation, distanceReading.getSharp1Distance().getMin());
-				
-				Prediction prediction = getDistance(a_bestGuess, distanceReading.getServoDirection(), distanceReading.getSharp1Distance().getBeamWidth());
-				//no prediction is found
-				if (prediction == null) {
-					//no prediction in this direction just add...
-					m_landmarks.add(lm);
-				} else {
-					
-					//the new prediction should be added if its closer
-//					boolean newLandMarkIsCloser;
-					boolean newLandMarkIsFurtherAway = lm.getDifference(prediction.landmark) > 100;
-//					boolean newLandMarkIsHasBetterSTDEV;
-					
-					
-					//add closer landmark
-					if (distanceMeasured < SharpMeasurement.RELIABLE_DISTANCE && 
-						distanceMeasured < prediction.getDistance() - 15 && lm.deviation < 10) {
-						m_landmarks.add(lm);
-					} else {
-					
-						//Improvements
-						if (lm.isBetter(prediction) && distanceMeasured < SharpMeasurement.RELIABLE_DISTANCE) 
-						{
-							//replace
-							if (distanceMeasured > prediction.getDistance()) { 
-								m_landmarks.remove(prediction.landmark);
-								m_landmarks.add(lm);
-							}
-						} else  if(newLandMarkIsFurtherAway && 
-								  distanceMeasured > SharpMeasurement.RELIABLE_DISTANCE && 
-								  prediction.getDistance() < SharpMeasurement.RELIABLE_DISTANCE ) {
-							//remove false landmarks
-							m_landmarks.remove(prediction.landmark);
-						}
-						
-					}
-				}
+			Landmark lm = new Landmark(position, deviation, sharp1Distance.getMin());
+			
+			Prediction prediction = getDistance(a_bestGuess, distanceReading.getServoDirection(), sharp1Distance.getBeamWidth());
+			//no prediction is found
+			if (prediction == null) {
+				//no prediction in this direction just add...
+				m_landmarks.add(lm);
+			} else {
+				addWithExisting(sharp1Distance, lm, prediction);
 			}
+
 		}
 	}
 
 
-	private Point2D.Float getIRPosition(State a_bestGuess,
-			DirectionalReading distanceReading) {
-		float distance = distanceReading.getSharp1Distance().getMedian();
-		Direction direction = a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection());
+	
+
+
+	private void addWithExisting(SharpMeasurement sharp1Distance, Landmark lm, Prediction prediction) {
+		
+		float distanceMeasured= sharp1Distance.getMedian();
+		//add closer landmark
+		if (distanceMeasured < sharp1Distance.getReliableDistance() && 
+			distanceMeasured < prediction.getDistance() - 15 && lm.deviation < 10) {
+			m_landmarks.add(lm);
+		} else {
+
+			//the new prediction should be removed if its much further away
+			//to remove false readings
+			
+			
+			//Improvements
+			if (lm.isBetter(prediction) && distanceMeasured < sharp1Distance.getReliableDistance()) 
+			{
+				//replace
+				if (distanceMeasured > prediction.getDistance()) { 
+					m_landmarks.remove(prediction.landmark);
+					m_landmarks.add(lm);
+				}
+			} else  if(shouldRemoveMoreDistantLandmark(sharp1Distance, prediction,
+					distanceMeasured, lm) ) {
+				//remove false landmarks
+				m_landmarks.remove(prediction.landmark);
+			}
+			
+		}
+	}
+
+
+	private boolean shouldRemoveMoreDistantLandmark(
+			SharpMeasurement sharp1Distance, Prediction prediction,
+			float distanceMeasured, Landmark lm) {
+		
+		boolean newLandMarkIsMuchFurtherAway = lm.getDifference(prediction.landmark) > 100;
+		
+		return newLandMarkIsMuchFurtherAway && 
+				  distanceMeasured > sharp1Distance.getReliableDistance() && 
+				  prediction.getDistance() < sharp1Distance.getReliableDistance();
+	}
+
+	
+	private Float getIRPosition(State a_bestGuess,
+			SharpMeasurement sharp1Distance, Direction servoDirection) {
+		
+		float distance = sharp1Distance.getMedian();
+		Direction direction = a_bestGuess.m_heading.getHeadDirection(servoDirection);
 		Point2D.Float headPosition = a_bestGuess.getRobotPosition();
 		
 		float x = headPosition.x + direction.getX() * distance;

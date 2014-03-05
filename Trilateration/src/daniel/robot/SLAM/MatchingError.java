@@ -3,8 +3,8 @@ package daniel.robot.SLAM;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
-import daniel.robot.glWindow.model.SharpMeasurement;
 import daniel.robot.glWindow.model.State;
+import daniel.robot.sensors.SharpMeasurement;
 import daniel.robot.statistics.Gaussian;
 
 public class MatchingError {
@@ -47,10 +47,10 @@ public class MatchingError {
 		
 		int numIrReadings = 0;
 		for (DirectionalReading dr : sense.getReadings().values()) {
-			
-			if (dr.getSharp1Distance().okDistance()) 
+			SharpMeasurement distance = dr.getBestDistance();
+			if (distance.okDistance()) 
 			{
-				float directionalError = matchReading(a_known, a_newState, error, dr.getSharp1Distance(), dr.getServoDirection());
+				float directionalError = matchReading(a_known, a_newState, error, distance, dr.getServoDirection());
 			
 				error.m_irError += directionalError;
 				numIrReadings++;
