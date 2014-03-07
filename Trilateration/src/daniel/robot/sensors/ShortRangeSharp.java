@@ -18,8 +18,8 @@ public class ShortRangeSharp extends SharpMeasurement {
 		return RELIABLE_DISTANCE;
 	}
 	@Override
-	protected float transformToCM(float a_voltage, boolean isLongRange) {
-		return super.transformToCM(a_voltage, isLongRange, voltages, distance);
+	protected float transformToCM(float a_voltage) {
+		return super.transformToCM(a_voltage, voltages, distance);
 	}
 
 }

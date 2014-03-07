@@ -56,10 +56,10 @@ public class ViewCore {
 		Direction right = new Direction(direction.getHeadingDegrees()+degrees/2);
 		float q1 = distance.getQ1() * scale;
 		float q3 = distance.getQ3() * scale;
-		if (q1 > 200)
+		/*if (q1 > 200)
 			q1 = 200;
 		if (q3 > 200)
-			q3 = 200;
+			q3 = 200;*/
 		
 		drawPoint(gl, cx, cy, q1, left);
 		
@@ -83,8 +83,8 @@ public class ViewCore {
 		drawPoint(gl, cx, cy, 0, left);
 		float min = distance.getMin() * scale;
 		
-		if (min > 200)
-			min = 200;
+		/*if (min > 200)
+			min = 200;*/
 		drawPoint(gl, cx, cy, min, left);
 		drawPoint(gl, cx, cy, 0, middle);
 		drawPoint(gl, cx, cy, min, middle);

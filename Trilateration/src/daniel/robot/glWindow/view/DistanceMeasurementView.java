@@ -38,7 +38,7 @@ public class DistanceMeasurementView {
 		
 		float cx = CenterX + pos.x+175;
 		float cy = CenterY + pos.y;
-		float scale = 0.6f;
+		float scale = 0.75f;
 		
 		
 		/*for(DirectionalReading reading1 : reading.getReadings().values()) {
@@ -58,7 +58,7 @@ public class DistanceMeasurementView {
 			Direction direction = robotDirection.getHeadDirection(servoDirection);
 			
 			//drawDistance(gl, cx, cy, scale, direction, reading1.getBestDistance());
-			drawDistance(gl, cx, cy, scale, direction, reading1.getLongDistance());
+			drawDistance(gl, cx, cy, scale, direction, reading1.getBestDistance());
 		}
 		
 		gl.glBegin(GL_LINES);
@@ -66,7 +66,7 @@ public class DistanceMeasurementView {
 		core.drawCircle(gl, cx, cy, scale * 17.0f);
 		core.drawCircle(gl, cx, cy, scale * 50.0f);
 		core.drawCircle(gl, cx, cy, scale * 100.0f);
-		core.drawCircle(gl, cx, cy, scale * 150.0f);
+		//core.drawCircle(gl, cx, cy, scale * 150.0f);
 		core.drawCircle(gl, cx, cy, scale * 200.0f);
 		core.drawCircle(gl, cx, cy, scale * 300.0f);
 		core.drawCircle(gl, cx, cy, scale * 400.0f);
@@ -84,17 +84,20 @@ public class DistanceMeasurementView {
 
 	private void drawDistance(GL2 gl, float cx, float cy, float scale, Direction direction,
 			SharpMeasurement distance) {
-		if (distance.okDistance()) {
-			gl.glColor4f(0, 1, 0, 1.0f);
-			core.drawArc(gl, cx, cy, scale, distance, direction, 3);
-			gl.glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
-			core.fillArc(gl, cx, cy, scale, distance, direction, 3);
-			
-		} else {
-			gl.glColor4f(1, 0, 0, 1.0f);
-			core.drawArc(gl, cx, cy, scale, distance, direction, 3);
-			gl.glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
-			core.fillArc(gl, cx, cy, scale, distance, direction, 3);
+		
+		if (distance.getValues().size() > 0) {
+			if (distance.okDistance()) {
+				gl.glColor4f(0, 1, 0, 1.0f);
+				core.drawArc(gl, cx, cy, scale, distance, direction, 3);
+				gl.glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
+				core.fillArc(gl, cx, cy, scale, distance, direction, 3);
+				
+			} else {
+				gl.glColor4f(1, 0, 0, 1.0f);
+				core.drawArc(gl, cx, cy, scale, distance, direction, 3);
+				gl.glColor4f(0.3f, 0.3f, 0.3f, 1.0f);
+				core.fillArc(gl, cx, cy, scale, distance, direction, 3);
+			}
 		}
 	}
 

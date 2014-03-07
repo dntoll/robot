@@ -3,8 +3,6 @@ package daniel.robot.SLAM.ParticleFilter;
 import daniel.robot.SLAM.Map;
 import daniel.robot.SLAM.MatchingError;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
-import daniel.robot.glWindow.model.IPose;
-import daniel.robot.glWindow.model.PoseCollection;
 import daniel.robot.glWindow.model.State;
 
 public class Particle {

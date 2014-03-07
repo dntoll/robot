@@ -53,9 +53,14 @@ public class DirectionalReading {
 	}
 
 	public SharpMeasurement getBestDistance() {
-		if (shortRange.getMedian() < ShortRangeSharp.RELIABLE_DISTANCE)
+		if (shortRange.getValues().size() > 0 && shortRange.getMedian() < ShortRangeSharp.RELIABLE_DISTANCE) {
 			return shortRange;
-		else 
-			return longRange;
+		} else {
+			if (longRange.getValues().size() > 0)
+				return longRange;
+			else
+				return shortRange;
+		}
+	
 	}
 }

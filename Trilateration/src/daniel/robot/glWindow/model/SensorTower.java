@@ -39,10 +39,10 @@ public class SensorTower  {
 			if (parts.length == 6 && reading != null) {
 				String code= parts[0];
 				int direction = Integer.parseInt(parts[1]);
-				Direction front = new Direction(direction);
-				Direction left = new Direction(direction+90);
-				Direction back = new Direction(direction+180);
-				Direction right = new Direction(direction+180+90);
+				Direction front = new Direction(360-(direction+180));
+				Direction left = new Direction(360-(direction+180+90));
+				Direction back = new Direction(360-(direction));
+				Direction right = new Direction(360-(direction+90));
 				lastDirection = front;
 				
 				if (code.equals("sh")) {

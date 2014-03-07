@@ -111,7 +111,8 @@ public class LandMarkNode implements ILandmarkNode {
 		
 		
 		float maxDistance = java.lang.Float.MAX_VALUE;
-		Float target = new Float(robotPosition.x + direction.getX() * maxDistance, robotPosition.y + direction.getY() * maxDistance);
+		Float target = new Float(robotPosition.x + direction.getX() * maxDistance, 
+								 robotPosition.y + direction.getY() * maxDistance);
 		
 		ILandmarkNode nodeContainingRobot = getContainingNode(robotPosition);
 		ILandmarkNode nodeContainingTarget = getContainingNode(target);

@@ -37,7 +37,7 @@ public class State {
 		float angle = a_move.getPossibleAngle();
 		float distanceMoved = a_move.getDistanceMoved();
 		
-		m_heading.Turn(angle);
+		m_heading = m_heading.getTurned(angle);
 		
 		float x = m_heading.getX() * distanceMoved; 
 		float y = m_heading.getY() * distanceMoved;
@@ -48,7 +48,7 @@ public class State {
 	}
 	
 	public void moveFlawLess(Movement a_move) {
-		m_heading.Turn(a_move.getAngle());
+		m_heading = m_heading.getTurned(a_move.getAngle());
 		
 		float x = m_heading.getX() * a_move.getDistance(); 
 		float y = m_heading.getY() * a_move.getDistance();

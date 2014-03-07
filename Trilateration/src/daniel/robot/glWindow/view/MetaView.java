@@ -163,7 +163,12 @@ implements GLEventListener, KeyListener {
 	    cameraView.drawCamera(gl, glu, windowSize);
 	 //   cameraView.drawPerspective(gl, glu, windowSize, model.getDistanceSensorReadings());
 	    
-	    
+	    try {
+			Thread.sleep(10);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	

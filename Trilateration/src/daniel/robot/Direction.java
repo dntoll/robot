@@ -3,20 +3,23 @@ package daniel.robot;
 public class Direction {
 
 	private static final float RADIANS_TO_DEGREES = 57.2957795f;
-	private float m_heading = 0.0f;
+	private final float m_heading;
+	private final float x;
+	private final float y;
 	
 	public Direction(float a_heading) {
-		m_heading = a_heading;
-		wrap();
+		m_heading = wrap(a_heading);
+		x = (float) Math.cos( toRadians(m_heading ));
+		y = (float) Math.sin( toRadians(m_heading ));
 	}
 	
 	public static Direction RadiansToDegrees(float radians) {
 		return new Direction(radians * RADIANS_TO_DEGREES);
 	}
 
-	public void Turn(float a_dh) {
-		m_heading += a_dh;
-		wrap();
+	public Direction getTurned(float a_dh) {
+		return new Direction(m_heading + a_dh);
+		
 	}
 
 	public float GetDifferenceInDegrees(Direction a_compassDirection) {
@@ -29,11 +32,11 @@ public class Direction {
 	}
 
 	public float getX() {
-		return (float) Math.cos( toRadians(m_heading ));
+		return x;
 	}
 	
 	public float getY() {
-		return (float) Math.sin( toRadians(m_heading ));
+		return y;//
 	}
 
 	public float getHeadingDegrees() {
@@ -62,14 +65,15 @@ public class Direction {
 		return a_heading2 / RADIANS_TO_DEGREES;
 	}
 	
-	private void wrap() {
-		while (m_heading > 360) {
-			m_heading -= 360;
+	private float wrap(float a_heading) {
+		while (a_heading > 360) {
+			a_heading -= 360;
 		}
 
-		while (m_heading < 0) {
-			m_heading += 360;
+		while (a_heading < 0) {
+			a_heading += 360;
 		}
+		return a_heading;
 	}
 
 }

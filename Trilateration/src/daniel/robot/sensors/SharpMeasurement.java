@@ -3,20 +3,20 @@ package daniel.robot.sensors;
 import daniel.robot.glWindow.model.Measurement;
 
 public abstract class SharpMeasurement extends Measurement {
-	public static final float BEAM_WIDTH = 1;
+	public static final float BEAM_WIDTH = 1.0f;
 	
 	
 	
 
-	public void add(float value, boolean isLongRange) {
+	public void add(float value) {
 		float v0 = getVoltage(value);
-		float distance  = transformToCM(v0, isLongRange);
-		super.add(distance);
+		float distance  = transformToCM(v0);
+		super.addDistance(distance);
 	}
 	
 	
 	public void addCM(float distance) {
-		super.add(distance);
+		super.addDistance(distance);
 	}
 
 	private float getVoltage(float sensorValue) {
@@ -30,9 +30,9 @@ public abstract class SharpMeasurement extends Measurement {
 	public String toString() {
 		return super.toString();
 	}
-	protected abstract float transformToCM(float a_voltage, boolean isLongRange);
+	protected abstract float transformToCM(float a_voltage);
 	  
-	protected float transformToCM(float a_voltage, boolean isLongRange, float voltages[], float distance[]) {
+	protected float transformToCM(float a_voltage, float voltages[], float distance[]) {
 		float dist = 0.0f;
 	 
 		for (int i = 0; i < voltages.length - 1; i++) {

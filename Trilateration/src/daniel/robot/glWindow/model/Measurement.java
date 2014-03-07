@@ -12,16 +12,16 @@ public class Measurement {
 	float total = 0;
 	
 	
-	public void add(float value) {
+	public void addDistance(float distanceCM) {
 		
 			
-		values.add(new Float(value));
+		values.add(new Float(distanceCM));
 		Collections.sort(values);
-		if (value < min)
-			min = value;
-		if (value > max)
-			max = value;
-		total += value;
+		if (distanceCM < min)
+			min = distanceCM;
+		if (distanceCM > max)
+			max = distanceCM;
+		total += distanceCM;
 	}
 	
 	public float getMin() {

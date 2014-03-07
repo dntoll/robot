@@ -47,7 +47,7 @@ class SensorTower {
     void measure(int pos, const String &code, int delayMilliseconds) {
       moveServo(pos);
           
-      for (int i = 0;i< 3; i++) {
+      for (int i = 0;i< 5; i++) {
         int visiblePos = map(m_servoPos, MIN_DEGREES, MAX_DEGREES, 0, 180);
         Serial.print(code);
         Serial.print(":");   
