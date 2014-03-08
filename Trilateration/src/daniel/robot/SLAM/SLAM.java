@@ -45,6 +45,9 @@ public class SLAM implements Runnable{
 			
 			for (int i =0 ;i< 150; i++) {
 				
+				while (doRunSlam() == false) {
+					Thread.sleep(1000);
+				}
 				Long startTime = System.currentTimeMillis();
 				Movement move = m_robot.makeMove();
 				DistanceSensorReadings sense = m_robot.makeReading();
@@ -74,6 +77,21 @@ public class SLAM implements Runnable{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	
+	private boolean isRunning = false;
+	private synchronized boolean doRunSlam() {
+		return isRunning;
+	}
+
+	public synchronized void start() {
+		isRunning = true;
+	}
+	
+	public synchronized void stop() {
+		isRunning = false;
+		
 	}
 	
 	

@@ -27,9 +27,9 @@ public class MVCAdapter implements GLAutoDrawable {
 	private MetaController controller;
 	private MetaView view;
 
-	public MVCAdapter(MetaController controller, MetaView view) {
+	public MVCAdapter(MetaController controller, MetaView canvas) {
 		this.controller = controller;
-		this.view = view;
+		this.view = canvas;
 	}
 
 	@Override
@@ -214,7 +214,7 @@ public class MVCAdapter implements GLAutoDrawable {
 	public void display() {
 		
 		controller.update();
-		view.display();
+		
 	}
 
 	@Override

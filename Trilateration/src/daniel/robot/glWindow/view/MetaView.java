@@ -1,7 +1,6 @@
 package daniel.robot.glWindow.view;
 
-import static java.awt.event.KeyEvent.VK_B;
-import static java.awt.event.KeyEvent.VK_L;
+import static java.awt.event.KeyEvent.VK_C;
 import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
@@ -10,7 +9,6 @@ import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.geom.Point2D;
 import java.awt.image.BufferedImage;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
@@ -18,11 +16,8 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.glu.GLU;
 
-import daniel.robot.Direction;
-import daniel.robot.SLAM.Map;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
-import daniel.robot.glWindow.model.State;
 
 public class MetaView extends GLCanvas  
 implements GLEventListener, KeyListener {
@@ -30,18 +25,25 @@ implements GLEventListener, KeyListener {
 	private static final long serialVersionUID = -5995442581511590711L;
 	
 	private ViewCore core = new ViewCore();
-	
-	private DistanceMeasurementView distances = new DistanceMeasurementView(core);
-	private CompassView compass = new CompassView(core);
 	private Dimension windowSize;
-	private CameraView cameraView = new CameraView();
+	
+	
+	SLAMView slam;
+	CalibrationView calibration;
+	
+	
 	private IRobotInterface robot;
 	PoseCollection world;
+	
+	private Input input = new Input();
 
 	public  MetaView(IRobotInterface model, PoseCollection world, Dimension windowSize ) {
 		//
 		this.world = world;
 		this.robot = model;
+		slam = new SLAMView(robot, world, core);
+		calibration = new CalibrationView(core);
+		
 		this.addGLEventListener(this);
 	    // For Handling KeyEvents
 	    this.addKeyListener(this);
@@ -55,23 +57,16 @@ implements GLEventListener, KeyListener {
 	
 	@Override
    public void keyPressed(KeyEvent e) {
-      int keyCode = e.getKeyCode();
-      switch (keyCode) {
-         case VK_B: // toggle blending on/off
-//            doTakeImages = true;
-            break;
-         case VK_L: // toggle light on/off
-//        	 doShowMeasurements = !doShowMeasurements;
-            break;
-      }
-      
+      input.keyPressed(e);
    }
-
+	
 	@Override
 	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+		input.keyReleased(arg0);
 	}
+	
+	
+	
 
 	@Override
 	public void keyTyped(KeyEvent arg0) {
@@ -85,28 +80,12 @@ implements GLEventListener, KeyListener {
 		core.setupOGL(gl);
 	}
 
-	
-	
-	public void batchTextures(BufferedImage left, BufferedImage right) {
-		
-	}
-
-	
-
 	@Override
 	public void dispose(GLAutoDrawable drawable) {
 		// TODO Auto-generated method stub
 		
 	}
 	
-	//http://www.java-tips.org/other-api-tips/jogl/outline-fonts-nehe-tutorial-jogl-port.html
-	
-	
-	
-	
-	
-	
-
 	@Override
 	public void display(GLAutoDrawable drawable) {
 		robot.update();
@@ -124,92 +103,29 @@ implements GLEventListener, KeyListener {
 	    
 	    gl.glLoadIdentity(); 
 	    
-	    
-	    cameraView.drawCamera(gl, glu, windowSize);
-	    
-	    try {
-		   /* for (IPose pose : world.poses) {
-			   distances.drawTopDown(gl, pose.getDistanceSensorReadings(), pose.getBestGuessPosition());
-		    }*/
-		    if (world.getLastPose() != null) {
-			    Map lastMap = world.getLastPose().getBestMap();
-			    State bestKnownPosition = world.getLastPose().getBestGuessPosition();
-			    distances.drawMap(gl,lastMap, bestKnownPosition, world.getLastPose().getParticleFilter()); 
-			    
-			    
-			    
-			    
-		    }
-	    } catch (Exception e) {
-	    	System.err.println(e.getMessage());
+	    if (isCalibrating() == false) {
+	    	slam.doSlam(gl, glu, windowSize);
+	    } else {
+	    	calibration.doDraw(gl, glu, windowSize);
 	    }
-	    if (robot.getDistanceSensorReadings() != null)
-	    	distances.drawTopDown(gl, robot.getDistanceSensorReadings(), new daniel.robot.glWindow.model.State(new Point2D.Float(450,0), new Direction(0)));
-	    
-	    compass.drawCompassArrow(gl, robot.getCompass());
-	    
-	    float temp = robot.getTemperature();
-	    if (robot.getCompassDirection() != null) {
-	    	
-	    	gl.glLoadIdentity(); 
-		    float direction = robot.getCompassDirection().getHeadingDegrees();
-		    String out = "Temperature " + temp + " direction " + direction; 
-		    core.renderStrokeString(gl, out); // Print GL Text To The Screen
-		    cameraView.updateCameraTexture(gl, robot.getPanoramaImage(), windowSize);
-	    }
-	    gl.glLoadIdentity(); 
-	    
-	    
-	    cameraView.drawCamera(gl, glu, windowSize);
-	 //   cameraView.drawPerspective(gl, glu, windowSize, model.getDistanceSensorReadings());
-	    
-	    try {
-			Thread.sleep(10);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
+	boolean isDoingCalibration = true;
+	private boolean isCalibrating() {
+		return isDoingCalibration;
+	}
 	
+	public void setCalibration(boolean calibrate) {
+		isDoingCalibration = calibrate;
+	}
+
+	public boolean userWantsToStopCalibrating() {
+		return input.wasClicked(VK_C);
+	}
 	
-
-
-
-
-	
-	
-	/*private void drawGyro(GL2 gl) {
-		float cx = 75;
-		float cy = 75;
-		GyroAccelerometer compass = model.getGyro();
-		
-		List<GyroAccelerometerReading> allReadings = compass.getAllReadings();
-		gl.glColor3f(1, 1, 1);
-		for (CompassReading reading : allReadings) {
-			Direction dir = reading.getHeading();
-			float len = reading.getLength() * 0.1f;
-			drawLine(gl, cx, cy, len, dir);
-		}
-		
-		
-		
-		
-		
-		gl.glColor3f(1, 0, 0);
-		drawLine(gl, cx, cy, 50.0f, compassDirection);
-	}*/
-
-
-
-
-	
-	
-
-	
-	
-
-
+	public boolean userWantsToStartCalibrating() {
+		return input.wasClicked(VK_C);
+	}
 
 
 	@Override
@@ -222,7 +138,5 @@ implements GLEventListener, KeyListener {
 	  
 	       
 	}
-
-	
 
 }
