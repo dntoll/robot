@@ -32,9 +32,7 @@ public class MapData extends Bitmap{
 	public void draw(SharpMeasurement sharp1Distance, Float robotPosition,
 			Direction headDirection) {
 
-		double dist = sharp1Distance.getMin();
-		if (dist > 180)
-			dist = 180;
+		double dist = sharp1Distance.getMedian();
 
 		for (int i = 0; i< dist; i++) {
 			float x = robotPosition.x + headDirection.getX() * (float)i;
@@ -56,7 +54,7 @@ public class MapData extends Bitmap{
 		int y = (int) (ry / cellSize + size/2);
 		
 		if (x >= 0 && x < size && y >= 0 && y < size) {
-			if (grid[getIndex(x, y)] == CellContent.unknown) 
+			//if (grid[getIndex(x, y)] == CellContent.unknown) 
 			{
 				grid[getIndex(x, y)] = type;
 			}

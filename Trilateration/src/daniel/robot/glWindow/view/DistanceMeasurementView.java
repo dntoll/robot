@@ -38,7 +38,7 @@ public class DistanceMeasurementView {
 		
 		float cx = CenterX + pos.x+175;
 		float cy = CenterY + pos.y;
-		float scale = 0.75f;
+		float scale = 0.6f;
 		
 		
 		/*for(DirectionalReading reading1 : reading.getReadings().values()) {
@@ -120,8 +120,8 @@ public class DistanceMeasurementView {
 		}
 		gl.glEnd();
 		gl.glBegin(GL_TRIANGLES);
-		/*
-		MapData map = lastMap.getMap();
+		
+		/*MapData map = lastMap.getMap();
 		
 		gl.glColor4f(0.1f, 0.1f, 0.1f, 1.0f);
 		for (int x = 0; x < map.getSize(); x++) {
@@ -139,8 +139,8 @@ public class DistanceMeasurementView {
 				}
 			}
 		}
-		
 		*/
+		
 		
 		gl.glColor4f(1.0f, 0.0f, 0.0f, 0.2f);
 		for (int i = 0; i<  diveristy.getSize(); i++) {

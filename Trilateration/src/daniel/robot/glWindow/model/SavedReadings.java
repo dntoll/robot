@@ -30,7 +30,7 @@ public class SavedReadings {
 		save(dr.getLongDistance(), dr.getServoDirection(), csvWriter, "lo");
 	}
 
-	private void save(Measurement sonar1Distance, Direction servoDirection,	FileWriter csvWriter, String type) throws IOException {
+	private void save(DistanceMeasurementCollection sonar1Distance, Direction servoDirection,	FileWriter csvWriter, String type) throws IOException {
 		for (Float value : sonar1Distance.getValues()) {
 			String str = String.format("%s:%f:%f\n", type, servoDirection.getHeadingDegrees(), value.floatValue());
 			csvWriter.write(str);

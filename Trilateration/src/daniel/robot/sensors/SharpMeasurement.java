@@ -1,8 +1,8 @@
 package daniel.robot.sensors;
 
-import daniel.robot.glWindow.model.Measurement;
+import daniel.robot.glWindow.model.DistanceMeasurementCollection;
 
-public abstract class SharpMeasurement extends Measurement {
+public abstract class SharpMeasurement extends DistanceMeasurementCollection {
 	public static final float BEAM_WIDTH = 1.0f;
 	
 	

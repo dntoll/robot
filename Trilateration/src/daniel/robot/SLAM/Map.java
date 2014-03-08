@@ -23,13 +23,13 @@ public class Map {
 		
 		if (parentMap != null) {
 			m_landmarks.copy(parentMap.m_landmarks);
-	//		freeArea = new MapData(parentMap.freeArea);
+		//	freeArea = new MapData(parentMap.freeArea);
 		} else {
-	//		freeArea = new MapData(300, 5);
+		//	freeArea = new MapData(600, 2);
 		}
 		
 		for (DirectionalReading distanceReading : sense.getReadings().values()) {
-	//		freeArea.draw(distanceReading.getSharp1Distance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
+			
 
 			SharpMeasurement sharp1Distance = distanceReading.getBestDistance();
 			Point2D.Float position = getIRPosition(a_bestGuess, sharp1Distance, distanceReading.getServoDirection());
@@ -38,13 +38,17 @@ public class Map {
 			
 			Landmark lm = new Landmark(position, deviation, sharp1Distance.getMin());
 			
-			Prediction prediction = getDistance(a_bestGuess, distanceReading.getServoDirection(), sharp1Distance.getBeamWidth());
+			Prediction prediction = getPrediction(a_bestGuess, distanceReading.getServoDirection(), sharp1Distance.getBeamWidth());
 			//no prediction is found
 			if (prediction == null) {
 				//no prediction in this direction just add...
 				m_landmarks.add(lm);
+			//	freeArea.draw(distanceReading.getBestDistance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
 			} else {
-				addWithExisting(sharp1Distance, lm, prediction);
+				if (addWithExisting(sharp1Distance, lm, prediction)) {
+			//		freeArea.draw(distanceReading.getBestDistance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
+				}
+					
 			}
 
 		}
@@ -54,17 +58,24 @@ public class Map {
 	
 
 
-	private void addWithExisting(SharpMeasurement sharp1Distance, Landmark lm, Prediction prediction) {
+	
+
+
+
+
+
+	private boolean addWithExisting(SharpMeasurement sharp1Distance, Landmark lm, Prediction prediction) {
 		
 		float distanceMeasured= sharp1Distance.getMedian();
 		//add closer landmark
 		if (distanceMeasured < sharp1Distance.getReliableDistance() && 
 			distanceMeasured < prediction.getDistance() - 15 && lm.deviation < 10) {
 			m_landmarks.add(lm);
+			return true;
+			//freeArea.draw(sharp1Distance, lm.pos, a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
 		} else {
 
-			//the new prediction should be removed if its much further away
-			//to remove false readings
+			
 			
 			
 			//Improvements
@@ -74,14 +85,18 @@ public class Map {
 				if (distanceMeasured > prediction.getDistance()) { 
 					m_landmarks.remove(prediction.landmark);
 					m_landmarks.add(lm);
+					return true;
 				}
 			} else  if(shouldRemoveMoreDistantLandmark(sharp1Distance, prediction,
 					distanceMeasured, lm) ) {
+				//the new prediction should be removed if its much further away
 				//remove false landmarks
 				m_landmarks.remove(prediction.landmark);
+				return true;
 			}
 			
 		}
+		return false;
 	}
 
 
@@ -110,18 +125,16 @@ public class Map {
 		return position;
 	}
 	
-	public Prediction getDistance(State state, Direction servo, float a_beamWidth) {
-		Direction direction = state.m_heading.getHeadDirection(servo);
+	
+	Prediction getPrediction(State state,
+			Direction servo, float beamWidth) {
+		Direction worldDirection = state.m_heading.getHeadDirection(servo);
 
 		Point2D.Float robotPosition = state.getRobotPosition();
 		
-		Prediction ret = m_landmarks.getClosestLandMark(a_beamWidth, direction, robotPosition);
-				
+		Prediction ret = m_landmarks.getClosestLandMark(beamWidth, worldDirection, robotPosition);
 		return ret;
 	}
-
-
-	
 
 
 	public boolean isFree(int x, int y) {
@@ -135,7 +148,6 @@ public class Map {
 
 
 	public MapData getMap() {
-		// TODO Auto-generated method stub
 		return null;//freeArea;
 	}
 

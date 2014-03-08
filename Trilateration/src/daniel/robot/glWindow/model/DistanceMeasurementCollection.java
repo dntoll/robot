@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class Measurement {
+public class DistanceMeasurementCollection {
 	protected List<Float> values = new ArrayList<Float>();
 	
 	float min = Float.MAX_VALUE;
