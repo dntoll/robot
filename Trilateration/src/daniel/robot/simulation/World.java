@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 import daniel.robot.Bitmap;
 import daniel.robot.Direction;
 import daniel.robot.SLAM.MapData;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 
 public class World extends Bitmap {
@@ -61,9 +61,9 @@ public class World extends Bitmap {
 		return new Direction(0);
 	}
 
-	public DistanceSensorReadings makeReading(State robot) {
+	public DirectionalReadingCollection makeReading(State robot) {
 		Direction compassDirection = robot.m_heading;
-		DistanceSensorReadings ret = new DistanceSensorReadings(compassDirection);
+		DirectionalReadingCollection ret = new DirectionalReadingCollection(compassDirection);
 		Random rand = new Random();
 		
 		for (int servoDegrees = 0; servoDegrees< 360; servoDegrees++) {

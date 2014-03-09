@@ -8,7 +8,7 @@ import daniel.robot.Direction;
 public class SensorTower  {
 	
 	
-	DistanceSensorReadings reading = null;
+	DirectionalReadingCollection reading = null;
 	IPSerialPort port;
 	
 	public SensorTower(String serverAdress) throws Exception {
@@ -63,11 +63,11 @@ public class SensorTower  {
 		port.write("5\n");
 		timeReceived = System.currentTimeMillis();
 		
-		reading = new DistanceSensorReadings(compass);
+		reading = new DirectionalReadingCollection(compass);
 		isComplete = false;
 	}
 
-	public DistanceSensorReadings getDistanceSensorReadings() {
+	public DirectionalReadingCollection getDistanceSensorReadings() {
 		return reading;
 	}
 
@@ -75,7 +75,7 @@ public class SensorTower  {
 		return lastDirection;
 	}
 
-	public DistanceSensorReadings getFullCompassReading() {
+	public DirectionalReadingCollection getFullCompassReading() {
 		if (isComplete == false)
 			return null;
 		return getDistanceSensorReadings();
@@ -85,7 +85,7 @@ public class SensorTower  {
 		port.write("c\n");
 		timeReceived = System.currentTimeMillis();
 		
-		reading = new DistanceSensorReadings(null);
+		reading = new DirectionalReadingCollection(null);
 		isComplete = false;
 	}
 	

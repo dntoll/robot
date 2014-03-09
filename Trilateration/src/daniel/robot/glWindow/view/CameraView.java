@@ -20,7 +20,7 @@ import com.jogamp.opengl.util.texture.TextureCoords;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 
 import daniel.robot.Direction;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 
 public class CameraView {
 	BufferedImage oldImage = null;
@@ -74,7 +74,7 @@ public class CameraView {
 
 
 
-	public void drawPerspective(GL2 gl, GLU glu, Dimension windowSize, DistanceSensorReadings reading) {
+	public void drawPerspective(GL2 gl, GLU glu, Dimension windowSize, DirectionalReadingCollection reading) {
 		/*cameraTexture.enable(gl);
 		     cameraTexture.bind(gl);
 	      gl.glMatrixMode(GL_PROJECTION);  // choose projection matrix

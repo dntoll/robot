@@ -3,8 +3,7 @@ package daniel.robot.SLAM;
 import java.awt.geom.Point2D.Float;
 
 import daniel.robot.Direction;
-import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
 import daniel.robot.glWindow.model.State;
@@ -31,7 +30,7 @@ public class SLAM implements Runnable{
 			while (doRunSlam() == false) {
 				Thread.sleep(1000);
 			}
-			DistanceSensorReadings startUpReading = m_robot.makeReading();
+			DirectionalReadingCollection startUpReading = m_robot.makeReading();
 			//Direction startupDirection = startUpReading.getCompassDirection();
 			
 			Direction startupDirection = new Direction(0);
@@ -50,7 +49,7 @@ public class SLAM implements Runnable{
 				}
 				Long startTime = System.currentTimeMillis();
 				Movement move = m_robot.makeMove();
-				DistanceSensorReadings sense = m_robot.makeReading();
+				DirectionalReadingCollection sense = m_robot.makeReading();
 				
 				ParticleFilter newFilter = new ParticleFilter(lastPose.m_position, move, sense, m_world);
 				Pose newPose = new Pose(newFilter, sense, move);

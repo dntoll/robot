@@ -10,10 +10,10 @@ import daniel.robot.Direction;
 import daniel.robot.SLAM.Landmark;
 import daniel.robot.SLAM.Map;
 import daniel.robot.SLAM.MapData;
-import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
+import daniel.robot.SLAM.ParticleFilter;
 
 import daniel.robot.glWindow.model.DirectionalReading;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.SharpMeasurement;
 
@@ -27,7 +27,7 @@ public class DistanceMeasurementView {
 		this.core = core;
 	}
 	
-	void drawTopDown(GL2 gl, DistanceSensorReadings reading, State position) {
+	void drawTopDown(GL2 gl, DirectionalReadingCollection reading, State position) {
 		gl.glLoadIdentity();  
 		
 		

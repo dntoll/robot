@@ -1,4 +1,4 @@
-package daniel.robot.statistics;
+package daniel.robot;
 
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;

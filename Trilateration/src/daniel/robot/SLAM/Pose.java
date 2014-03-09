@@ -1,7 +1,6 @@
 package daniel.robot.SLAM;
 
-import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IPose;
 import daniel.robot.glWindow.model.State;
 
@@ -14,11 +13,11 @@ import daniel.robot.glWindow.model.State;
  */
 public class Pose implements IPose {
 	public ParticleFilter m_position;
-	public DistanceSensorReadings  m_sensorReading;
+	public DirectionalReadingCollection  m_sensorReading;
 	public Movement		  m_movement;
 	
 	
-	public Pose(ParticleFilter a_particles, DistanceSensorReadings a_reading, Movement a_movement) {
+	public Pose(ParticleFilter a_particles, DirectionalReadingCollection a_reading, Movement a_movement) {
 		m_position = a_particles;
 		m_sensorReading = a_reading;
 		m_movement = a_movement;
@@ -39,7 +38,7 @@ public class Pose implements IPose {
 
 
 	@Override
-	public DistanceSensorReadings getDistanceSensorReadings() {
+	public DirectionalReadingCollection getDistanceSensorReadings() {
 		return m_sensorReading;
 	}
 

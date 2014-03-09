@@ -1,10 +1,10 @@
-package daniel.robot.glWindow.model;
+package daniel.robot;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class DistanceMeasurementCollection {
+public class FloatCollection {
 	protected List<Float> values = new ArrayList<Float>();
 	
 	float min = Float.MAX_VALUE;
@@ -12,7 +12,7 @@ public class DistanceMeasurementCollection {
 	float total = 0;
 	
 	
-	public void addDistance(float distanceCM) {
+	public void addValue(float distanceCM) {
 		
 			
 		values.add(new Float(distanceCM));

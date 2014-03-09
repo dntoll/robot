@@ -1,8 +1,6 @@
-package daniel.robot.SLAM.ParticleFilter;
+package daniel.robot.SLAM;
 
-import daniel.robot.SLAM.Map;
-import daniel.robot.SLAM.MatchingError;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 
 public class Particle {
@@ -12,9 +10,9 @@ public class Particle {
 	private State m_state;
 	private Map m_map = null;
 	private Particle m_parent;
-	private DistanceSensorReadings m_reading;
+	private DirectionalReadingCollection m_reading;
 	
-	Particle(State a_state, float a_weight, DistanceSensorReadings a_reading) {
+	Particle(State a_state, float a_weight, DirectionalReadingCollection a_reading) {
 		m_state = a_state;
 		m_weight = a_weight;
 		
@@ -43,7 +41,7 @@ public class Particle {
 
 	
 	
-	public void calculateWeight(DistanceSensorReadings sense) throws Exception {
+	public void calculateWeight(DirectionalReadingCollection sense) throws Exception {
 		
 		float accumulatedWeight = 0;
 		Particle parent = m_parent;
@@ -61,7 +59,7 @@ public class Particle {
 		}
 	}
 
-	public void addMap(DistanceSensorReadings sense) {
+	public void addMap(DirectionalReadingCollection sense) {
 		if (m_map == null) {
 			if (m_parent != null) {
 				m_map = new Map(m_state, sense, m_parent.m_map);

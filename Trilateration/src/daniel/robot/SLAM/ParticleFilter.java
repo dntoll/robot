@@ -1,9 +1,8 @@
-package daniel.robot.SLAM.ParticleFilter;
+package daniel.robot.SLAM;
 
 import java.util.Random;
 
-import daniel.robot.SLAM.Movement;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.PoseCollection;
 import daniel.robot.glWindow.model.State;
 
@@ -13,7 +12,7 @@ public class ParticleFilter {
 	private static int NUMBER_OF_PARTICLES = 100;
 	private Particle[] m_particles;
 	
-	public ParticleFilter(State a_startState, DistanceSensorReadings sense) {
+	public ParticleFilter(State a_startState, DirectionalReadingCollection sense) {
 		m_particles = new Particle[NUMBER_OF_PARTICLES];
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
 			State state = new State(a_startState.getRobotPosition(), a_startState.m_heading);
@@ -23,7 +22,7 @@ public class ParticleFilter {
 		}
 	}
 	
-	public ParticleFilter(ParticleFilter a_parent, Movement move, DistanceSensorReadings sense, PoseCollection world) throws Exception {
+	public ParticleFilter(ParticleFilter a_parent, Movement move, DirectionalReadingCollection sense, PoseCollection world) throws Exception {
 		
 		m_particles = new Particle[NUMBER_OF_PARTICLES];
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
@@ -48,7 +47,7 @@ public class ParticleFilter {
 		
 	}
 	
-	private void AddMaps(DistanceSensorReadings sense) {
+	private void AddMaps(DirectionalReadingCollection sense) {
 		for (int i= 0; i < NUMBER_OF_PARTICLES; i++) {
 			m_particles[i].addMap(sense);
 		}
@@ -137,7 +136,7 @@ public class ParticleFilter {
 		}
 	}
 
-	private void setWeights(DistanceSensorReadings sense, PoseCollection world) throws Exception {
+	private void setWeights(DirectionalReadingCollection sense, PoseCollection world) throws Exception {
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
 			m_particles[i].calculateWeight(sense );
 		}

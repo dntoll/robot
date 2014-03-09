@@ -1,4 +1,4 @@
-package daniel.robot.statistics;
+package daniel.robot;
 
 import java.util.Random;
 

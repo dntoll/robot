@@ -6,12 +6,12 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import daniel.robot.glWindow.model.DirectionalReading;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 
 public class CalibrationView {
 
 	private ViewCore core;
-	private DistanceSensorReadings calibration = null;
+	private DirectionalReadingCollection calibration = null;
 	
 	public CalibrationView(ViewCore core ) {
 		
@@ -43,7 +43,7 @@ public class CalibrationView {
 		
 	}
 
-	public void setCalibrationData(DistanceSensorReadings calibration2) {
+	public void setCalibrationData(DirectionalReadingCollection calibration2) {
 		calibration = calibration2;
 	}
 

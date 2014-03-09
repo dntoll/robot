@@ -1,8 +1,8 @@
 package daniel.robot.sensors;
 
-import daniel.robot.glWindow.model.DistanceMeasurementCollection;
+import daniel.robot.FloatCollection;
 
-public abstract class SharpMeasurement extends DistanceMeasurementCollection {
+public abstract class SharpMeasurement extends FloatCollection {
 	public static final float BEAM_WIDTH = 1.0f;
 	
 	
@@ -11,12 +11,12 @@ public abstract class SharpMeasurement extends DistanceMeasurementCollection {
 	public void add(float value) {
 		float v0 = getVoltage(value);
 		float distance  = transformToCM(v0);
-		super.addDistance(distance);
+		super.addValue(distance);
 	}
 	
 	
 	public void addCM(float distance) {
-		super.addDistance(distance);
+		super.addValue(distance);
 	}
 
 	private float getVoltage(float sensorValue) {

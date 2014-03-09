@@ -19,7 +19,7 @@ public class RobotModel {
 		camera = new CameraSensor(serverAdress);
 	}
 
-	public DistanceSensorReadings getDistanceSensorReadings() {
+	public DirectionalReadingCollection getDistanceSensorReadings() {
 		return sensorTower.getDistanceSensorReadings();
 	}
 
@@ -65,11 +65,11 @@ public class RobotModel {
 		return ret;
 	}
 
-	public DistanceSensorReadings waitForFullReading(Direction compass) throws IOException, InterruptedException {
+	public DirectionalReadingCollection waitForFullReading(Direction compass) throws IOException, InterruptedException {
 		sensorTower.askForMeasurement(compass);
 		
 		
-		DistanceSensorReadings ret = null;
+		DirectionalReadingCollection ret = null;
 		do {
 			ret = sensorTower.getFullCompassReading();
 			
@@ -88,11 +88,11 @@ public class RobotModel {
 		}
 	}
 
-	public DistanceSensorReadings waitForCalibrationReading() throws InterruptedException, IOException {
+	public DirectionalReadingCollection waitForCalibrationReading() throws InterruptedException, IOException {
 		
 		sensorTower.askForCalibrationMeasurement();
 		
-		DistanceSensorReadings ret = null;
+		DirectionalReadingCollection ret = null;
 		do {
 			ret = sensorTower.getFullCompassReading();
 			

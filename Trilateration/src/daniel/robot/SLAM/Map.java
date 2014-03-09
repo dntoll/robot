@@ -5,7 +5,7 @@ import java.awt.geom.Point2D.Float;
 import java.util.ArrayList;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.SharpMeasurement;
 
@@ -19,7 +19,7 @@ public class Map {
 	//MapData freeArea;
 	
 	
-	public Map(State a_bestGuess, DistanceSensorReadings sense, Map parentMap) {
+	public Map(State a_bestGuess, DirectionalReadingCollection sense, Map parentMap) {
 		
 		if (parentMap != null) {
 			m_landmarks.copy(parentMap.m_landmarks);

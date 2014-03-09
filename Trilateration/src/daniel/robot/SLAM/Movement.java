@@ -1,6 +1,6 @@
 package daniel.robot.SLAM;
 
-import daniel.robot.statistics.Gaussian;
+import daniel.robot.Gaussian;
 
 public class Movement {
 

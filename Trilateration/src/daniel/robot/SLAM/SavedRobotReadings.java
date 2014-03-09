@@ -7,11 +7,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import daniel.robot.Direction;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IPose;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
-import daniel.robot.glWindow.model.SavedReadings;
+import daniel.robot.glWindow.model.persistence.SavedReadings;
 import daniel.robot.sensors.Compass;
 
 
@@ -23,14 +23,14 @@ public class SavedRobotReadings implements IRobotInterface {
 	private String fileName;
 	private int readingIndex = 0;
 	
-	DistanceSensorReadings lastReading;
+	DirectionalReadingCollection lastReading;
 	
 	public SavedRobotReadings(String fileName) {
 		this.fileName = fileName;
 	}
 
 	@Override
-	public DistanceSensorReadings makeReading() throws IOException,
+	public DirectionalReadingCollection makeReading() throws IOException,
 			InterruptedException {
 		lastReading = saver.load(new File(String.format("readings/%s_%d", fileName, readingIndex)));
 		readingIndex++;
@@ -55,7 +55,7 @@ public class SavedRobotReadings implements IRobotInterface {
 	}
 
 	@Override
-	public DistanceSensorReadings getDistanceSensorReadings() {
+	public DirectionalReadingCollection getDistanceSensorReadings() {
 		return lastReading;
 	}
 	
@@ -83,7 +83,7 @@ public class SavedRobotReadings implements IRobotInterface {
 	}
 
 	@Override
-	public DistanceSensorReadings makeCalibration() {
+	public DirectionalReadingCollection makeCalibration() {
 		return null;
 	}
 

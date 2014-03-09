@@ -13,7 +13,7 @@ import javax.media.opengl.glu.GLU;
 
 import daniel.robot.SLAM.SLAM;
 import daniel.robot.glWindow.adapter.AdapterCanvas;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
 import daniel.robot.glWindow.view.CalibrationView;
@@ -74,7 +74,7 @@ public class MetaController {
 				isCalibrating = false;
 			}
 			
-			DistanceSensorReadings calibration = robotInterface.makeCalibration();
+			DirectionalReadingCollection calibration = robotInterface.makeCalibration();
 			
 			calibrationView.setCalibrationData(calibration);
 			calibrationView.doDraw(gl, glu, windowSize);

@@ -6,26 +6,21 @@ import java.util.Map;
 
 import daniel.robot.Direction;
 
-public class DistanceSensorReadings {
+public class DirectionalReadingCollection {
 	HashMap<Integer, DirectionalReading> readings = new HashMap<Integer, DirectionalReading>(360);
 	
 	private DirectionalReading latest;
 
-	private Date startTime;
-
 	private Direction compass;
 	
-	public DistanceSensorReadings(Direction compass) {
-		startTime = new Date();
+	public DirectionalReadingCollection(Direction compass) {
+		new Date();
 		this.compass = compass;
 	}
 
 	public Map<Integer, DirectionalReading> getReadings() {
 		return readings;
 	}
-	
-	
-
 	
 	
 	public void addSharpReading(Direction direction, float value, boolean isLongRange) {

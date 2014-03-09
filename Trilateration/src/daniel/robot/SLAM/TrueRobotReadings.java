@@ -7,10 +7,10 @@ import java.util.Date;
 
 import daniel.NotImplementedException;
 import daniel.robot.Direction;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.RobotModel;
-import daniel.robot.glWindow.model.SavedReadings;
+import daniel.robot.glWindow.model.persistence.SavedReadings;
 import daniel.robot.sensors.Compass;
 
 /**
@@ -26,10 +26,10 @@ public class TrueRobotReadings implements IRobotInterface{
 		this.model = model;
 	}
 	
-	public DistanceSensorReadings makeReading() throws IOException,
+	public DirectionalReadingCollection makeReading() throws IOException,
 			InterruptedException {
 		Direction compassDirection = model.waitForCompassDirection();
-		DistanceSensorReadings startUpReading = model.waitForFullReading(compassDirection);
+		DirectionalReadingCollection startUpReading = model.waitForFullReading(compassDirection);
 		saver.save(startUpReading, new File(String.format("readings/%s_%d", day.toString(), readingIndex)));
 		readingIndex++;
 		return startUpReading;
@@ -53,7 +53,7 @@ public class TrueRobotReadings implements IRobotInterface{
 	}
 
 	@Override
-	public DistanceSensorReadings getDistanceSensorReadings() {
+	public DirectionalReadingCollection getDistanceSensorReadings() {
 		return model.getDistanceSensorReadings();
 	}
 
@@ -78,7 +78,7 @@ public class TrueRobotReadings implements IRobotInterface{
 	}
 
 	@Override
-	public DistanceSensorReadings makeCalibration() {
+	public DirectionalReadingCollection makeCalibration() {
 		try {
 			return model.waitForCalibrationReading();
 		} catch (InterruptedException e) {

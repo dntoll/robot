@@ -18,7 +18,7 @@ import javax.media.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.util.gl2.GLUT;
 
 import daniel.robot.Direction;
-import daniel.robot.glWindow.model.DistanceMeasurementCollection;
+import daniel.robot.FloatCollection;
 
 public class ViewCore {
 	
@@ -45,7 +45,7 @@ public class ViewCore {
 	
 		
 
-	public void drawArc(GL2 gl, float cx, float cy, float scale, DistanceMeasurementCollection distance,
+	public void drawArc(GL2 gl, float cx, float cy, float scale, FloatCollection distance,
 			Direction direction, int degrees) {
 		gl.glBegin(GL_TRIANGLE_STRIP);
 		
@@ -71,7 +71,7 @@ public class ViewCore {
 		gl.glEnd();
 	}
 	
-	public void fillArc(GL2 gl, float cx, float cy, float scale, DistanceMeasurementCollection distance,
+	public void fillArc(GL2 gl, float cx, float cy, float scale, FloatCollection distance,
 			Direction direction, int degrees) {
 		gl.glBegin(GL_TRIANGLE_STRIP);
 		//gl.glVertex2f(cx, cy);

@@ -5,7 +5,7 @@ import java.io.IOException;
 
 import daniel.robot.Direction;
 import daniel.robot.SLAM.Movement;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.Compass;
@@ -16,10 +16,10 @@ public class SimulationReadings implements IRobotInterface {
 	
 	private State robot = new State(surroundings.getStartPosition(), surroundings.getStartDirection() );
 	Compass compass = new Compass();
-	DistanceSensorReadings latest = null;
+	DirectionalReadingCollection latest = null;
 	
 	@Override
-	public DistanceSensorReadings makeReading() throws IOException,
+	public DirectionalReadingCollection makeReading() throws IOException,
 			InterruptedException {
 		latest = surroundings.makeReading(robot );
 		
@@ -75,7 +75,7 @@ public class SimulationReadings implements IRobotInterface {
 	}
 
 	@Override
-	public DistanceSensorReadings getDistanceSensorReadings() {
+	public DirectionalReadingCollection getDistanceSensorReadings() {
 		return latest;
 	}
 
@@ -101,7 +101,7 @@ public class SimulationReadings implements IRobotInterface {
 	}
 
 	@Override
-	public DistanceSensorReadings makeCalibration() {
+	public DirectionalReadingCollection makeCalibration() {
 		return null;
 	}
 

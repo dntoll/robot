@@ -1,11 +1,11 @@
 package daniel.robot.glWindow.model;
 
 import daniel.robot.SLAM.Map;
-import daniel.robot.SLAM.ParticleFilter.ParticleFilter;
+import daniel.robot.SLAM.ParticleFilter;
 
 public interface IPose {
 
-	DistanceSensorReadings getDistanceSensorReadings();
+	DirectionalReadingCollection getDistanceSensorReadings();
 
 	daniel.robot.glWindow.model.State getBestGuessPosition();
 

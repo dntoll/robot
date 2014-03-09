@@ -2,10 +2,10 @@ package daniel.robot.SLAM;
 
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
-import daniel.robot.glWindow.model.DistanceSensorReadings;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.SharpMeasurement;
-import daniel.robot.statistics.Gaussian;
+import daniel.robot.Gaussian;
 
 public class MatchingError {
 	//Error statistics compared to last measurement
@@ -37,7 +37,7 @@ public class MatchingError {
 	}
 	
 	
-	public static MatchingError getMatchingError(Map a_known, State a_newState, DistanceSensorReadings sense) {
+	public static MatchingError getMatchingError(Map a_known, State a_newState, DirectionalReadingCollection sense) {
 		MatchingError error = new MatchingError();
 		
 		error.m_directionalError = a_newState.m_heading.GetDifferenceInDegrees(sense.getCompassDirection());

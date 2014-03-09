@@ -1,4 +1,4 @@
-package daniel.robot.glWindow.model;
+package daniel.robot.glWindow.model.persistence;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -7,11 +7,14 @@ import java.io.FileWriter;
 import java.io.IOException;
 
 import daniel.robot.Direction;
+import daniel.robot.FloatCollection;
+import daniel.robot.glWindow.model.DirectionalReading;
+import daniel.robot.glWindow.model.DirectionalReadingCollection;
 
 public class SavedReadings {
 	
 	
-	public void save(DistanceSensorReadings dsr, File destination) throws IOException {
+	public void save(DirectionalReadingCollection dsr, File destination) throws IOException {
 		
 		//File readingsFile = new File("readings/" + startTime.toString() + ".csv");
 		FileWriter out = new FileWriter(destination);
@@ -30,20 +33,20 @@ public class SavedReadings {
 		save(dr.getLongDistance(), dr.getServoDirection(), csvWriter, "lo");
 	}
 
-	private void save(DistanceMeasurementCollection sonar1Distance, Direction servoDirection,	FileWriter csvWriter, String type) throws IOException {
+	private void save(FloatCollection sonar1Distance, Direction servoDirection,	FileWriter csvWriter, String type) throws IOException {
 		for (Float value : sonar1Distance.getValues()) {
 			String str = String.format("%s:%f:%f\n", type, servoDirection.getHeadingDegrees(), value.floatValue());
 			csvWriter.write(str);
 		}
 	}
 
-	public DistanceSensorReadings load(File source) throws NumberFormatException, IOException {
+	public DirectionalReadingCollection load(File source) throws NumberFormatException, IOException {
 		
 		BufferedReader in = new BufferedReader(new FileReader(source));
 		
 		float compassDirection = Float.parseFloat(in.readLine());
 		
-		DistanceSensorReadings ret = new DistanceSensorReadings(new Direction(compassDirection));
+		DirectionalReadingCollection ret = new DirectionalReadingCollection(new Direction(compassDirection));
 		
 		String line = in.readLine(); //titles
 		do {
