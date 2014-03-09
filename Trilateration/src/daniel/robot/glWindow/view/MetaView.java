@@ -9,7 +9,6 @@ import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.awt.image.BufferedImage;
 import javax.media.opengl.GL2;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
@@ -19,7 +18,11 @@ import javax.media.opengl.glu.GLU;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
-
+import daniel.robot.glWindow.view.CalibrationView;
+import daniel.robot.glWindow.view.Input;
+import daniel.robot.glWindow.view.SLAMView;
+import daniel.robot.glWindow.view.ViewCore;
+/*
 public class MetaView extends GLCanvas  
 implements GLEventListener, KeyListener {
 
@@ -148,3 +151,4 @@ implements GLEventListener, KeyListener {
 	}
 
 }
+*/

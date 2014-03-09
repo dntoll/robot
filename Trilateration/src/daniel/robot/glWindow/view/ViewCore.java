@@ -24,7 +24,7 @@ public class ViewCore {
 	
 	private GLUT glut = new GLUT();
 	
-	void setupOGL(GL2 gl) {
+	public void setupOGL(GL2 gl) {
 		  gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f); // set background (clear) color
 		  gl.glClearDepth(1.0f);      // set clear depth value to farthest
 		  gl.glEnable(GL_DEPTH_TEST); // enables depth testing

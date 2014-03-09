@@ -11,10 +11,13 @@ import com.jogamp.opengl.util.FPSAnimator;
 
 import daniel.robot.SLAM.SLAM;
 import daniel.robot.SLAM.SavedRobotReadings;
+import daniel.robot.glWindow.adapter.AdapterCanvas;
+//import daniel.robot.glWindow.adapter.AdapterCanvas;
 import daniel.robot.glWindow.controller.MetaController;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.RobotModel;
-import daniel.robot.glWindow.view.MetaView;
+import daniel.robot.glWindow.view.Input;
+import daniel.robot.glWindow.view.ViewCore;
 import daniel.robot.simulation.SimulationReadings;
 import daniel.robot.SLAM.TrueRobotReadings;
 
@@ -51,14 +54,17 @@ public class Main {
 					//model = new RobotModel("192.168.1.6");
 				
 					Dimension windowSize = new Dimension(CANVAS_WIDTH, CANVAS_HEIGHT);
-		        	MetaView canvas = new MetaView(robotInterface, slam.m_world, windowSize);
-		        	
-		        	MetaController controller = new MetaController(canvas, robotInterface, slam);
-		            
+					
+					
+					
+					Input input = new Input();
+					ViewCore core = new ViewCore();
+					MetaController controller = new MetaController(robotInterface, slam, core, windowSize, input, slam.m_world);
+					AdapterCanvas canvas = new AdapterCanvas(controller, input, core);
 		            canvas.setPreferredSize(windowSize);
 	
 		            // Create a animator that drives canvas' display() at the specified FPS. 
-		            final FPSAnimator animator = new FPSAnimator(new MVCAdapter(controller, canvas), FPS, true);
+		            final FPSAnimator animator = new FPSAnimator(canvas, FPS, true);
 		            
 		            // Create the top-level container
 		            final JFrame frame = new JFrame(); // Swing's JFrame or AWT's Frame
