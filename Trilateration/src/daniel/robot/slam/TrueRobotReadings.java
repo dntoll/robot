@@ -1,4 +1,4 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam;
 
 import java.awt.image.BufferedImage;
 import java.io.File;

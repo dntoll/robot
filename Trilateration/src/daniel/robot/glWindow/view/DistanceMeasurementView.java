@@ -7,15 +7,15 @@ import java.awt.geom.Point2D.Float;
 
 import javax.media.opengl.GL2;
 import daniel.robot.Direction;
-import daniel.robot.SLAM.Landmark;
-import daniel.robot.SLAM.Map;
-import daniel.robot.SLAM.MapData;
-import daniel.robot.SLAM.ParticleFilter;
 
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.SharpMeasurement;
+import daniel.robot.slam.Map;
+import daniel.robot.slam.ParticleFilter;
+import daniel.robot.slam.map.Landmark;
+import daniel.robot.slam.map.MapData;
 
 public class DistanceMeasurementView {
 	

@@ -1,7 +1,9 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam.map;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Float;
+
+import daniel.robot.slam.Prediction;
 
 public class Landmark {
 	public Point2D.Float pos;
@@ -17,7 +19,7 @@ public class Landmark {
 
 
 	public boolean isBetter(Prediction prediction) {
-		if (deviation < prediction.landmark.deviation ) {
+		if (deviation < prediction.getLandmark().deviation ) {
 			return true;
 		}
 		
@@ -26,7 +28,7 @@ public class Landmark {
 
 
 	public float getDifference(Landmark landmark) {
-		// TODO Auto-generated method stub
-		return (float) Math.sqrt((landmark.distanceMeasureFrom - distanceMeasureFrom)*(landmark.distanceMeasureFrom - distanceMeasureFrom));
+		return (float) Math.sqrt((landmark.distanceMeasureFrom - distanceMeasureFrom)*
+								 (landmark.distanceMeasureFrom - distanceMeasureFrom));
 	}
 }

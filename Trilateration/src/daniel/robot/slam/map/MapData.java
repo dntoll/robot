@@ -1,4 +1,4 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam.map;
 
 import java.awt.geom.Point2D.Float;
 

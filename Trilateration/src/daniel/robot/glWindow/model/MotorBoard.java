@@ -2,11 +2,11 @@ package daniel.robot.glWindow.model;
 
 import daniel.IPSerialPort;
 import daniel.robot.Direction;
-import daniel.robot.SLAM.Movement;
 import daniel.robot.sensors.Compass;
 import daniel.robot.sensors.CompassReading;
 import daniel.robot.sensors.GyroAccelerometer;
 import daniel.robot.sensors.GyroAccelerometerReading;
+import daniel.robot.slam.Movement;
 
 public class MotorBoard {
 

@@ -1,4 +1,4 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam;
 
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
@@ -67,7 +67,6 @@ public class MatchingError {
 	
 	private static float matchReading(Map a_known, State a_newState,
 			MatchingError error, SharpMeasurement measurement, Direction direction) {
-		float ret = 0;
 		float degrees = measurement.getBeamWidth();
 		Prediction expectedDistance = a_known.getPrediction(a_newState, direction, degrees);
 		if (expectedDistance != null) {

@@ -1,15 +1,14 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam;
 
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 
 public class Particle {
-	
+	private Particle m_parent;
 	private float m_weight;
-	private MatchingError m_error;
 	private State m_state;
 	private Map m_map = null;
-	private Particle m_parent;
+	
 	private DirectionalReadingCollection m_reading;
 	
 	Particle(State a_state, float a_weight, DirectionalReadingCollection a_reading) {
@@ -46,12 +45,12 @@ public class Particle {
 		float accumulatedWeight = 0;
 		Particle parent = m_parent;
 		while (parent != null && parent.m_reading != null) {
-			m_error = MatchingError.getMatchingError(m_map, parent.m_state, parent.m_reading);
-			accumulatedWeight += m_error.getWeight();
+			MatchingError error = MatchingError.getMatchingError(m_map, parent.m_state, parent.m_reading);
+			accumulatedWeight += error.getWeight();
 			parent = parent.m_parent;	
 		} 
-		m_error = MatchingError.getMatchingError(m_map, m_state, sense);
-		float lastError = m_error.getWeight();
+		MatchingError error = MatchingError.getMatchingError(m_map, m_state, sense);
+		float lastError = error.getWeight();
 		m_weight = lastError * accumulatedWeight;
 		
 		if (Float.isNaN(getWeight())) {

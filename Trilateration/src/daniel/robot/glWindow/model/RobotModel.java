@@ -4,9 +4,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import daniel.robot.Direction;
-import daniel.robot.SLAM.Movement;
 import daniel.robot.sensors.CameraSensor;
 import daniel.robot.sensors.Compass;
+import daniel.robot.slam.Movement;
 
 public class RobotModel {
 	SensorTower sensorTower;

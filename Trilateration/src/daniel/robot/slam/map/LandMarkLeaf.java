@@ -1,10 +1,12 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam.map;
 
 import java.awt.geom.Point2D.Float;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import daniel.robot.Direction;
+import daniel.robot.slam.ILandmarkNode;
+import daniel.robot.slam.Prediction;
 
 public class LandMarkLeaf implements ILandmarkNode {
 	private ArrayList<Landmark> landmarks = new ArrayList<Landmark>();

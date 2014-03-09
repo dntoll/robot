@@ -1,8 +1,10 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam.map;
 
 import java.awt.geom.Point2D.Float;
 import java.util.ArrayList;
 import daniel.robot.Direction;
+import daniel.robot.slam.ILandmarkCollection;
+import daniel.robot.slam.Prediction;
 
 
 public class LandMarkCollectionTree  extends LandMarkNode implements ILandmarkCollection {

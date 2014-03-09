@@ -1,19 +1,16 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam;
 
 import java.awt.geom.Point2D;
 import java.awt.geom.Point2D.Float;
-import java.util.ArrayList;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.SharpMeasurement;
+import daniel.robot.slam.map.LandMarkCollectionTree;
+import daniel.robot.slam.map.Landmark;
 
-/**
- * Bitmap map of robot world, starts with 0.0 in the middle
- * @author dntoll
- *
- */ 
+
 public class Map {
 	ILandmarkCollection m_landmarks = new LandMarkCollectionTree();
 	//MapData freeArea;
@@ -83,7 +80,7 @@ public class Map {
 			{
 				//replace
 				if (distanceMeasured > prediction.getDistance()) { 
-					m_landmarks.remove(prediction.landmark);
+					m_landmarks.remove(prediction.getLandmark());
 					m_landmarks.add(lm);
 					return true;
 				}
@@ -91,7 +88,7 @@ public class Map {
 					distanceMeasured, lm) ) {
 				//the new prediction should be removed if its much further away
 				//remove false landmarks
-				m_landmarks.remove(prediction.landmark);
+				m_landmarks.remove(prediction.getLandmark());
 				return true;
 			}
 			
@@ -104,7 +101,7 @@ public class Map {
 			SharpMeasurement sharp1Distance, Prediction prediction,
 			float distanceMeasured, Landmark lm) {
 		
-		boolean newLandMarkIsMuchFurtherAway = lm.getDifference(prediction.landmark) > 100;
+		boolean newLandMarkIsMuchFurtherAway = lm.getDifference(prediction.getLandmark()) > 100;
 		
 		return newLandMarkIsMuchFurtherAway && 
 				  distanceMeasured > sharp1Distance.getReliableDistance() && 
@@ -134,21 +131,6 @@ public class Map {
 		
 		Prediction ret = m_landmarks.getClosestLandMark(beamWidth, worldDirection, robotPosition);
 		return ret;
-	}
-
-
-	public boolean isFree(int x, int y) {
-		return false;//freeArea.isFree(x, y);
-	}
-
-
-	public boolean isBlocked(int x, int y) {
-		return false;//freeArea.isBlocked(x, y);
-	}
-
-
-	public MapData getMap() {
-		return null;//freeArea;
 	}
 
 

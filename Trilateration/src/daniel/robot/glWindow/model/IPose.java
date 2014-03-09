@@ -1,7 +1,7 @@
 package daniel.robot.glWindow.model;
 
-import daniel.robot.SLAM.Map;
-import daniel.robot.SLAM.ParticleFilter;
+import daniel.robot.slam.Map;
+import daniel.robot.slam.ParticleFilter;
 
 public interface IPose {
 

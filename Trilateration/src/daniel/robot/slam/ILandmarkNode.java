@@ -1,9 +1,10 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam;
 
 import java.awt.geom.Point2D.Float;
 import java.util.Collection;
 
 import daniel.robot.Direction;
+import daniel.robot.slam.map.Landmark;
 
 public interface ILandmarkNode {
 

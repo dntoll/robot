@@ -1,9 +1,11 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam.map;
 
 import java.awt.geom.Point2D;
 import java.util.ArrayList;
 
 import daniel.robot.Direction;
+import daniel.robot.slam.ILandmarkCollection;
+import daniel.robot.slam.Prediction;
 
 public class LandmarkCollection implements ILandmarkCollection {
 	private ArrayList<Landmark> landmarks = new ArrayList<Landmark>();

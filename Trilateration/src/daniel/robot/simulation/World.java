@@ -10,9 +10,9 @@ import javax.imageio.ImageIO;
 
 import daniel.robot.Bitmap;
 import daniel.robot.Direction;
-import daniel.robot.SLAM.MapData;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
+import daniel.robot.slam.map.MapData;
 
 public class World extends Bitmap {
 

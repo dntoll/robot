@@ -7,11 +7,11 @@ import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import daniel.robot.Direction;
-import daniel.robot.SLAM.Map;
 import daniel.robot.glWindow.model.IPose;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
 import daniel.robot.glWindow.model.State;
+import daniel.robot.slam.Map;
 
 public class SLAMView {
 	private CameraView cameraView = new CameraView();

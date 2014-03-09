@@ -4,11 +4,11 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import daniel.robot.Direction;
-import daniel.robot.SLAM.Movement;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.Compass;
+import daniel.robot.slam.Movement;
 
 public class SimulationReadings implements IRobotInterface {
 	

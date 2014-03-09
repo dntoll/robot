@@ -1,9 +1,17 @@
-package daniel.robot.SLAM;
+package daniel.robot.slam;
+
+import daniel.robot.slam.map.Landmark;
 
 
-class Prediction {
+public class Prediction {
+	private float minLenSquareDistance;
+	private boolean hasCalculatedDistance = false;
 	private float distance;
-
+	private Landmark landmark;
+	
+	public Landmark getLandmark() {
+		return landmark;
+	}
 
 	public Prediction(float minLenSquare, Landmark end) {
 		minLenSquareDistance = minLenSquare;
@@ -18,9 +26,7 @@ class Prediction {
 		return distance;
 		
 	}
-	private float minLenSquareDistance;
-	Landmark landmark;
-	private boolean hasCalculatedDistance = false;
+	
 	
 	
 	public boolean isCloserThan(Prediction ret2) {

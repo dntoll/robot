@@ -3,8 +3,8 @@ package daniel.robot.glWindow.model;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import daniel.robot.Direction;
-import daniel.robot.SLAM.Movement;
 import daniel.robot.sensors.Compass;
+import daniel.robot.slam.Movement;
 
 public interface IRobotInterface {
 	

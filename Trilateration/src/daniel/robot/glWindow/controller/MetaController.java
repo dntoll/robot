@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
-import daniel.robot.SLAM.SLAM;
 import daniel.robot.glWindow.adapter.AdapterCanvas;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
@@ -20,6 +19,7 @@ import daniel.robot.glWindow.view.CalibrationView;
 import daniel.robot.glWindow.view.Input;
 import daniel.robot.glWindow.view.SLAMView;
 import daniel.robot.glWindow.view.ViewCore;
+import daniel.robot.slam.SLAM;
 
 public class MetaController {
 	private boolean isCalibrating = true;

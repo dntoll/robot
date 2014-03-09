@@ -2,7 +2,7 @@ package daniel.robot.glWindow.model;
 
 import java.awt.geom.Point2D.Float;
 import daniel.robot.Direction;
-import daniel.robot.SLAM.Movement;
+import daniel.robot.slam.Movement;
 
 public class State {
 	private Float m_position = new Float(); //in degrees
