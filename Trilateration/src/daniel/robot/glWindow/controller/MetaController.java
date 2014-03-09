@@ -1,10 +1,12 @@
 package daniel.robot.glWindow.controller;
 
 import daniel.robot.SLAM.SLAM;
+import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.view.MetaView;
 
 public class MetaController {
+	
 	
 	private MetaView view;
 	
@@ -29,6 +31,10 @@ public class MetaController {
 				System.out.println("stop calibrating starting slam");
 				isCalibrating = false;
 			}
+			
+			DistanceSensorReadings calibration = robotInterface.makeCalibration();
+			
+			view.setCalibrationData(calibration);
 		} else {
 			if (view.userWantsToStartCalibrating()) {
 				slam.stop();

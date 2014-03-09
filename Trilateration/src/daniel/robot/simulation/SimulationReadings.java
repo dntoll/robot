@@ -100,4 +100,9 @@ public class SimulationReadings implements IRobotInterface {
 		return null;
 	}
 
+	@Override
+	public DistanceSensorReadings makeCalibration() {
+		return null;
+	}
+
 }

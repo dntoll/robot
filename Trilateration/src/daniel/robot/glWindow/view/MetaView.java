@@ -16,6 +16,7 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.awt.GLCanvas;
 import javax.media.opengl.glu.GLU;
 
+import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
 
@@ -137,6 +138,13 @@ implements GLEventListener, KeyListener {
     	  height = 1;   // prevent divide by zero
 	  
 	       
+	}
+
+
+
+
+	public void setCalibrationData(DistanceSensorReadings calibration2) {
+		calibration.setCalibrationData(calibration2);
 	}
 
 }

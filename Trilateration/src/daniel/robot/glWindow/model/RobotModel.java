@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import daniel.robot.Direction;
 import daniel.robot.SLAM.Movement;
+import daniel.robot.sensors.CameraSensor;
 import daniel.robot.sensors.Compass;
 
 public class RobotModel {
@@ -24,7 +25,7 @@ public class RobotModel {
 
 	public void update() {
 		try {
-			while(sensorTower.update(board.getCompassDirection())) {
+			while(sensorTower.update()) {
 				;
 			}
 		} catch (IOException e) {
@@ -85,5 +86,23 @@ public class RobotModel {
 		while(board.isStillMoving()) {
 			Thread.sleep(100);
 		}
+	}
+
+	public DistanceSensorReadings waitForCalibrationReading() throws InterruptedException, IOException {
+		
+		sensorTower.askForCalibrationMeasurement();
+		
+		DistanceSensorReadings ret = null;
+		do {
+			ret = sensorTower.getFullCompassReading();
+			
+			Thread.sleep(100);
+			
+			while(sensorTower.update()) {
+				;
+			}
+			
+		} while (ret == null);
+		return ret;
 	}
 }

@@ -12,8 +12,9 @@ import daniel.robot.glWindow.model.State;
 public class SLAM implements Runnable{
 	
 	public PoseCollection m_world;
-	IRobotInterface 		   m_robot;
+	private IRobotInterface 		   m_robot;
 	private Thread m_myThread;
+	private boolean isRunning = false;
 	
 	public SLAM(IRobotInterface a_robot){
 		m_robot = a_robot;
@@ -25,12 +26,11 @@ public class SLAM implements Runnable{
 
 	
 	public void run() {
-		//Direction compassDirection;
-		
-		
 		
 		try {
-			
+			while (doRunSlam() == false) {
+				Thread.sleep(1000);
+			}
 			DistanceSensorReadings startUpReading = m_robot.makeReading();
 			//Direction startupDirection = startUpReading.getCompassDirection();
 			
@@ -80,7 +80,7 @@ public class SLAM implements Runnable{
 	}
 
 	
-	private boolean isRunning = false;
+	
 	private synchronized boolean doRunSlam() {
 		return isRunning;
 	}

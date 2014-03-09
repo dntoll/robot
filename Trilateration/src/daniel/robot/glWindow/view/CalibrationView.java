@@ -5,9 +5,13 @@ import java.awt.Dimension;
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import daniel.robot.glWindow.model.DirectionalReading;
+import daniel.robot.glWindow.model.DistanceSensorReadings;
+
 public class CalibrationView {
 
 	private ViewCore core;
+	private DistanceSensorReadings calibration = null;
 	
 	public CalibrationView(ViewCore core ) {
 		
@@ -17,7 +21,30 @@ public class CalibrationView {
 	public void doDraw(GL2 gl, GLU glu, Dimension windowSize) {
 		// TODO Auto-generated method stub
 		gl.glLoadIdentity(); 
-		core.drawText(gl, "calibration", 30, 30);
+		
+		if (calibration == null) {
+			core.drawText(gl, "calibration no data", 30, 30);
+		} else {
+			int i = 0;
+			for (DirectionalReading value : calibration.getReadings().values() ) {
+				if (value.getShortDistance().getValues().size() > 0) { 
+					gl.glLoadIdentity(); 
+					core.drawText(gl, "" + value.getShortDistance().getMedian() + " " + value.getShortDistance().getStdev(), 30, 400 + 30 *i);
+					i++;
+				} else if (value.getLongDistance().getValues().size() > 0) { 
+					gl.glLoadIdentity(); 
+					core.drawText(gl, "" + value.getLongDistance().getMedian() + " " + value.getLongDistance().getStdev(), 500, 400 + 30 *i);
+					
+				}
+				
+			}
+		}
+		
+		
+	}
+
+	public void setCalibrationData(DistanceSensorReadings calibration2) {
+		calibration = calibration2;
 	}
 
 	

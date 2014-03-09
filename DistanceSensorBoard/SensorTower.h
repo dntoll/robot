@@ -33,7 +33,7 @@ class SensorTower {
        m_servo.attach(SERVO_PIN); 
        for(int pos = MIN_DEGREES; pos <= MAX_DEGREES; pos += 1)  // goes from 0 degrees to 180 degrees 
        { 
-          measure(pos, "sh", 40);
+          measure(pos, "sh", 40, 5);
        }
        Serial.println("DONE");
        delay(10);
@@ -44,10 +44,17 @@ class SensorTower {
        m_servo.detach(); 
     }
     
-    void measure(int pos, const String &code, int delayMilliseconds) {
+    void calibrate() {
+      m_servo.attach(SERVO_PIN); 
+      measure(MIN_DEGREES+5, "sh", 40, 50);
+      Serial.println("DONE");
+      m_servo.detach(); 
+    }
+  private:
+    void measure(int pos, const String &code, int delayMilliseconds, int numMeasurements) {
       moveServo(pos);
           
-      for (int i = 0;i< 5; i++) {
+      for (int i = 0;i< numMeasurements; i++) {
         int visiblePos = map(m_servoPos, MIN_DEGREES, MAX_DEGREES, 0, 180);
         Serial.print(code);
         Serial.print(":");   
@@ -66,8 +73,6 @@ class SensorTower {
         delay(delayMilliseconds);
       }
     }
-  private:
-    
     
     void moveServo(int pos) {
       float distanceMoved = sqrt((pos - m_servoPos)*(pos - m_servoPos));

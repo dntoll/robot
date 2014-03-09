@@ -28,4 +28,6 @@ public interface IRobotInterface {
 
 	public BufferedImage getPanoramaImage();
 
+	public DistanceSensorReadings makeCalibration();
+
 }

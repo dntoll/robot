@@ -21,7 +21,7 @@ public class SensorTower  {
 	private Direction lastDirection;
 	private boolean isComplete;
 	
-	public boolean update(Direction compass) throws IOException {
+	public boolean update() throws IOException {
 		String data = port.read();
 		
 		if (data.equals("")) {
@@ -60,13 +60,11 @@ public class SensorTower  {
 	}
 
 	public void askForMeasurement(Direction compass) throws IOException {
-		{
-			port.write("5\n");
-			timeReceived = System.currentTimeMillis();
-			
-			reading = new DistanceSensorReadings(compass);
-			isComplete = false;
-		}
+		port.write("5\n");
+		timeReceived = System.currentTimeMillis();
+		
+		reading = new DistanceSensorReadings(compass);
+		isComplete = false;
 	}
 
 	public DistanceSensorReadings getDistanceSensorReadings() {
@@ -81,6 +79,14 @@ public class SensorTower  {
 		if (isComplete == false)
 			return null;
 		return getDistanceSensorReadings();
+	}
+
+	public void askForCalibrationMeasurement() {
+		port.write("c\n");
+		timeReceived = System.currentTimeMillis();
+		
+		reading = new DistanceSensorReadings(null);
+		isComplete = false;
 	}
 	
 	

@@ -39,6 +39,7 @@ void loop() {
       case  'z': establishContact();
                  break; 
       case  '5': pRobot->sweep();
+      case  'c': pRobot->calibrate();
       default : 
               ;//  Serial.println("unknown character");      
                 

@@ -82,6 +82,11 @@ public class SavedRobotReadings implements IRobotInterface {
 		return null;
 	}
 
+	@Override
+	public DistanceSensorReadings makeCalibration() {
+		return null;
+	}
+
 
 
 	

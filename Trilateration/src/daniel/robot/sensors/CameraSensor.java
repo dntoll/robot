@@ -1,4 +1,4 @@
-package daniel.robot.glWindow.model;
+package daniel.robot.sensors;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;

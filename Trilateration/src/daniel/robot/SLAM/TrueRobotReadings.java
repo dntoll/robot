@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
+import daniel.NotImplementedException;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DistanceSensorReadings;
 import daniel.robot.glWindow.model.IRobotInterface;
@@ -74,6 +75,17 @@ public class TrueRobotReadings implements IRobotInterface{
 	@Override
 	public BufferedImage getPanoramaImage() {
 		return model.getPanoramaImage();
+	}
+
+	@Override
+	public DistanceSensorReadings makeCalibration() {
+		try {
+			return model.waitForCalibrationReading();
+		} catch (InterruptedException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
 	}
 
 	
