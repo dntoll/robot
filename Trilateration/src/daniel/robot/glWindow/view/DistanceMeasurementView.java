@@ -17,7 +17,7 @@ import daniel.robot.slam.ParticleFilter;
 import daniel.robot.slam.map.bm.BitmapMap;
 import daniel.robot.slam.map.bm.MapData;
 import daniel.robot.slam.map.lm.Landmark;
-import daniel.robot.slam.map.lm.Map;
+import daniel.robot.slam.map.lm.LandmarkMap;
 
 public class DistanceMeasurementView {
 	
@@ -106,8 +106,8 @@ public class DistanceMeasurementView {
 	public void drawMap(GL2 gl, IMap lastMap, State bestKnownPosition, ParticleFilter diveristy) {
 		gl.glLoadIdentity(); 
 		
-		if (lastMap instanceof Map) {
-			drawMapInner(gl, (Map) lastMap);
+		if (lastMap instanceof LandmarkMap) {
+			drawMapInner(gl, (LandmarkMap) lastMap);
 		}
 		if (lastMap instanceof BitmapMap) {
 			drawMapInner(gl, (BitmapMap) lastMap);
@@ -132,7 +132,7 @@ public class DistanceMeasurementView {
 		gl.glEnd();
 	}
 	
-	private void drawMapInner(GL2 gl, Map lastMap) {
+	private void drawMapInner(GL2 gl, LandmarkMap lastMap) {
 		
 		gl.glColor4f(1, 1, 1, 1.0f);
 		gl.glBegin(GL_LINES);

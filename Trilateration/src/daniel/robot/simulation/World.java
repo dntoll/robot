@@ -15,7 +15,7 @@ import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.slam.map.bm.MapData;
 
-public class World extends Bitmap<BitMapCell> {
+public class World extends Bitmap {
 
 	//int size = 250;
 	//boolean[] grid = new boolean[size * size];
@@ -38,14 +38,14 @@ public class World extends Bitmap<BitMapCell> {
 		Random rand = new Random();
 		for (int x = 0;x< size; x++) {
 			for (int y = 0; y < size; y++) {
-				grid[getIndex(x, y)] = BitMapCell.empty;
+				grid[getIndex(x, y)] = BitMapCell.getEmpty();
 				if (x == 0 || y == 0 || x == size-1 || y == size-1) {
-					grid[getIndex(x, y)] = BitMapCell.blocked;
+					grid[getIndex(x, y)] = BitMapCell.getBlocked();
 				} else {
 					if (pixels[getIndex(x,y)] == -16777216) {
-						grid[getIndex(x, y)] = BitMapCell.blocked;
+						grid[getIndex(x, y)] = BitMapCell.getBlocked();
 					} else {
-						grid[getIndex(x, y)] = BitMapCell.empty;
+						grid[getIndex(x, y)] = BitMapCell.getEmpty();
 					}
 				}
 			}

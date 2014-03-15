@@ -4,7 +4,7 @@ import java.awt.geom.Point2D.Float;
 
 
 
-public class Bitmap<T extends BitMapCell> {
+public class Bitmap {
 	
 	
 	protected int size; 
@@ -14,9 +14,9 @@ public class Bitmap<T extends BitMapCell> {
 	
 	public Bitmap(int size2) {
 		size = size2;
-		grid = T.getArray(size * size);
+		grid = new BitMapCell[size * size];
 		for (int i = 0;i< size*size; i++) {
-			grid[i] = T.getInstance();
+			grid[i] = BitMapCell.getUnknown();
 		}
 	}
 	

@@ -7,7 +7,7 @@ import daniel.robot.Bitmap;
 import daniel.robot.Direction;
 import daniel.robot.sensors.SharpMeasurement;
 
-public class MapData extends Bitmap<BitMapCell> {
+public class MapData extends Bitmap {
 	
 	
 	protected float cellSize;
@@ -22,7 +22,7 @@ public class MapData extends Bitmap<BitMapCell> {
 		
 		cellSize = freeArea.cellSize;
 		for (int i = 0;i< size*size; i++) {
-			grid[i] = freeArea.grid[i];
+			grid[i].copy(freeArea.grid[i]);
 		}
 	}
 
@@ -34,30 +34,31 @@ public class MapData extends Bitmap<BitMapCell> {
 			Direction headDirection) {
 
 		double dist = sharp1Distance.getMin();
+		float stdev = sharp1Distance.getStdev();
 
 		for (int i = 0; i< dist; i++) {
 			float x = robotPosition.x + headDirection.getX() * (float)i;
 			float y = robotPosition.y + headDirection.getY() * (float)i;
-			draw(x, y, BitMapCell.empty);
+			draw(x, y, BitMapCell.CellState.empty, stdev);
 		}
 		
 		if (sharp1Distance.okDistance()) {
 			float blockLen = sharp1Distance.getMedian();
 			float x = robotPosition.x + headDirection.getX() * blockLen;
 			float y = robotPosition.y + headDirection.getY() * blockLen;
-			draw(x, y, BitMapCell.blocked);
+			draw(x, y, BitMapCell.CellState.blocked, stdev);
 		}
 		
 	}
 	
-	private void draw(float rx, float ry, BitMapCell type) {
+	private void draw(float rx, float ry, BitMapCell.CellState type, float stdev) {
 		int x = (int) (rx / cellSize + size/2);
 		int y = (int) (ry / cellSize + size/2);
 		
 		if (x >= 0 && x < size && y >= 0 && y < size) {
-			if (grid[getIndex(x, y)] == BitMapCell.unknown) 
+			if (grid[getIndex(x, y)].isBetter(stdev)) 
 			{
-				grid[getIndex(x, y)] = type;
+				grid[getIndex(x, y)].modify(type, stdev);
 			}
 		}
 	}

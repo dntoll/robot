@@ -13,14 +13,14 @@ import daniel.robot.slam.ILandmarkCollection;
 import daniel.robot.slam.Prediction;
 
 
-public class Map extends IMap {
+public class LandmarkMap extends IMap {
 	ILandmarkCollection m_landmarks = new LandMarkCollectionTree();
 	
 	
-	public Map(State a_bestGuess, DirectionalReadingCollection sense, IMap parent) {
+	public LandmarkMap(State a_bestGuess, DirectionalReadingCollection sense, IMap parent) {
 		
 		if (parent != null) {
-			m_landmarks.copy(((Map)parent).m_landmarks);
+			m_landmarks.copy(((LandmarkMap)parent).m_landmarks);
 		}
 		
 		addLandmarks(a_bestGuess, sense);
@@ -32,7 +32,7 @@ public class Map extends IMap {
 
 	@Override
 	public IMap createChild(State bestGuess, DirectionalReadingCollection sense) {
-		return new Map( bestGuess, sense, this);
+		return new LandmarkMap( bestGuess, sense, this);
 	}
 
 

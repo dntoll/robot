@@ -4,7 +4,7 @@ import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IMap;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.slam.map.bm.BitmapMap;
-import daniel.robot.slam.map.lm.Map;
+import daniel.robot.slam.map.lm.LandmarkMap;
 
 public class Particle {
 	private Particle m_parent;
@@ -72,7 +72,7 @@ public class Particle {
 			if (m_parent != null) {
 				m_map = m_parent.m_map.createChild(m_state, sense);
 			} else {
-				//m_map = new Map(m_state, sense, null);
+				//m_map = new LandmarkMap(m_state, sense, null);
 				m_map = new BitmapMap(m_state, sense, null);
 			}
 		}
