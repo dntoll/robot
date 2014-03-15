@@ -3,6 +3,8 @@ package daniel.robot.slam;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
+import daniel.robot.glWindow.model.IMap;
+import daniel.robot.glWindow.model.IPrediction;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.SharpMeasurement;
 import daniel.robot.Gaussian;
@@ -37,7 +39,7 @@ public class MatchingError {
 	}
 	
 	
-	public static MatchingError getMatchingError(Map a_known, State a_newState, DirectionalReadingCollection sense) {
+	public static MatchingError getMatchingError(IMap a_known, State a_newState, DirectionalReadingCollection sense) {
 		MatchingError error = new MatchingError();
 		
 		error.m_directionalError = a_newState.m_heading.GetDifferenceInDegrees(sense.getCompassDirection());
@@ -65,10 +67,10 @@ public class MatchingError {
 	}
 
 	
-	private static float matchReading(Map a_known, State a_newState,
+	private static float matchReading(IMap a_known, State a_newState,
 			MatchingError error, SharpMeasurement measurement, Direction direction) {
 		float degrees = measurement.getBeamWidth();
-		Prediction expectedDistance = a_known.getPrediction(a_newState, direction, degrees);
+		IPrediction expectedDistance = a_known.getPrediction(a_newState, direction, degrees);
 		if (expectedDistance != null) {
 			float distance = measurement.getMedian();
 			

@@ -8,13 +8,14 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
+import daniel.robot.BitMapCell;
 import daniel.robot.Bitmap;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
-import daniel.robot.slam.map.MapData;
+import daniel.robot.slam.map.bm.MapData;
 
-public class World extends Bitmap {
+public class World extends Bitmap<BitMapCell> {
 
 	//int size = 250;
 	//boolean[] grid = new boolean[size * size];
@@ -37,14 +38,14 @@ public class World extends Bitmap {
 		Random rand = new Random();
 		for (int x = 0;x< size; x++) {
 			for (int y = 0; y < size; y++) {
-				grid[getIndex(x, y)] = CellContent.empty;
+				grid[getIndex(x, y)] = BitMapCell.empty;
 				if (x == 0 || y == 0 || x == size-1 || y == size-1) {
-					grid[getIndex(x, y)] = CellContent.blocked;
+					grid[getIndex(x, y)] = BitMapCell.blocked;
 				} else {
 					if (pixels[getIndex(x,y)] == -16777216) {
-						grid[getIndex(x, y)] = CellContent.blocked;
+						grid[getIndex(x, y)] = BitMapCell.blocked;
 					} else {
-						grid[getIndex(x, y)] = CellContent.empty;
+						grid[getIndex(x, y)] = BitMapCell.empty;
 					}
 				}
 			}

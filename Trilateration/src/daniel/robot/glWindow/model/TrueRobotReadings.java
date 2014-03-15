@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
-import daniel.NotImplementedException;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.persistence.SavedReadings;
 import daniel.robot.sensors.Compass;

@@ -3,7 +3,7 @@ package daniel.robot.slam;
 import java.awt.geom.Point2D;
 
 import daniel.robot.Direction;
-import daniel.robot.slam.map.Landmark;
+import daniel.robot.slam.map.lm.Landmark;
 
 public interface ILandmarkCollection {
 

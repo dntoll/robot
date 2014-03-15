@@ -1,13 +1,16 @@
 package daniel.robot.slam;
 
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
+import daniel.robot.glWindow.model.IMap;
 import daniel.robot.glWindow.model.State;
+import daniel.robot.slam.map.bm.BitmapMap;
+import daniel.robot.slam.map.lm.Map;
 
 public class Particle {
 	private Particle m_parent;
 	private float m_weight;
 	private State m_state;
-	private Map m_map = null;
+	private IMap m_map = null;
 	
 	private DirectionalReadingCollection m_reading;
 	
@@ -67,14 +70,15 @@ public class Particle {
 	private void addMap(DirectionalReadingCollection sense) {
 		if (m_map == null) {
 			if (m_parent != null) {
-				m_map = new Map(m_state, sense, m_parent.m_map);
+				m_map = m_parent.m_map.createChild(m_state, sense);
 			} else {
-				m_map = new Map(m_state, sense, null);
+				//m_map = new Map(m_state, sense, null);
+				m_map = new BitmapMap(m_state, sense, null);
 			}
 		}
 	}
 
-	public Map getMap() {
+	public IMap getMap() {
 		return m_map;
 	}
 

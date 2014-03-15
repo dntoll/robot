@@ -10,12 +10,14 @@ import daniel.robot.Direction;
 
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
+import daniel.robot.glWindow.model.IMap;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.SharpMeasurement;
-import daniel.robot.slam.Map;
 import daniel.robot.slam.ParticleFilter;
-import daniel.robot.slam.map.Landmark;
-import daniel.robot.slam.map.MapData;
+import daniel.robot.slam.map.bm.BitmapMap;
+import daniel.robot.slam.map.bm.MapData;
+import daniel.robot.slam.map.lm.Landmark;
+import daniel.robot.slam.map.lm.Map;
 
 public class DistanceMeasurementView {
 	
@@ -101,11 +103,39 @@ public class DistanceMeasurementView {
 		}
 	}
 
-	public void drawMap(GL2 gl, Map lastMap, State bestKnownPosition, ParticleFilter diveristy) {
+	public void drawMap(GL2 gl, IMap lastMap, State bestKnownPosition, ParticleFilter diveristy) {
 		gl.glLoadIdentity(); 
+		
+		if (lastMap instanceof Map) {
+			drawMapInner(gl, (Map) lastMap);
+		}
+		if (lastMap instanceof BitmapMap) {
+			drawMapInner(gl, (BitmapMap) lastMap);
+		}
+		
+		drawPosition(gl, bestKnownPosition, diveristy);
+	}
+
+	public void drawPosition(GL2 gl, State bestKnownPosition,
+			ParticleFilter diveristy) {
+		gl.glBegin(GL_TRIANGLES);
+		
+		gl.glColor4f(1.0f, 0.0f, 0.0f, 0.2f);
+		for (int i = 0; i<  diveristy.getSize(); i++) {
+			
+			drawState(gl, diveristy.getState(i));
+		}
+		
+		gl.glColor4f(0.4f, 0.4f, 1.0f, 1.0f);
+		drawState(gl, bestKnownPosition);
+		
+		gl.glEnd();
+	}
+	
+	private void drawMapInner(GL2 gl, Map lastMap) {
+		
 		gl.glColor4f(1, 1, 1, 1.0f);
 		gl.glBegin(GL_LINES);
-		
 		Landmark[] bestGuess = lastMap.getAllLandmarks();
 		for ( Landmark l : bestGuess) {
 			float cx = CenterX + l.pos.x;
@@ -119,46 +149,32 @@ public class DistanceMeasurementView {
 			
 		}
 		gl.glEnd();
-		gl.glBegin(GL_TRIANGLES);
 		
-		/*MapData map = lastMap.getMap();
 		
+		
+	}
+
+	private void drawMapInner(GL2 gl, BitmapMap lastMap) {
+		MapData map = lastMap.getMap();
+		gl.glBegin(GL_LINES);
 		gl.glColor4f(0.1f, 0.1f, 0.1f, 1.0f);
 		for (int x = 0; x < map.getSize(); x++) {
 			for (int y = 0; y < map.getSize(); y++) {
 				float vx = CenterX + (x - map.getSize()/2.0f) * map.getCellSize();
 				float vy = CenterY + (y - map.getSize()/2.0f) * map.getCellSize();
 				
-				if (lastMap.isFree(x,y)) {
+				if (map.isFree(x,y)) {
 					gl.glColor4f(0.1f, 0.1f, 0.1f, 1.0f);
 					core.drawQuad(gl, vx, vy, map.getCellSize(), map.getCellSize());
 				}
-				if (lastMap.isBlocked(x,y)) {
+				if (map.isBlocked(x,y)) {
 					gl.glColor4f(0.5f, 0.1f, 0.1f, 1.0f);
 					core.drawQuad(gl, vx, vy, map.getCellSize(), map.getCellSize());
 				}
 			}
 		}
-		*/
-		
-		
-		gl.glColor4f(1.0f, 0.0f, 0.0f, 0.2f);
-		for (int i = 0; i<  diveristy.getSize(); i++) {
-			
-			drawState(gl, diveristy.getState(i));
-		}
-		
-		gl.glColor4f(0.4f, 0.4f, 1.0f, 1.0f);
-		drawState(gl, bestKnownPosition);
-		
 		gl.glEnd();
 		
-		
-		
-		gl.glColor4f(1, 1, 1, 1.0f);
-		float x = bestKnownPosition.getRobotPosition().x;
-		float y = bestKnownPosition.getRobotPosition().y;
-		core.drawText(gl, "" + bestGuess.length+ " x: " + x + " y: " + y, 30, 580);
 	}
 	
 	void drawState(GL2 gl, State pos) {

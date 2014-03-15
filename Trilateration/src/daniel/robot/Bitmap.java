@@ -4,23 +4,19 @@ import java.awt.geom.Point2D.Float;
 
 
 
-public class Bitmap {
-	public enum CellContent {
-		empty,
-		blocked,
-		unknown
-	}
+public class Bitmap<T extends BitMapCell> {
+	
 	
 	protected int size; 
 	
 	
-	protected CellContent[] grid = new CellContent[size * size]; 
+	protected BitMapCell[] grid;// = (T[]) T.getArray(size * size);//new T[size * size]; 
 	
 	public Bitmap(int size2) {
 		size = size2;
-		grid = new CellContent[size * size]; 
+		grid = T.getArray(size * size);
 		for (int i = 0;i< size*size; i++) {
-			grid[i] = CellContent.unknown;
+			grid[i] = T.getInstance();
 		}
 	}
 	
@@ -28,10 +24,10 @@ public class Bitmap {
 		return size;
 	}
 	public boolean isFree(int x, int y) {
-		return grid[getIndex(x, y)] == CellContent.empty;
+		return grid[getIndex(x, y)].isEmpty();
 	}
 	public boolean isBlocked(int x, int y) {
-		return grid[getIndex(x, y)] == CellContent.blocked;
+		return grid[getIndex(x, y)].isBlocked();
 	}
 	
 	protected int getIndex(int x, int y) {
@@ -57,8 +53,8 @@ public class Bitmap {
 				if ( y < 0 || y > size-1) {
 					break;
 				}
-				if (grid[getIndex((int)x, (int)y)] == CellContent.blocked || 
-					grid[getIndex((int)x+1, (int)y)] == CellContent.blocked) {
+				if (grid[getIndex((int)x, (int)y)].isBlocked() || 
+					grid[getIndex((int)x+1, (int)y)].isBlocked()) {
 					if (u < minu)
 						minu = u;
 					break;
@@ -72,8 +68,8 @@ public class Bitmap {
 				if ( y < 0 || y > size-1) {
 					break;
 				}
-				if (grid[getIndex((int)x, (int)y)] == CellContent.blocked || 
-					grid[getIndex((int)x-1, (int)y)] == CellContent.blocked) {
+				if (grid[getIndex((int)x, (int)y)].isBlocked() || 
+					grid[getIndex((int)x-1, (int)y)].isBlocked()) {
 					if (u < minu)
 						minu = u;
 					break;
@@ -88,8 +84,8 @@ public class Bitmap {
 				if ( x < 0 || x > size-1) {
 					break;
 				}
-				if (grid[getIndex((int)x, (int)y)] == CellContent.blocked || 
-					grid[getIndex((int)x, (int)y+1)] == CellContent.blocked) {
+				if (grid[getIndex((int)x, (int)y)].isBlocked() || 
+					grid[getIndex((int)x, (int)y+1)].isBlocked()) {
 					if (u < minu)
 						minu = u;
 					break;
@@ -103,8 +99,8 @@ public class Bitmap {
 				if ( x < 0 || x > size-1){
 					break;
 				}
-				if (grid[getIndex((int)x, (int)y)] == CellContent.blocked || 
-					grid[getIndex((int)x, (int)y-1)] == CellContent.blocked) {
+				if (grid[getIndex((int)x, (int)y)].isBlocked() || 
+					grid[getIndex((int)x, (int)y-1)].isBlocked()) {
 					if (u < minu)
 						minu = u;
 					break;

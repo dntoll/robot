@@ -1,9 +1,10 @@
 package daniel.robot.slam;
 
-import daniel.robot.slam.map.Landmark;
+import daniel.robot.glWindow.model.IPrediction;
+import daniel.robot.slam.map.lm.Landmark;
 
 
-public class Prediction {
+public class Prediction implements IPrediction {
 	private float minLenSquareDistance;
 	private boolean hasCalculatedDistance = false;
 	private float distance;
@@ -26,9 +27,7 @@ public class Prediction {
 		return distance;
 		
 	}
-	
-	
-	
+		
 	public boolean isCloserThan(Prediction ret2) {
 		return minLenSquareDistance < ret2.minLenSquareDistance;
 	}

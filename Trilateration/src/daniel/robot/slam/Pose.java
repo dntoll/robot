@@ -1,6 +1,7 @@
 package daniel.robot.slam;
 
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
+import daniel.robot.glWindow.model.IMap;
 import daniel.robot.glWindow.model.IPose;
 import daniel.robot.glWindow.model.State;
 
@@ -32,7 +33,7 @@ public class Pose implements IPose {
 		return m_position.getBestGuess().getState();
 	}
 
-	public Map getBestMap() {
+	public IMap getBestMap() {
 		return m_position.getBestGuess().getMap();
 	}
 
