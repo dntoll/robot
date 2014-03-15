@@ -1,18 +1,13 @@
-package daniel.robot.slam;
+package daniel.robot.glWindow.model.persistence;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
-import daniel.robot.glWindow.model.IPose;
 import daniel.robot.glWindow.model.IRobotInterface;
-import daniel.robot.glWindow.model.PoseCollection;
-import daniel.robot.glWindow.model.persistence.SavedReadings;
 import daniel.robot.sensors.Compass;
+import daniel.robot.slam.Movement;
 
 
 /**

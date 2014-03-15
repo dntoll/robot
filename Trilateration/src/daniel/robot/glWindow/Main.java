@@ -14,12 +14,12 @@ import daniel.robot.glWindow.adapter.AdapterCanvas;
 import daniel.robot.glWindow.controller.MetaController;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.RobotModel;
+import daniel.robot.glWindow.model.TrueRobotReadings;
+import daniel.robot.glWindow.model.persistence.SavedRobotReadings;
 import daniel.robot.glWindow.view.Input;
 import daniel.robot.glWindow.view.ViewCore;
 import daniel.robot.simulation.SimulationReadings;
 import daniel.robot.slam.SLAM;
-import daniel.robot.slam.SavedRobotReadings;
-import daniel.robot.slam.TrueRobotReadings;
 
 public class Main {
 	protected static final int CANVAS_WIDTH = 1024;

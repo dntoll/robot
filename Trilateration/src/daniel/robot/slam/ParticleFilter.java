@@ -22,55 +22,18 @@ public class ParticleFilter {
 		}
 	}
 	
-	public ParticleFilter(ParticleFilter a_parent, Movement move, DirectionalReadingCollection sense, PoseCollection world) throws Exception {
-		
+	public ParticleFilter(ParticleFilter a_parent, Movement movement, DirectionalReadingCollection sense, PoseCollection world) throws Exception {
+		//copy parent filter
 		m_particles = new Particle[NUMBER_OF_PARTICLES];
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
-			m_particles[i] = new Particle(a_parent.m_particles[i]);
-		}
-		
-		move(move);
-		
-		AddMaps(sense);
-		
-		setWeights( sense, world);
-		
-		if (shouldResample()) {
+			m_particles[i] = new Particle(a_parent.m_particles[i], movement, sense);
 			
-			printWeights();
-			ResampleParticles();
-			
-			printWeights();
 		}
-		
-		
-		
+
+		ResampleParticles();
 	}
 	
-	private void AddMaps(DirectionalReadingCollection sense) {
-		for (int i= 0; i < NUMBER_OF_PARTICLES; i++) {
-			m_particles[i].addMap(sense);
-		}
-		
-	}
 
-	int shouldResample = 0;
-	private boolean shouldResample() {
-		//http://www.informatik.uni-freiburg.de/~stachnis/rbpf-tutorial/iros05tutorial-gridrbpf-handout.pdf
-		
-		
-		return true;
-	}
-
-	private void printWeights() {
-		float totalWeight = 0.0f;
-		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
-			System.out.print(":" + m_particles[i].getWeight() );
-			totalWeight += m_particles[i].getWeight();
-		}
-		System.out.println();
-		System.out.println("totalWeight:" + totalWeight);
-	}
 
 	public Particle getBestGuess() {
 		
@@ -117,42 +80,13 @@ public class ParticleFilter {
 	    m_particles = newParticles;
 	    
 	}
-	
 
-
-	
-	
 	private float totalWeight() {
 		float totalWeight = 0.0f;
 		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
 			totalWeight += m_particles[i].getWeight();
 		}
 		return totalWeight;
-	}
-
-	private void move(Movement a_move) {
-		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
-			m_particles[i].getState().move(a_move);
-		}
-	}
-
-	private void setWeights(DirectionalReadingCollection sense, PoseCollection world) throws Exception {
-		for (int i = 0; i< NUMBER_OF_PARTICLES; i++) {
-			m_particles[i].calculateWeight(sense );
-		}
-	}
-
-
-	
-	
-	private float max() {
-		int bestIndex = 0;
-		for (int i= 1; i < NUMBER_OF_PARTICLES; i++) {
-			if (m_particles[i].getWeight() > m_particles[bestIndex].getWeight()) {
-				bestIndex = i;
-			}
-		}
-		return m_particles[bestIndex].getWeight();
 	}
 
 	

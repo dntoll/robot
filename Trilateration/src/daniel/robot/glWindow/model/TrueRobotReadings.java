@@ -1,4 +1,4 @@
-package daniel.robot.slam;
+package daniel.robot.glWindow.model;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -7,11 +7,9 @@ import java.util.Date;
 
 import daniel.NotImplementedException;
 import daniel.robot.Direction;
-import daniel.robot.glWindow.model.DirectionalReadingCollection;
-import daniel.robot.glWindow.model.IRobotInterface;
-import daniel.robot.glWindow.model.RobotModel;
 import daniel.robot.glWindow.model.persistence.SavedReadings;
 import daniel.robot.sensors.Compass;
+import daniel.robot.slam.Movement;
 
 /**
  * This class connects to an actual robot...

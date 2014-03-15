@@ -11,23 +11,28 @@ public class Particle {
 	
 	private DirectionalReadingCollection m_reading;
 	
-	Particle(State a_state, float a_weight, DirectionalReadingCollection a_reading) {
+	Particle(State a_state, float a_weight, DirectionalReadingCollection sense) {
 		m_state = a_state;
 		m_weight = a_weight;
 		
 		m_parent = null;
-		m_reading = a_reading;
+		m_reading = sense;
 		
-		addMap(a_reading);
+		addMap(sense);
 	}
 		
-	public Particle(Particle a_parent) {
-		
+	
+
+	public Particle(Particle a_parent, Movement movement,
+			DirectionalReadingCollection sense) {
 		m_parent = a_parent;
 		m_state = new State(a_parent.getState());
 		m_weight = a_parent.getWeight();
-		m_reading = null;
+		m_reading = sense;
 		
+		m_state.move(movement);
+		addMap(sense);
+		calculateWeight(sense);
 	}
 
 	public float getWeight() {
@@ -40,7 +45,7 @@ public class Particle {
 
 	
 	
-	public void calculateWeight(DirectionalReadingCollection sense) throws Exception {
+	private void calculateWeight(DirectionalReadingCollection sense) {
 		
 		float accumulatedWeight = 0;
 		Particle parent = m_parent;
@@ -52,13 +57,14 @@ public class Particle {
 		MatchingError error = MatchingError.getMatchingError(m_map, m_state, sense);
 		float lastError = error.getWeight();
 		m_weight = lastError * accumulatedWeight;
+		//m_weight = lastError;
 		
 		if (Float.isNaN(getWeight())) {
 			m_weight = 0.0f;
 		}
 	}
 
-	public void addMap(DirectionalReadingCollection sense) {
+	private void addMap(DirectionalReadingCollection sense) {
 		if (m_map == null) {
 			if (m_parent != null) {
 				m_map = new Map(m_state, sense, m_parent.m_map);
@@ -66,16 +72,15 @@ public class Particle {
 				m_map = new Map(m_state, sense, null);
 			}
 		}
-		m_reading = sense;
 	}
 
 	public Map getMap() {
 		return m_map;
 	}
 
-	public Particle getParent() {
+	/*public Particle getParent() {
 		return m_parent;
 	}
-
+*/
 	
 }
