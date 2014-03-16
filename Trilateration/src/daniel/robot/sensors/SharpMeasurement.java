@@ -4,27 +4,13 @@ import daniel.robot.FloatCollection;
 
 public abstract class SharpMeasurement extends FloatCollection {
 	public static final float BEAM_WIDTH = 1.0f;
-	float voltage = 4.85f;
-	
-	
-
-	/*public void add(float reading) {
-		float v0 = getVoltage(reading);
-		float distance  = transformToCM(v0);
-		super.addValue(distance);
-	}*/
+	float voltage = 4.95f;
 	
 	protected float convert(float reading) {
 		float v0 = getVoltage(reading);
 		float distance  = transformToCM(v0);
 		return distance;
 	}
-	
-	
-	/*public void addCM(float distance) {
-		super.addValue(distance);
-	}*/
-
 	
 	private float getVoltage(float sensorValue) {
 		return sensorValue * (voltage / 1023.0f);
@@ -36,9 +22,7 @@ public abstract class SharpMeasurement extends FloatCollection {
 
 	protected abstract float getMaxDistance();
 	public abstract float getReliableDistance();
-	public String toString() {
-		return super.toString();
-	}
+
 	protected abstract float transformToCM(float a_voltage);
 	  
 	protected float transformToCM(float a_voltage, float voltages[], float distance[]) {
@@ -69,8 +53,7 @@ public abstract class SharpMeasurement extends FloatCollection {
 		return reading;
 	}
 	
-	private 
-	float floatMap(float sourceValue, float sourceMin, float sourceMax, float destMin, float destMax) {
+	private float floatMap(float sourceValue, float sourceMin, float sourceMax, float destMin, float destMax) {
 		float sourceRange = sourceMax - sourceMin;
 		float percent = ((sourceValue - sourceMin ) / sourceRange);
 		float destRange = destMax - destMin;

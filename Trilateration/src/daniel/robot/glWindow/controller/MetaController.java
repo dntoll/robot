@@ -16,6 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
 import daniel.robot.FloatCollection;
+import daniel.robot.glWindow.model.CalibrationModel;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
@@ -38,6 +39,7 @@ public class MetaController {
 	private AtomicReference<Integer> selectedSensor = new AtomicReference<Integer>();
 	FloatCollection[] calibration;
 	Collection<DirectionalReading> readings;
+	private CalibrationModel calibrationModel = new CalibrationModel();
 	
 
 	public MetaController(IRobotInterface robotInterface, SLAM slam, ViewCore core, Dimension windowSize, Input input, PoseCollection world) {
@@ -128,6 +130,7 @@ public class MetaController {
 		} else if(userStartsMeasurement()) {
 			calibration = robotInterface.makeCalibration();
 			readings = robotInterface.getDistanceSensorReadings().getReadings().values();
+			calibrationModel.addValues(selectedSensor.get(), calibrationDistance.get(), calibration[selectedSensor.get()]);
 		}
 		
 		calibrationView.doDraw(gl, glu, windowSize, calibrationDistance.get(), calibration, readings);
