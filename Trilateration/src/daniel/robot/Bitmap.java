@@ -37,7 +37,7 @@ public class Bitmap {
 		return y * size + x;
 	}
 	
-	protected float getDistance(Float from, Direction worldDirection) {
+	protected float getDistance(Float from, Direction worldDirection) throws Exception {
 		
 		float xdir = worldDirection.getX();
 		float ydir = worldDirection.getY();
@@ -108,8 +108,8 @@ public class Bitmap {
 			}
 		}
 		
-		if (minu > size)
-			minu = size;
+		if (minu >= java.lang.Float.MAX_VALUE)
+			throw new Exception("no obstacle found");
 		
 		return minu;
 		

@@ -13,6 +13,8 @@ import daniel.robot.Bitmap;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
+import daniel.robot.sensors.LongRangeSharp;
+import daniel.robot.sensors.ShortRangeSharp;
 import daniel.robot.slam.map.bm.MapData;
 
 public class World extends Bitmap {
@@ -69,21 +71,31 @@ public class World extends Bitmap {
 		
 		for (int servoDegrees = 0; servoDegrees< 360; servoDegrees++) {
 			Direction worldDirection = robot.m_heading.getHeadDirection(new Direction(servoDegrees));
-			float distance = getDistance(robot.getRobotPosition(), worldDirection);
-			for (int i  =0; i< 5; i++) {
-				//if (distance < 100) {
-				ret.addSharpDistance(new Direction(servoDegrees + getAngleRandomness(rand) ), getShortDistanceRandomness(distance, rand), false);
-				ret.addSharpDistance(new Direction(servoDegrees + getAngleRandomness(rand) ), getLongDistanceRandomness(distance, rand), true);
+			try {
+				float distance = getDistance(robot.getRobotPosition(), worldDirection);
+			
 				
+				ShortRangeSharp srs = new ShortRangeSharp();
+				LongRangeSharp lrs = new LongRangeSharp();
+				for (int i  =0; i< 5; i++) {
+					//if (distance < 100) {
+					ret.addSharpReading(new Direction(servoDegrees + getAngleRandomness(rand) ), srs.fromDistance(getShortDistanceRandomness(distance, rand)), false);
+					ret.addSharpReading(new Direction(servoDegrees + getAngleRandomness(rand) ), lrs.fromDistance(getLongDistanceRandomness(distance, rand)), true);
+					
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		
 		return ret;
 	}
 
+	
+	float multiplier = 1.0f;
 	private float getShortDistanceRandomness(float distance, Random rand) {
-		float multiplier = 0.70f;
-		float randomness = 0;
+		
+		float randomness = 0.0f;
 		if (distance < 100) {
 			randomness = 5.0f;
 		} else if (distance < 150) {
@@ -91,18 +103,18 @@ public class World extends Bitmap {
 		} else if (distance < 200) {
 			randomness = 30.0f;
 		} else if (distance < 300) {
-			randomness = 150.0f;
-		} else {
+			randomness = 100.0f;
+		} /*else {
 			randomness = 150.0f;
 			return 300 + rand.nextFloat() * randomness - randomness/2.0f;
-		}
+		}*/
 		randomness *= multiplier; 
 		return distance + rand.nextFloat() * randomness - randomness/2.0f;
 	}
 	
 	private float getLongDistanceRandomness(float distance, Random rand) {
-		float multiplier = 1.70f;
-		float randomness = 0;
+		float randomness = 0.0f;
+		
 		if (distance < 100) {
 			return 300 + rand.nextFloat()*randomness - randomness /2.0f;
 		} else if (distance < 150) {
@@ -111,16 +123,17 @@ public class World extends Bitmap {
 			randomness = 10.0f;
 		} else if (distance < 500) {
 			randomness = 30.0f;
-		} else {
+		} /*else {
 			randomness = 150.0f;
 			return 500 + rand.nextFloat() * randomness - randomness/2.0f;
-		}
+		}*/
 		randomness *= multiplier; 
 		return distance + rand.nextFloat() * randomness - randomness/2.0f;
 	}
 
-	private float getAngleRandomness(Random rand) {
-		return rand.nextFloat() * 2.0f-1.0f;
+	
+	private int getAngleRandomness(Random rand) {
+		return (int) (multiplier * (rand.nextInt(3) -1));
 	}
 
 	

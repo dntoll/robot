@@ -4,25 +4,34 @@ import daniel.robot.FloatCollection;
 
 public abstract class SharpMeasurement extends FloatCollection {
 	public static final float BEAM_WIDTH = 1.0f;
-	
+	float voltage = 4.85f;
 	
 	
 
-	public void add(float value) {
-		float v0 = getVoltage(value);
+	/*public void add(float reading) {
+		float v0 = getVoltage(reading);
 		float distance  = transformToCM(v0);
 		super.addValue(distance);
+	}*/
+	
+	protected float convert(float reading) {
+		float v0 = getVoltage(reading);
+		float distance  = transformToCM(v0);
+		return distance;
 	}
 	
 	
-	public void addCM(float distance) {
+	/*public void addCM(float distance) {
 		super.addValue(distance);
-	}
+	}*/
 
+	
 	private float getVoltage(float sensorValue) {
-		float voltage = 4.85f;
-		
 		return sensorValue * (voltage / 1023.0f);
+	}
+	
+	private float getSensorValue(float mv) {
+		return mv / (voltage / 1023.0f);
 	}
 
 	protected abstract float getMaxDistance();
@@ -43,6 +52,23 @@ public abstract class SharpMeasurement extends FloatCollection {
   
 		return dist;
 	}
+	
+	/**
+	 * Creates reading value from distance
+	 */
+	protected float fromDistance(float distanceCM, float voltages[], float distance[]) {
+		float reading = 0.0f;
+		 
+		for (int i = 0; i < distance.length - 1; i++) {
+			if (distanceCM > distance[i+1]) {
+			     float voltage= floatMap(distanceCM, distance[i], distance[i+1], voltages[i], voltages[i+1]);
+			     return getSensorValue(voltage);
+			}
+		}
+  
+		return reading;
+	}
+	
 	private 
 	float floatMap(float sourceValue, float sourceMin, float sourceMax, float destMin, float destMax) {
 		float sourceRange = sourceMax - sourceMin;

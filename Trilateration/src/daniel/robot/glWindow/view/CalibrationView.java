@@ -18,7 +18,7 @@ public class CalibrationView {
 		this.core = core;
 	}
 
-	public void doDraw(GL2 gl, GLU glu, Dimension windowSize) {
+	public void doDraw(GL2 gl, GLU glu, Dimension windowSize, int calibrationDistance, int sensor) {
 		// TODO Auto-generated method stub
 		gl.glLoadIdentity(); 
 		
@@ -29,15 +29,18 @@ public class CalibrationView {
 			for (DirectionalReading value : calibration.getReadings().values() ) {
 				if (value.getShortDistance().getValues().size() > 0) { 
 					gl.glLoadIdentity(); 
-					core.drawText(gl, "" + value.getShortDistance().getMedian() + " " + value.getShortDistance().getStdev(), 30, 400 + 30 *i);
+					
+					core.drawText(gl, "" +value.getServoDirection().getHeadingDegrees() + ":" + value.getShortDistance().getMedian() + " " + value.getShortDistance().getStdev(), 30, 400 + 30 *i);
 					i++;
 				} else if (value.getLongDistance().getValues().size() > 0) { 
 					gl.glLoadIdentity(); 
-					core.drawText(gl, "" + value.getLongDistance().getMedian() + " " + value.getLongDistance().getStdev(), 500, 400 + 30 *i);
+					core.drawText(gl, "" +value.getServoDirection().getHeadingDegrees() + ":" + value.getLongDistance().getMedian() + " " + value.getLongDistance().getStdev(), 500, 400 + 30 *i);
 					
 				}
 				
 			}
+			core.drawText(gl, "Calibration Distance : " +calibrationDistance, 500, 400 + 30 *i);
+			
 		}
 		
 		

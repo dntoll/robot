@@ -10,6 +10,9 @@ public class SensorTower  {
 	
 	DirectionalReadingCollection reading = null;
 	IPSerialPort port;
+	Long timeReceived = (long) 0;
+	private Direction lastDirection;
+	private boolean isComplete;
 	
 	public SensorTower(String serverAdress) throws Exception {
 		port = new IPSerialPort(serverAdress, 6789);
@@ -17,9 +20,7 @@ public class SensorTower  {
 		Thread.sleep(2000);
 		timeReceived = System.currentTimeMillis();
 	}
-	Long timeReceived = (long) 0;
-	private Direction lastDirection;
-	private boolean isComplete;
+	
 	
 	public boolean update() throws IOException {
 		String data = port.read();
@@ -38,8 +39,8 @@ public class SensorTower  {
 			//System.out.println(data);
 			if (parts.length == 6 && reading != null) {
 				String code= parts[0];
-				int direction = Integer.parseInt(parts[1]);
-				Direction front = new Direction(360-(direction+180));
+				int direction = Integer.parseInt(parts[1]);//5
+				Direction front = new Direction(360-(direction+180));//175
 				Direction left = new Direction(360-(direction+180+90));
 				Direction back = new Direction(360-(direction));
 				Direction right = new Direction(360-(direction+90));
@@ -75,7 +76,7 @@ public class SensorTower  {
 		return lastDirection;
 	}
 
-	public DirectionalReadingCollection getFullCompassReading() {
+	public DirectionalReadingCollection getFullDistanceReading() {
 		if (isComplete == false)
 			return null;
 		return getDistanceSensorReadings();

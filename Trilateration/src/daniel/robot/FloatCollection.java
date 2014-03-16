@@ -11,6 +11,9 @@ public class FloatCollection {
 	float max = Float.MIN_VALUE;
 	float total = 0;
 	
+	protected float convert(float input) {
+		return input;
+	}
 	
 	public void addValue(float distanceCM) {
 		
@@ -25,16 +28,16 @@ public class FloatCollection {
 	}
 	
 	public float getMin() {
-		return min;
+		return convert(min);
 	}
 	public float getMax() {
-		return max;
+		return convert(max);
 	}
 
 	public float getMean() {
 		
 		if (values.size() > 0) {
-			return total / values.size();
+			return convert(total / values.size());
 		} else
 			return 0;
 	}
@@ -43,9 +46,9 @@ public class FloatCollection {
 		
 		if (values.size() > 0) {
 			if (values.size() % 2 == 1)
-				return values.get(values.size() / 2);
+				return convert(values.get(values.size() / 2));
 			else 
-				return (values.get(values.size() / 2) + values.get(values.size() / 2-1))/ 2.0f;
+				return convert((values.get(values.size() / 2) + values.get(values.size() / 2-1))/ 2.0f);
 		} else {
 			return 0;
 		}
@@ -53,7 +56,7 @@ public class FloatCollection {
 
 	public float getQ1() {
 		if (values.size() > 0) {
-			return values.get(values.size() / 4)-1.0f;
+			return convert(values.get(values.size() / 4)-1.0f);
 		} else {
 			return 0;
 		}
@@ -61,7 +64,7 @@ public class FloatCollection {
 	
 	public float getQ3() {
 		if (values.size() > 0) {
-			return values.get(3 * values.size() / 4);
+			return convert(values.get(3 * values.size() / 4));
 		} else {
 			return 0;
 		}
@@ -74,7 +77,7 @@ public class FloatCollection {
 		float mean = getMean();
 		float totalsq = 0;
 		for(Float value : values) {
-			float diff = value.floatValue() - mean;
+			float diff = convert(value.floatValue()) - mean;
 			float sq = diff * diff;
 			
 			totalsq += sq;
@@ -84,7 +87,7 @@ public class FloatCollection {
 	}
 	
 	public String toString() {
-		return String.format("%03.0f %03.0f %03.0f %03.0f %03.0f", min, getMedian(), getMean(), max, getStdev());
+		return String.format("%03.0f %03.0f %03.0f %03.0f %03.0f", min, convert(getMedian()), convert(getMean()), convert(max), getStdev());
 	}
 
 	public boolean toLarge() {

@@ -23,5 +23,8 @@ public class ShortRangeSharp extends SharpMeasurement {
 	protected float transformToCM(float a_voltage) {
 		return super.transformToCM(a_voltage, voltages, distance);
 	}
+	public float fromDistance(float a_voltage) {
+		return super.fromDistance(a_voltage, voltages, distance);
+	}
 
 }

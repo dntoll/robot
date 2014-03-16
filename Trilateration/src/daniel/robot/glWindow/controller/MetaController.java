@@ -1,17 +1,19 @@
 package daniel.robot.glWindow.controller;
 
-import static java.awt.event.KeyEvent.VK_C;
+import static java.awt.event.KeyEvent.*;
 import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 
 import java.awt.Dimension;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
+import javax.swing.JOptionPane;
+import javax.swing.SwingUtilities;
 
-import daniel.robot.glWindow.adapter.AdapterCanvas;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
@@ -29,13 +31,18 @@ public class MetaController {
 	private CalibrationView calibrationView;
 	private Input input;
 	private Dimension windowSize;
+	private AtomicReference<Integer> calibrationDistance = new AtomicReference<Integer>();
+	private AtomicReference<Integer> selectedSensor = new AtomicReference<Integer>();
+	
+	
 
 	public MetaController(IRobotInterface robotInterface, SLAM slam, ViewCore core, Dimension windowSize, Input input, PoseCollection world) {
 		this.robotInterface = robotInterface;
 		this.slam = slam;
 		this.windowSize = windowSize;
 		this.input = input;
-		
+		calibrationDistance.set(0);
+		selectedSensor.set(0);
 		
 		slamView = new SLAMView(robotInterface, world, core);
 		calibrationView = new CalibrationView(core);
@@ -47,6 +54,13 @@ public class MetaController {
 	
 	public boolean userWantsToStartCalibrating() {
 		return input.wasClicked(VK_C);
+	}
+	private boolean userEntersCalibrationDistance() {
+		return input.wasClicked(VK_D);
+	}
+	
+	private boolean userStartsMeasurement() {
+		return input.wasClicked(VK_M);
 	}
 
 	public void update(GL2 gl) {
@@ -74,10 +88,7 @@ public class MetaController {
 				isCalibrating = false;
 			}
 			
-			DirectionalReadingCollection calibration = robotInterface.makeCalibration();
-			
-			calibrationView.setCalibrationData(calibration);
-			calibrationView.doDraw(gl, glu, windowSize);
+			doCalibration(gl, glu);
 		} else {
 			if (userWantsToStartCalibrating()) {
 				slam.stop();
@@ -91,4 +102,40 @@ public class MetaController {
 		
 		
 	}
+
+	public void doCalibration(GL2 gl, GLU glu) {
+		
+		
+		
+		
+		
+		if (userEntersCalibrationDistance()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					String input = JOptionPane.showInputDialog(null, "Enter a distance:");
+					
+					calibrationDistance.set(Integer.parseInt(input));
+				}
+			});
+		} else if (userEntersCalibrationDistance()) {
+			SwingUtilities.invokeLater(new Runnable() {
+				public void run() {
+					String input = JOptionPane.showInputDialog(null, "select sensor : ");
+					
+					selectedSensor.set(Integer.parseInt(input));
+				}
+			});
+		}else if(userStartsMeasurement()) {
+			DirectionalReadingCollection calibration = robotInterface.makeCalibration();
+			calibrationView.setCalibrationData(calibration);
+			
+			
+		}
+		
+		calibrationView.doDraw(gl, glu, windowSize, calibrationDistance.get(), selectedSensor.get());
+	}
+
+	
+
+	
 }

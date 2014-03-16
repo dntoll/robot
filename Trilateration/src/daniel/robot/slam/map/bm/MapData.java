@@ -63,7 +63,7 @@ public class MapData extends Bitmap {
 		}
 	}
 	
-	public float  getDistance(Float from, Direction worldDirection) {
+	public float  getDistance(Float from, Direction worldDirection) throws Exception {
 		
 		Float scaled = new Float(from.x/cellSize + size/2, from.y/cellSize + size/2);
 		return super.getDistance(scaled, worldDirection);

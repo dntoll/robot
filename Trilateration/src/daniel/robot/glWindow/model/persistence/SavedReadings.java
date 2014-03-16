@@ -56,12 +56,12 @@ public class SavedReadings {
 			
 			String type = parts[0];
 			Direction servoDirection = new Direction(Float.parseFloat(parts[1]));
-			float distance = Float.parseFloat(parts[2]);
+			float reading = Float.parseFloat(parts[2]);
 			
 			if (type.equals("sh"))
-				ret.addSharpDistance(servoDirection, distance, false);
+				ret.addSharpReading(servoDirection, reading, false);
 			if (type.equals("lo"))
-				ret.addSharpDistance(servoDirection, distance, true);
+				ret.addSharpReading(servoDirection, reading, true);
 			
 			
 			line = in.readLine(); //titles

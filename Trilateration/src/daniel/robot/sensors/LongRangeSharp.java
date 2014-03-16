@@ -50,4 +50,8 @@ private static final float distance[]= {  600,
 		return super.transformToCM(a_voltage, voltages, distance);
 	}
 	
+	public float fromDistance(float a_voltage) {
+		return super.fromDistance(a_voltage, voltages, distance);
+	}
+	
 }

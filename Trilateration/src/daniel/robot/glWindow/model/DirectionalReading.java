@@ -31,19 +31,11 @@ public class DirectionalReading {
 
 	public void addSharpReading(float reading, boolean isLongRange) {
 		if (isLongRange) {
-			this.longRange.add(reading);	
+			this.longRange.addValue(reading);	
 		} else {
-			this.shortRange.add(reading);
+			this.shortRange.addValue(reading);
 		}
 		
-	}
-	
-	public void addSharpCM(float distance, boolean isLongRange) {
-		if (isLongRange) {
-			this.longRange.addCM(distance);
-		} else {
-			this.shortRange.addCM(distance);
-		}
 	}
 	
 	public String getSharpString() {

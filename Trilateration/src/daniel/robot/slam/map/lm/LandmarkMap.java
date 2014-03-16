@@ -41,7 +41,8 @@ public class LandmarkMap extends IMap {
 		float distanceMeasured= sharp1Distance.getMedian();
 		//add closer landmark
 		if (distanceMeasured < sharp1Distance.getReliableDistance() && 
-			distanceMeasured < ((Prediction)prediction).getDistance() - 15 && lm.deviation < 10) {
+			distanceMeasured < ((Prediction)prediction).getDistance() - 15 && 
+			lm.deviation < 10) {
 			m_landmarks.add(lm);
 			return true;
 			//freeArea.draw(sharp1Distance, lm.pos, a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
@@ -51,7 +52,8 @@ public class LandmarkMap extends IMap {
 			
 			
 			//Improvements
-			if (lm.isBetter((Prediction)prediction) && distanceMeasured < sharp1Distance.getReliableDistance()) 
+			if (lm.isBetter((Prediction)prediction) && 
+					distanceMeasured < sharp1Distance.getReliableDistance()) 
 			{
 				//replace
 				if (distanceMeasured > ((Prediction)prediction).getDistance()) { 

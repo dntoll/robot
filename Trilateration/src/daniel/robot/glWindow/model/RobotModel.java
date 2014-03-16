@@ -71,7 +71,7 @@ public class RobotModel {
 		
 		DirectionalReadingCollection ret = null;
 		do {
-			ret = sensorTower.getFullCompassReading();
+			ret = sensorTower.getFullDistanceReading();
 			
 			Thread.sleep(100);
 			
@@ -94,7 +94,7 @@ public class RobotModel {
 		
 		DirectionalReadingCollection ret = null;
 		do {
-			ret = sensorTower.getFullCompassReading();
+			ret = sensorTower.getFullDistanceReading();
 			
 			Thread.sleep(100);
 			

@@ -30,11 +30,6 @@ public class DirectionalReadingCollection {
 		latest = dr;
 	}
 	
-	public void addSharpDistance(Direction direction, float distance, boolean isLongRange) {
-		DirectionalReading dr = getReading(direction);
-		dr.addSharpCM(distance, isLongRange);
-	}
-	
 	private DirectionalReading getReading(Direction direction) {
 		Integer key = new Integer((int)direction.getHeadingDegrees());
 		DirectionalReading reading = readings.get(key);

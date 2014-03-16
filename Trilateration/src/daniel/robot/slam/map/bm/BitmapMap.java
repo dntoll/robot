@@ -8,6 +8,9 @@ import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IMap;
 import daniel.robot.glWindow.model.IPrediction;
 import daniel.robot.glWindow.model.State;
+import daniel.robot.sensors.SharpMeasurement;
+import daniel.robot.slam.Prediction;
+import daniel.robot.slam.map.lm.Landmark;
 
 public class BitmapMap extends IMap {
 
@@ -32,8 +35,14 @@ public class BitmapMap extends IMap {
 
 		Point2D.Float robotPosition = state.getRobotPosition();
 		
-		float distance = freeArea.getDistance(robotPosition, worldDirection);
-		return new SimplePrediction(distance);
+		float distance;
+		try {
+			distance = freeArea.getDistance(robotPosition, worldDirection);
+			return new SimplePrediction(distance);
+		} catch (Exception e) {
+			return null;
+		}
+		
 	}
 
 	@Override
@@ -45,6 +54,8 @@ public class BitmapMap extends IMap {
 	protected void addWithPrediction(State a_bestGuess, DirectionalReading distanceReading, IPrediction prediction) {
 		freeArea.draw(distanceReading.getBestDistance(), a_bestGuess.getRobotPosition(), a_bestGuess.m_heading.getHeadDirection(distanceReading.getServoDirection()));
 	}
+	
+	
 
 	@Override
 	protected void addWithoutPrediction(State a_bestGuess, DirectionalReading distanceReading) {
