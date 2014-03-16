@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import daniel.robot.Direction;
+import daniel.robot.FloatCollection;
 import daniel.robot.sensors.CameraSensor;
 import daniel.robot.sensors.Compass;
 import daniel.robot.slam.Movement;
@@ -88,13 +89,13 @@ public class RobotModel {
 		}
 	}
 
-	public DirectionalReadingCollection waitForCalibrationReading() throws InterruptedException, IOException {
+	public FloatCollection[] waitForCalibrationReading() throws InterruptedException, IOException {
 		
 		sensorTower.askForCalibrationMeasurement();
 		
-		DirectionalReadingCollection ret = null;
+		FloatCollection[] ret = null;
 		do {
-			ret = sensorTower.getFullDistanceReading();
+			ret = sensorTower.getCalibrationReading();
 			
 			Thread.sleep(100);
 			

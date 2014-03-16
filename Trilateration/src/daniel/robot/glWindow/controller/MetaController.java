@@ -7,6 +7,7 @@ import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
 
 import java.awt.Dimension;
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.media.opengl.GL2;
@@ -14,6 +15,8 @@ import javax.media.opengl.glu.GLU;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 
+import daniel.robot.FloatCollection;
+import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
@@ -33,7 +36,8 @@ public class MetaController {
 	private Dimension windowSize;
 	private AtomicReference<Integer> calibrationDistance = new AtomicReference<Integer>();
 	private AtomicReference<Integer> selectedSensor = new AtomicReference<Integer>();
-	
+	FloatCollection[] calibration;
+	Collection<DirectionalReading> readings;
 	
 
 	public MetaController(IRobotInterface robotInterface, SLAM slam, ViewCore core, Dimension windowSize, Input input, PoseCollection world) {
@@ -105,10 +109,6 @@ public class MetaController {
 
 	public void doCalibration(GL2 gl, GLU glu) {
 		
-		
-		
-		
-		
 		if (userEntersCalibrationDistance()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
@@ -125,14 +125,12 @@ public class MetaController {
 					selectedSensor.set(Integer.parseInt(input));
 				}
 			});
-		}else if(userStartsMeasurement()) {
-			DirectionalReadingCollection calibration = robotInterface.makeCalibration();
-			calibrationView.setCalibrationData(calibration);
-			
-			
+		} else if(userStartsMeasurement()) {
+			calibration = robotInterface.makeCalibration();
+			readings = robotInterface.getDistanceSensorReadings().getReadings().values();
 		}
 		
-		calibrationView.doDraw(gl, glu, windowSize, calibrationDistance.get(), selectedSensor.get());
+		calibrationView.doDraw(gl, glu, windowSize, calibrationDistance.get(), calibration, readings);
 	}
 
 	

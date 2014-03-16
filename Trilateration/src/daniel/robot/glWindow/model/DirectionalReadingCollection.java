@@ -9,8 +9,10 @@ import daniel.robot.Direction;
 public class DirectionalReadingCollection {
 	HashMap<Integer, DirectionalReading> readings = new HashMap<Integer, DirectionalReading>(360);
 	
+	
+	
+	
 	private DirectionalReading latest;
-
 	private Direction compass;
 	
 	public DirectionalReadingCollection(Direction compass) {

@@ -4,6 +4,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import daniel.robot.Direction;
+import daniel.robot.FloatCollection;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.State;
@@ -101,7 +102,7 @@ public class SimulationReadings implements IRobotInterface {
 	}
 
 	@Override
-	public DirectionalReadingCollection makeCalibration() {
+	public FloatCollection[] makeCalibration() {
 		return null;
 	}
 

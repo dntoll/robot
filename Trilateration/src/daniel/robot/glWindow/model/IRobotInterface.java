@@ -3,6 +3,7 @@ package daniel.robot.glWindow.model;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import daniel.robot.Direction;
+import daniel.robot.FloatCollection;
 import daniel.robot.sensors.Compass;
 import daniel.robot.slam.Movement;
 
@@ -26,6 +27,6 @@ public interface IRobotInterface {
 
 	public BufferedImage getPanoramaImage();
 
-	public DirectionalReadingCollection makeCalibration();
+	public FloatCollection[] makeCalibration();
 
 }

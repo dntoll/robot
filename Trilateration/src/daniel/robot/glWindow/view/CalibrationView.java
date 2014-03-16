@@ -1,24 +1,26 @@
 package daniel.robot.glWindow.view;
 
 import java.awt.Dimension;
+import java.util.Collection;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
+import daniel.robot.FloatCollection;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 
 public class CalibrationView {
 
 	private ViewCore core;
-	private DirectionalReadingCollection calibration = null;
+	
 	
 	public CalibrationView(ViewCore core ) {
 		
 		this.core = core;
 	}
 
-	public void doDraw(GL2 gl, GLU glu, Dimension windowSize, int calibrationDistance, int sensor) {
+	public void doDraw(GL2 gl, GLU glu, Dimension windowSize, int calibrationDistance, FloatCollection[] calibration, Collection<DirectionalReading> readings) {
 		// TODO Auto-generated method stub
 		gl.glLoadIdentity(); 
 		
@@ -26,31 +28,31 @@ public class CalibrationView {
 			core.drawText(gl, "calibration no data", 30, 30);
 		} else {
 			int i = 0;
-			for (DirectionalReading value : calibration.getReadings().values() ) {
-				if (value.getShortDistance().getValues().size() > 0) { 
-					gl.glLoadIdentity(); 
-					
-					core.drawText(gl, "" +value.getServoDirection().getHeadingDegrees() + ":" + value.getShortDistance().getMedian() + " " + value.getShortDistance().getStdev(), 30, 400 + 30 *i);
-					i++;
-				} else if (value.getLongDistance().getValues().size() > 0) { 
-					gl.glLoadIdentity(); 
-					core.drawText(gl, "" +value.getServoDirection().getHeadingDegrees() + ":" + value.getLongDistance().getMedian() + " " + value.getLongDistance().getStdev(), 500, 400 + 30 *i);
-					
-				}
-				
-			}
-			core.drawText(gl, "Calibration Distance : " +calibrationDistance, 500, 400 + 30 *i);
+			gl.glLoadIdentity(); 
+			core.drawText(gl, "" +calibration[0].getMedian() + " " + calibration[0].getStdev(), 30, 400 + 30 *i);
+			core.drawText(gl, "" +calibration[1].getMedian() + " " + calibration[1].getStdev(), 500, 400 + 30 *i);
+			core.drawText(gl, "Calibration Distance : " +calibrationDistance, 30, 400 + 30);
 			
+			i-=2;
+			for (DirectionalReading r : readings) {
+				if (r.getShortDistance().getValues().size() > 0) {
+					core.drawText(gl, "" + r.getServoDirection() + " sr: " + r.getShortDistance().getMedian() + " " 
+										 + r.getShortDistance().getStdev(), 30, 400 + 30 *i);
+					i--;
+				}
+				if (r.getLongDistance().getValues().size() > 0) {
+					core.drawText(gl, "" + r.getServoDirection() + " lr: " + r.getLongDistance().getMedian() + " " 
+										 + r.getLongDistance().getStdev(), 30, 400 + 30 *i);
+					i--;
+				}
+					
+			}
 		}
 		
 		
 	}
 
-	public void setCalibrationData(DirectionalReadingCollection calibration2) {
-		calibration = calibration2;
-	}
 
-	
 	/*private void drawGyro(GL2 gl) {
 	float cx = 75;
 	float cy = 75;

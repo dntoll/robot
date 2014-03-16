@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Date;
 
 import daniel.robot.Direction;
+import daniel.robot.FloatCollection;
 import daniel.robot.glWindow.model.persistence.SavedReadings;
 import daniel.robot.sensors.Compass;
 import daniel.robot.slam.Movement;
@@ -75,7 +76,7 @@ public class TrueRobotReadings implements IRobotInterface{
 	}
 
 	@Override
-	public DirectionalReadingCollection makeCalibration() {
+	public FloatCollection[] makeCalibration() {
 		try {
 			return model.waitForCalibrationReading();
 		} catch (InterruptedException e) {
