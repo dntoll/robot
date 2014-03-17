@@ -14,6 +14,7 @@ public class SensorTower  {
 	Long timeReceived = (long) 0;
 	private Direction lastDirection;
 	private boolean isComplete;
+	CalibrationModel model = new CalibrationModel();
 	
 	public SensorTower(String serverAdress) throws Exception {
 		port = new IPSerialPort(serverAdress, 6789);
@@ -74,7 +75,7 @@ public class SensorTower  {
 		port.write("5\n");
 		timeReceived = System.currentTimeMillis();
 		
-		reading = new DirectionalReadingCollection(compass);
+		reading = new DirectionalReadingCollection(compass, model);
 		isComplete = false;
 	}
 	
@@ -82,7 +83,7 @@ public class SensorTower  {
 		port.write("c\n");
 		timeReceived = System.currentTimeMillis();
 		
-		reading = new DirectionalReadingCollection(null);
+		reading = new DirectionalReadingCollection(null, model);
 		calibrationValues = new FloatCollection[] {
 				new FloatCollection(), //sensor 1 short range
 				new FloatCollection() //sensor 3 long range

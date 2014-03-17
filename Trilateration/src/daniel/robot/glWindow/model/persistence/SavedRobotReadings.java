@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import daniel.robot.Direction;
 import daniel.robot.FloatCollection;
+import daniel.robot.glWindow.model.CalibrationModel;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.sensors.Compass;
@@ -18,17 +19,18 @@ public class SavedRobotReadings implements IRobotInterface {
 	private SavedReadings saver = new SavedReadings();
 	private String fileName;
 	private int readingIndex = 0;
+	private DirectionalReadingCollection lastReading;
+	private CalibrationModel model;
 	
-	DirectionalReadingCollection lastReading;
-	
-	public SavedRobotReadings(String fileName) {
+	public SavedRobotReadings(String fileName, CalibrationModel model) {
 		this.fileName = fileName;
+		this.model = model;
 	}
 
 	@Override
 	public DirectionalReadingCollection makeReading() throws IOException,
 			InterruptedException {
-		lastReading = saver.load(new File(String.format("readings/%s_%d", fileName, readingIndex)));
+		lastReading = saver.load(new File(String.format("readings/%s_%d", fileName, readingIndex)), model);
 		readingIndex++;
 		return lastReading;
 	}

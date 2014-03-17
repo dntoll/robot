@@ -8,6 +8,7 @@ import java.io.IOException;
 
 import daniel.robot.Direction;
 import daniel.robot.FloatCollection;
+import daniel.robot.glWindow.model.CalibrationModel;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 
@@ -40,13 +41,13 @@ public class SavedReadings {
 		}
 	}
 
-	public DirectionalReadingCollection load(File source) throws NumberFormatException, IOException {
+	public DirectionalReadingCollection load(File source, CalibrationModel model) throws NumberFormatException, IOException {
 		
 		BufferedReader in = new BufferedReader(new FileReader(source));
 		
 		float compassDirection = Float.parseFloat(in.readLine());
 		
-		DirectionalReadingCollection ret = new DirectionalReadingCollection(new Direction(compassDirection));
+		DirectionalReadingCollection ret = new DirectionalReadingCollection(new Direction(compassDirection), model);
 		
 		String line = in.readLine(); //titles
 		do {

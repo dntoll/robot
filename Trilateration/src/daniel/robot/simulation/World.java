@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import daniel.robot.BitMapCell;
 import daniel.robot.Bitmap;
 import daniel.robot.Direction;
+import daniel.robot.glWindow.model.CalibrationModel;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.LongRangeSharp;
@@ -19,12 +20,12 @@ import daniel.robot.slam.map.bm.MapData;
 
 public class World extends Bitmap {
 
-	//int size = 250;
-	//boolean[] grid = new boolean[size * size];
+	CalibrationModel calibrationModel;
 	
-	public World(int size) {
+	public World(int size, CalibrationModel cm) {
 		super(size);
 		loadFromImage();
+		calibrationModel = cm;
 	}
 
 	private void loadFromImage() {
@@ -66,8 +67,9 @@ public class World extends Bitmap {
 
 	public DirectionalReadingCollection makeReading(State robot) {
 		Direction compassDirection = robot.m_heading;
-		DirectionalReadingCollection ret = new DirectionalReadingCollection(compassDirection);
+		DirectionalReadingCollection ret = new DirectionalReadingCollection(compassDirection, calibrationModel);
 		Random rand = new Random();
+		
 		
 		for (int servoDegrees = 0; servoDegrees< 360; servoDegrees++) {
 			Direction worldDirection = robot.m_heading.getHeadDirection(new Direction(servoDegrees));
@@ -75,8 +77,8 @@ public class World extends Bitmap {
 				float distance = getDistance(robot.getRobotPosition(), worldDirection);
 			
 				
-				ShortRangeSharp srs = new ShortRangeSharp();
-				LongRangeSharp lrs = new LongRangeSharp();
+				ShortRangeSharp srs = new ShortRangeSharp(calibrationModel);
+				LongRangeSharp lrs = new LongRangeSharp(calibrationModel);
 				for (int i  =0; i< 5; i++) {
 					//if (distance < 100) {
 					ret.addSharpReading(new Direction(servoDegrees + getAngleRandomness(rand) ), srs.fromDistance(getShortDistanceRandomness(distance, rand)), false);

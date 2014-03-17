@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import daniel.robot.Direction;
 import daniel.robot.FloatCollection;
+import daniel.robot.glWindow.model.CalibrationModel;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.State;
@@ -13,7 +14,7 @@ import daniel.robot.slam.Movement;
 
 public class SimulationReadings implements IRobotInterface {
 	
-	World surroundings = new World(512);
+	World surroundings = new World(512, new CalibrationModel());
 	
 	private State robot = new State(surroundings.getStartPosition(), surroundings.getStartDirection() );
 	Compass compass = new Compass();

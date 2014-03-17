@@ -9,11 +9,15 @@ public class DirectionalReading {
 
 	Direction direction;
 	
-	SharpMeasurement shortRange = new ShortRangeSharp();
-	SharpMeasurement longRange = new LongRangeSharp();
+	SharpMeasurement shortRange;
+	SharpMeasurement longRange;// = new LongRangeSharp();
 
-	public DirectionalReading(Direction direction2) {
+	public DirectionalReading(Direction direction2, CalibrationModel model) {
+		//why is this copied?
 		direction = new Direction(direction2.getHeadingDegrees());
+		
+		shortRange = new ShortRangeSharp(model);
+		longRange = new LongRangeSharp(model);
 	}
 
 	public Direction getServoDirection() {

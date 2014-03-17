@@ -14,10 +14,12 @@ public class DirectionalReadingCollection {
 	
 	private DirectionalReading latest;
 	private Direction compass;
+	private CalibrationModel model;
 	
-	public DirectionalReadingCollection(Direction compass) {
+	public DirectionalReadingCollection(Direction compass, CalibrationModel model) {
 		new Date();
 		this.compass = compass;
+		this.model = model;
 	}
 
 	public Map<Integer, DirectionalReading> getReadings() {
@@ -38,7 +40,7 @@ public class DirectionalReadingCollection {
 		
 		if (reading == null) 
 		{
-			reading = new DirectionalReading(direction);
+			reading = new DirectionalReading(direction, model);
 			readings.put(key, reading);
 		}
 		return reading;
