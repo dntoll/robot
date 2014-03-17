@@ -64,11 +64,10 @@ public class MetaController {
 	private boolean userEntersCalibrationDistance() {
 		return input.wasClicked(VK_D);
 	}
-	
-	private boolean userStartsMeasurement() {
-		return input.wasClicked(VK_M);
+	private boolean userEntersCalibrationSensor() {
+		return input.wasClicked(VK_S);
 	}
-
+	
 	public void update(GL2 gl) {
 		robotInterface.update();
 		
@@ -117,9 +116,13 @@ public class MetaController {
 					String input = JOptionPane.showInputDialog(null, "Enter a distance:");
 					
 					calibrationDistance.set(Integer.parseInt(input));
+					calibration = robotInterface.makeCalibration();
+					readings = robotInterface.getDistanceSensorReadings().getReadings().values();
+					calibrationModel.addValues(selectedSensor.get(), calibrationDistance.get(), calibration[selectedSensor.get()]);
+					
 				}
 			});
-		} else if (userEntersCalibrationDistance()) {
+		} else if (userEntersCalibrationSensor()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					String input = JOptionPane.showInputDialog(null, "select sensor : ");
@@ -127,13 +130,9 @@ public class MetaController {
 					selectedSensor.set(Integer.parseInt(input));
 				}
 			});
-		} else if(userStartsMeasurement()) {
-			calibration = robotInterface.makeCalibration();
-			readings = robotInterface.getDistanceSensorReadings().getReadings().values();
-			calibrationModel.addValues(selectedSensor.get(), calibrationDistance.get(), calibration[selectedSensor.get()]);
-		}
+		} 
 		
-		calibrationView.doDraw(gl, glu, windowSize, calibrationDistance.get(), calibration, readings);
+		calibrationView.doDraw(gl, glu, windowSize, calibrationDistance.get(), calibration, readings, selectedSensor.get());
 	}
 
 	

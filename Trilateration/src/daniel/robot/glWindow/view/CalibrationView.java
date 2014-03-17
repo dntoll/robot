@@ -2,6 +2,7 @@ package daniel.robot.glWindow.view;
 
 import java.awt.Dimension;
 import java.util.Collection;
+import java.util.concurrent.atomic.AtomicReference;
 
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
@@ -20,18 +21,18 @@ public class CalibrationView {
 		this.core = core;
 	}
 
-	public void doDraw(GL2 gl, GLU glu, Dimension windowSize, int calibrationDistance, FloatCollection[] calibration, Collection<DirectionalReading> readings) {
+	public void doDraw(GL2 gl, GLU glu, Dimension windowSize, int calibrationDistance, FloatCollection[] calibration, Collection<DirectionalReading> readings, int selectedSensor) {
 		// TODO Auto-generated method stub
 		gl.glLoadIdentity(); 
 		
 		if (calibration == null) {
-			core.drawText(gl, "calibration no data", 30, 30);
+			core.drawText(gl, "calibration no data " + selectedSensor, 30, 30);
 		} else {
 			int i = 0;
 			gl.glLoadIdentity(); 
 			core.drawText(gl, "" +calibration[0].getMedian() + " " + calibration[0].getStdev(), 30, 400 + 30 *i);
 			core.drawText(gl, "" +calibration[1].getMedian() + " " + calibration[1].getStdev(), 500, 400 + 30 *i);
-			core.drawText(gl, "Calibration Distance : " +calibrationDistance, 30, 400 + 30);
+			core.drawText(gl, "Calibration Distance : " + calibrationDistance + " sensor " + selectedSensor, 30, 400 + 30);
 			
 			i-=2;
 			for (DirectionalReading r : readings) {
