@@ -18,7 +18,6 @@ import javax.swing.SwingUtilities;
 import daniel.robot.FloatCollection;
 import daniel.robot.glWindow.model.CalibrationModel;
 import daniel.robot.glWindow.model.DirectionalReading;
-import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.PoseCollection;
 import daniel.robot.glWindow.view.CalibrationView;
@@ -36,7 +35,7 @@ public class MetaController {
 	private Input input;
 	private Dimension windowSize;
 	private AtomicReference<Integer> calibrationDistance = new AtomicReference<Integer>();
-	private AtomicReference<Integer> selectedSensor = new AtomicReference<Integer>();
+	private int selectedSensor = 0;
 	FloatCollection[] calibration;
 	Collection<DirectionalReading> readings;
 	private CalibrationModel calibrationModel = new CalibrationModel();
@@ -48,8 +47,6 @@ public class MetaController {
 		this.windowSize = windowSize;
 		this.input = input;
 		calibrationDistance.set(0);
-		selectedSensor.set(0);
-		
 		slamView = new SLAMView(robotInterface, world, core);
 		calibrationView = new CalibrationView(core);
 	}
@@ -64,8 +61,11 @@ public class MetaController {
 	private boolean userEntersCalibrationDistance() {
 		return input.wasClicked(VK_D);
 	}
-	private boolean userEntersCalibrationSensor() {
-		return input.wasClicked(VK_S);
+	private boolean userSelectSensor0() {
+		return input.wasClicked(VK_0);
+	}
+	private boolean userSelectSensor1() {
+		return input.wasClicked(VK_1);
 	}
 	
 	public void update(GL2 gl) {
@@ -118,21 +118,17 @@ public class MetaController {
 					calibrationDistance.set(Integer.parseInt(input));
 					calibration = robotInterface.makeCalibration();
 					readings = robotInterface.getDistanceSensorReadings().getReadings().values();
-					calibrationModel.addValues(selectedSensor.get(), calibrationDistance.get(), calibration[selectedSensor.get()]);
+					calibrationModel.addValues(selectedSensor, calibrationDistance.get(), calibration[selectedSensor]);
 					
 				}
 			});
-		} else if (userEntersCalibrationSensor()) {
-			SwingUtilities.invokeLater(new Runnable() {
-				public void run() {
-					String input = JOptionPane.showInputDialog(null, "select sensor : ");
-					
-					selectedSensor.set(Integer.parseInt(input));
-				}
-			});
+		} else if (userSelectSensor0()) {
+			selectedSensor = 0;
+		} else if (userSelectSensor1()) {
+			selectedSensor = 1;
 		} 
 		
-		calibrationView.doDraw(gl, glu, windowSize, calibrationDistance.get(), calibration, readings, selectedSensor.get());
+		calibrationView.doDraw(gl, glu, windowSize, calibrationDistance.get(), calibration, readings, selectedSensor);
 	}
 
 	
