@@ -86,5 +86,16 @@ public class TrueRobotReadings implements IRobotInterface{
 		}
 	}
 
+	@Override
+	public FloatCollection[] makeSingleDistanceRead() {
+		try {
+			return model.waitForSingleRead();
+		} catch (InterruptedException e) {
+			return null;
+		} catch (IOException e) {
+			return null;
+		}
+	}
+
 	
 }

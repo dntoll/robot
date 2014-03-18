@@ -44,9 +44,9 @@ class SensorTower {
        m_servo.detach(); 
     }
     
-    void calibrate() {
+    void calibrate(int measurements) {
       m_servo.attach(SERVO_PIN); 
-      measure(MIN_DEGREES+5, "sh", 40, 50);
+      measure(MIN_DEGREES+5, "sh", 40, measurements);
       Serial.println("DONE");
       m_servo.detach(); 
     }

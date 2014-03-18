@@ -85,6 +85,12 @@ public class SavedRobotReadings implements IRobotInterface {
 		return null;
 	}
 
+	@Override
+	public FloatCollection[] makeSingleDistanceRead() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 
 
 	

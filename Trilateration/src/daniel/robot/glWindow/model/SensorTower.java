@@ -14,13 +14,14 @@ public class SensorTower  {
 	Long timeReceived = (long) 0;
 	private Direction lastDirection;
 	private boolean isComplete;
-	CalibrationModel model = new CalibrationModel();
+	CalibrationModel model;
 	
-	public SensorTower(String serverAdress) throws Exception {
+	public SensorTower(String serverAdress, CalibrationModel model) throws Exception {
 		port = new IPSerialPort(serverAdress, 6789);
 		
 		Thread.sleep(2000);
 		timeReceived = System.currentTimeMillis();
+		this.model = model;
 	}
 	
 	
@@ -90,6 +91,19 @@ public class SensorTower  {
 			};
 		isComplete = false;
 	}
+	
+	public void askForSingleRead() {
+		port.write("s\n");
+		timeReceived = System.currentTimeMillis();
+		
+		reading = new DirectionalReadingCollection(null, model);
+		calibrationValues = new FloatCollection[] {
+				new FloatCollection(), //sensor 1 short range
+				new FloatCollection() //sensor 3 long range
+			};
+		isComplete = false;
+		
+	}
 
 	public DirectionalReadingCollection getDistanceSensorReadings() {
 		return reading;
@@ -110,6 +124,8 @@ public class SensorTower  {
 			return null;
 		return calibrationValues;
 	}
+
+	
 
 	
 	

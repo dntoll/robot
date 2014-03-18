@@ -1,6 +1,8 @@
 package daniel.robot.glWindow.view;
 
 import static javax.media.opengl.GL.GL_BLEND;
+import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
+import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_TEST;
 import static javax.media.opengl.GL.GL_LEQUAL;
 import static javax.media.opengl.GL.GL_NICEST;
@@ -10,10 +12,15 @@ import static javax.media.opengl.GL.GL_TRIANGLE_STRIP;
 import static javax.media.opengl.GL2ES1.GL_PERSPECTIVE_CORRECTION_HINT;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_LIGHTING;
 import static javax.media.opengl.fixedfunc.GLLightingFunc.GL_SMOOTH;
+import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
+import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
+
+import java.awt.Dimension;
 
 import javax.media.opengl.GL;
 import javax.media.opengl.GL2;
 import javax.media.opengl.fixedfunc.GLMatrixFunc;
+import javax.media.opengl.glu.GLU;
 
 import com.jogamp.opengl.util.gl2.GLUT;
 
@@ -169,6 +176,20 @@ public class ViewCore {
 		gl.glVertex2f(vx+cellSize, vy+cellSize);
 		gl.glVertex2f(vx+cellSize, vy);
 		gl.glVertex2f(vx, vy);
+	}
+
+
+
+
+	public void startDraw(GL2 gl, Dimension windowSize) {
+		gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
+		GLU glu = new GLU();
+		gl.glViewport(0, 0, windowSize.width, windowSize.height);
+	    gl.glMatrixMode(GL_PROJECTION);  // choose projection matrix
+	    gl.glLoadIdentity();             // reset projection matrix
+	    glu.gluOrtho2D(0, windowSize.width, 0, windowSize.height); 
+	    gl.glMatrixMode(GL_MODELVIEW);
+	    gl.glLoadIdentity(); 
 	}
 
 

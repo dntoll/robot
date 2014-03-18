@@ -29,6 +29,8 @@ public interface IRobotInterface {
 
 	public FloatCollection[] makeCalibration();
 
+	public FloatCollection[] makeSingleDistanceRead();
+
 
 
 }

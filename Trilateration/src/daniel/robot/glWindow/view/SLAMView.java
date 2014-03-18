@@ -24,6 +24,8 @@ public class SLAMView {
 	private ViewCore core;
 
 	private IRobotInterface robot;
+
+	private GLU glu;
 	
 	public SLAMView(IRobotInterface robot, PoseCollection world, ViewCore core ) {
 		this.world = world;
@@ -31,10 +33,11 @@ public class SLAMView {
 		this.robot = robot;
 		compass = new CompassView(core);
 		distances = new DistanceMeasurementView(core);
+		glu = new GLU();
 	}
 	
 	
-	public void doSlam(GL2 gl, GLU glu, Dimension windowSize) {
+	public void doSlam(GL2 gl, Dimension windowSize) {
 		cameraView.drawCamera(gl, glu, windowSize);
 	    
 	    try {

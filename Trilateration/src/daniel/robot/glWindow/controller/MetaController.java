@@ -31,23 +31,25 @@ public class MetaController {
 	private SLAM slam;
 	private SLAMView slamView;
 	private CalibrationView calibrationView;
-	private Input input;
 	private Dimension windowSize;
 	private AtomicReference<Integer> calibrationDistance = new AtomicReference<Integer>();
 	private int selectedSensor = 0;
 	FloatCollection[] calibration;
 	Collection<DirectionalReading> readings;
-	private CalibrationModel calibrationModel = new CalibrationModel();
+	private CalibrationModel calibrationModel;
+	private ViewCore core;
 	
 
-	public MetaController(IRobotInterface robotInterface, SLAM slam, ViewCore core, Dimension windowSize, Input input, PoseCollection world) {
+	public MetaController(IRobotInterface robotInterface, SLAM slam, ViewCore core, Dimension windowSize, Input input, PoseCollection world, CalibrationModel calibrationModel) {
+		this.calibrationModel = calibrationModel;
 		this.robotInterface = robotInterface;
 		this.slam = slam;
 		this.windowSize = windowSize;
-		this.input = input;
+		this.core = core;
 		calibrationDistance.set(0);
 		slamView = new SLAMView(robotInterface, world, core);
-		calibrationView = new CalibrationView(core, input);
+		
+		calibrationView = new CalibrationView(calibrationModel, core, input);
 	}
 	
 	
@@ -55,20 +57,7 @@ public class MetaController {
 	public void update(GL2 gl) {
 		robotInterface.update();
 		
-		
-	    gl.glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // clear color and depth buffers
-	    
-	    GLU glu = new GLU();
-		gl.glViewport(0, 0, windowSize.width, windowSize.height);
-	    gl.glMatrixMode(GL_PROJECTION);  // choose projection matrix
-	    gl.glLoadIdentity();             // reset projection matrix
-	    glu.gluOrtho2D(0, windowSize.width, 0, windowSize.height); 
-	    gl.glMatrixMode(GL_MODELVIEW);
-	    gl.glLoadIdentity(); 
-	    
-	    gl.glLoadIdentity(); 
-	    
-	 
+		core.startDraw(gl, windowSize);
 		
 		if (isCalibrating) {
 			if (calibrationView.userWantsToStopCalibrating()) {
@@ -77,7 +66,7 @@ public class MetaController {
 				isCalibrating = false;
 			}
 			
-			doCalibration(gl, glu);
+			doCalibration(gl);
 		} else {
 			if (calibrationView.userWantsToStartCalibrating()) {
 				slam.stop();
@@ -85,14 +74,15 @@ public class MetaController {
 				isCalibrating = true;
 				
 			}
-			slamView.doSlam(gl, glu, windowSize);
+			slamView.doSlam(gl, windowSize);
 		}
 		
 		
 		
 	}
 
-	public void doCalibration(GL2 gl, GLU glu) {
+	long lastReadTime = 0;
+	public void doCalibration(GL2 gl) {
 		
 		if (calibrationView.userEntersCalibrationDistance()) {
 			SwingUtilities.invokeLater(new Runnable() {
@@ -109,9 +99,14 @@ public class MetaController {
 			selectedSensor = 0;
 		} else if (calibrationView.userSelectSensor1()) {
 			selectedSensor = 1;
-		} 
+		} else {
+			if (System.currentTimeMillis() - lastReadTime > 3000) {
+				calibration = robotInterface.makeSingleDistanceRead();
+				lastReadTime = System.currentTimeMillis();
+			}
+		}
 		
-		calibrationView.doDraw(gl, glu, windowSize, calibrationDistance.get(), calibration, readings, selectedSensor);
+		calibrationView.doDraw(gl, windowSize, calibrationDistance.get(), calibration, readings, selectedSensor);
 	}
 
 	

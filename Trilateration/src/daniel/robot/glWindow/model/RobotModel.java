@@ -14,8 +14,8 @@ public class RobotModel {
 	MotorBoard board;
 	CameraSensor camera;
 	
-	public RobotModel(String serverAdress) throws Exception {
-		sensorTower = new SensorTower(serverAdress);
+	public RobotModel(String serverAdress, CalibrationModel model) throws Exception {
+		sensorTower = new SensorTower(serverAdress, model);
 		board = new MotorBoard(serverAdress);
 		camera = new CameraSensor(serverAdress);
 	}
@@ -92,6 +92,23 @@ public class RobotModel {
 	public FloatCollection[] waitForCalibrationReading() throws InterruptedException, IOException {
 		
 		sensorTower.askForCalibrationMeasurement();
+		
+		FloatCollection[] ret = null;
+		do {
+			ret = sensorTower.getCalibrationReading();
+			
+			Thread.sleep(100);
+			
+			while(sensorTower.update()) {
+				;
+			}
+			
+		} while (ret == null);
+		return ret;
+	}
+
+	public FloatCollection[] waitForSingleRead() throws IOException, InterruptedException {
+		sensorTower.askForSingleRead();
 		
 		FloatCollection[] ret = null;
 		do {

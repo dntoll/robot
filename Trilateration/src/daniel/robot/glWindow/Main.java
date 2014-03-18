@@ -12,10 +12,10 @@ import com.jogamp.opengl.util.FPSAnimator;
 import daniel.robot.glWindow.adapter.AdapterCanvas;
 //import daniel.robot.glWindow.adapter.AdapterCanvas;
 import daniel.robot.glWindow.controller.MetaController;
+import daniel.robot.glWindow.model.CalibrationModel;
 import daniel.robot.glWindow.model.IRobotInterface;
 import daniel.robot.glWindow.model.RobotModel;
 import daniel.robot.glWindow.model.TrueRobotReadings;
-import daniel.robot.glWindow.model.persistence.SavedRobotReadings;
 import daniel.robot.glWindow.view.Input;
 import daniel.robot.glWindow.view.ViewCore;
 import daniel.robot.simulation.SimulationReadings;
@@ -38,14 +38,15 @@ public class Main {
 	        	
 	        	IRobotInterface robotInterface;
 				try {
+					CalibrationModel cm = new CalibrationModel();
 					//model = new RobotModel("127.0.0.1");
 					
 					//robotInterface = new SavedRobotReadings("Sat Feb 22 09:06:08 CET 2014");
 					
-					robotInterface = new TrueRobotReadings(new RobotModel("127.0.0.1"));
+					robotInterface = new TrueRobotReadings(new RobotModel("127.0.0.1", cm));
 					//robotInterface = new TrueRobotReadings(new RobotModel("192.168.1.6"));
 					
-					//robotInterface = new SimulationReadings();
+					//robotInterface = new SimulationReadings(cm);
 					SLAM slam = new SLAM(robotInterface);
 					
 					
@@ -59,7 +60,7 @@ public class Main {
 					
 					Input input = new Input();
 					ViewCore core = new ViewCore();
-					MetaController controller = new MetaController(robotInterface, slam, core, windowSize, input, slam.m_world);
+					MetaController controller = new MetaController(robotInterface, slam, core, windowSize, input, slam.m_world, cm);
 					AdapterCanvas canvas = new AdapterCanvas(controller, input, core);
 		            canvas.setPreferredSize(windowSize);
 	

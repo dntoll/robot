@@ -14,11 +14,17 @@ import daniel.robot.slam.Movement;
 
 public class SimulationReadings implements IRobotInterface {
 	
-	World surroundings = new World(512, new CalibrationModel());
+	World surroundings;
 	
-	private State robot = new State(surroundings.getStartPosition(), surroundings.getStartDirection() );
+	private State robot;
 	Compass compass = new Compass();
 	DirectionalReadingCollection latest = null;
+	
+	
+	public SimulationReadings(CalibrationModel cm) {
+		surroundings = new World(512, cm);
+		robot = new State(surroundings.getStartPosition(), surroundings.getStartDirection() );
+	}
 	
 	@Override
 	public DirectionalReadingCollection makeReading() throws IOException,
@@ -106,5 +112,13 @@ public class SimulationReadings implements IRobotInterface {
 	public FloatCollection[] makeCalibration() {
 		return null;
 	}
+
+	@Override
+	public FloatCollection[] makeSingleDistanceRead() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	
 
 }
