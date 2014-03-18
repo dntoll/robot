@@ -1,6 +1,5 @@
 package daniel.robot.glWindow.controller;
 
-import static java.awt.event.KeyEvent.*;
 import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
 import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
 import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
@@ -48,25 +47,10 @@ public class MetaController {
 		this.input = input;
 		calibrationDistance.set(0);
 		slamView = new SLAMView(robotInterface, world, core);
-		calibrationView = new CalibrationView(core);
+		calibrationView = new CalibrationView(core, input);
 	}
 	
-	public boolean userWantsToStopCalibrating() {
-		return input.wasClicked(VK_C);
-	}
 	
-	public boolean userWantsToStartCalibrating() {
-		return input.wasClicked(VK_C);
-	}
-	private boolean userEntersCalibrationDistance() {
-		return input.wasClicked(VK_D);
-	}
-	private boolean userSelectSensor0() {
-		return input.wasClicked(VK_0);
-	}
-	private boolean userSelectSensor1() {
-		return input.wasClicked(VK_1);
-	}
 	
 	public void update(GL2 gl) {
 		robotInterface.update();
@@ -87,7 +71,7 @@ public class MetaController {
 	 
 		
 		if (isCalibrating) {
-			if (userWantsToStopCalibrating()) {
+			if (calibrationView.userWantsToStopCalibrating()) {
 				slam.start();
 				System.out.println("stop calibrating starting slam");
 				isCalibrating = false;
@@ -95,7 +79,7 @@ public class MetaController {
 			
 			doCalibration(gl, glu);
 		} else {
-			if (userWantsToStartCalibrating()) {
+			if (calibrationView.userWantsToStartCalibrating()) {
 				slam.stop();
 				System.out.println("stop slam starting calibration");
 				isCalibrating = true;
@@ -110,7 +94,7 @@ public class MetaController {
 
 	public void doCalibration(GL2 gl, GLU glu) {
 		
-		if (userEntersCalibrationDistance()) {
+		if (calibrationView.userEntersCalibrationDistance()) {
 			SwingUtilities.invokeLater(new Runnable() {
 				public void run() {
 					String input = JOptionPane.showInputDialog(null, "Enter a distance:");
@@ -119,12 +103,11 @@ public class MetaController {
 					calibration = robotInterface.makeCalibration();
 					readings = robotInterface.getDistanceSensorReadings().getReadings().values();
 					calibrationModel.addValues(selectedSensor, calibrationDistance.get(), calibration[selectedSensor]);
-					
 				}
 			});
-		} else if (userSelectSensor0()) {
+		} else if (calibrationView.userSelectSensor0()) {
 			selectedSensor = 0;
-		} else if (userSelectSensor1()) {
+		} else if (calibrationView.userSelectSensor1()) {
 			selectedSensor = 1;
 		} 
 		

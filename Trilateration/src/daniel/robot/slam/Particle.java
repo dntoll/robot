@@ -72,8 +72,8 @@ public class Particle {
 			if (m_parent != null) {
 				m_map = m_parent.m_map.createChild(m_state, sense);
 			} else {
-				//m_map = new LandmarkMap(m_state, sense, null);
-				m_map = new BitmapMap(m_state, sense, null);
+				m_map = new LandmarkMap(m_state, sense, null);
+				//m_map = new BitmapMap(m_state, sense, null);
 			}
 		}
 	}

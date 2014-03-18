@@ -1,24 +1,45 @@
 package daniel.robot.glWindow.view;
 
+import static java.awt.event.KeyEvent.VK_0;
+import static java.awt.event.KeyEvent.VK_1;
+import static java.awt.event.KeyEvent.VK_C;
+import static java.awt.event.KeyEvent.VK_D;
+
 import java.awt.Dimension;
 import java.util.Collection;
-import java.util.concurrent.atomic.AtomicReference;
-
 import javax.media.opengl.GL2;
 import javax.media.opengl.glu.GLU;
 
 import daniel.robot.FloatCollection;
 import daniel.robot.glWindow.model.DirectionalReading;
-import daniel.robot.glWindow.model.DirectionalReadingCollection;
 
 public class CalibrationView {
 
 	private ViewCore core;
+	private Input input;
 	
 	
-	public CalibrationView(ViewCore core ) {
+	public CalibrationView(ViewCore core, Input input ) {
 		
 		this.core = core;
+		this.input = input;
+	}
+	
+	public boolean userWantsToStopCalibrating() {
+		return input.wasClicked(VK_C);
+	}
+	
+	public boolean userWantsToStartCalibrating() {
+		return input.wasClicked(VK_C);
+	}
+	public boolean userEntersCalibrationDistance() {
+		return input.wasClicked(VK_D);
+	}
+	public boolean userSelectSensor0() {
+		return input.wasClicked(VK_0);
+	}
+	public boolean userSelectSensor1() {
+		return input.wasClicked(VK_1);
 	}
 
 	public void doDraw(GL2 gl, GLU glu, Dimension windowSize, int calibrationDistance, FloatCollection[] calibration, Collection<DirectionalReading> readings, int selectedSensor) {
