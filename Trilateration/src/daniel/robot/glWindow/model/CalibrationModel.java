@@ -165,7 +165,7 @@ public class CalibrationModel {
 		float reading = 0.0f;
 		 
 		for (int i = 0; i < distance.length - 1; i++) {
-			if (distanceCM > distance[i+1]) {
+			if (distanceCM < distance[i+1]) {
 				return floatMap(distanceCM, distance[i], distance[i+1], sensorValues[i], sensorValues[i+1]);
 			     
 			}

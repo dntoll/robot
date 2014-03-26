@@ -11,11 +11,11 @@ public class LongRangeSharp extends SharpMeasurement {
 	
 	@Override
 	protected float getMaxDistance() {
-		return 500;
+		return 250;
 	}
 	@Override
 	public float getReliableDistance() {
-		return 450;
+		return 200;
 	}
 	@Override
 	protected float transformToCM(float sensorValue) {
