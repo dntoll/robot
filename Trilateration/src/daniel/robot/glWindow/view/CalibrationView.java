@@ -19,7 +19,6 @@ public class CalibrationView {
 
 	private ViewCore core;
 	private Input input;
-	private GLU glu;
 	private CalibrationModel calibrationModel;
 	
 	
@@ -28,7 +27,7 @@ public class CalibrationView {
 		this.core = core;
 		this.input = input;
 		this.calibrationModel = calibrationModel;
-		glu = new GLU();
+		new GLU();
 	}
 	
 	public boolean userWantsToStopCalibrating() {

@@ -19,6 +19,10 @@ public class Landmark {
 
 
 	public boolean isBetter(Prediction prediction) {
+		if (distanceMeasureFrom < prediction.getLandmark().distanceMeasureFrom ) {
+			return true;
+		}
+		
 		if (deviation < prediction.getLandmark().deviation ) {
 			return true;
 		}

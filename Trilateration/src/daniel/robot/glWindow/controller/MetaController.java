@@ -1,16 +1,10 @@
 package daniel.robot.glWindow.controller;
 
-import static javax.media.opengl.GL.GL_COLOR_BUFFER_BIT;
-import static javax.media.opengl.GL.GL_DEPTH_BUFFER_BIT;
-import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_MODELVIEW;
-import static javax.media.opengl.fixedfunc.GLMatrixFunc.GL_PROJECTION;
-
 import java.awt.Dimension;
 import java.util.Collection;
 import java.util.concurrent.atomic.AtomicReference;
 
 import javax.media.opengl.GL2;
-import javax.media.opengl.glu.GLU;
 import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 

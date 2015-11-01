@@ -1,7 +1,6 @@
 package daniel.robot.slam.map.lm;
 
 import java.awt.geom.Point2D;
-import java.awt.geom.Point2D.Float;
 import daniel.robot.Direction;
 import daniel.robot.glWindow.model.DirectionalReading;
 import daniel.robot.glWindow.model.DirectionalReadingCollection;

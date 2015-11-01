@@ -8,9 +8,6 @@ import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.IMap;
 import daniel.robot.glWindow.model.IPrediction;
 import daniel.robot.glWindow.model.State;
-import daniel.robot.sensors.SharpMeasurement;
-import daniel.robot.slam.Prediction;
-import daniel.robot.slam.map.lm.Landmark;
 
 public class BitmapMap extends IMap {
 

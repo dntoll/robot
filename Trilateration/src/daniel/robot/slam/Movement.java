@@ -23,7 +23,7 @@ public class Movement {
 	}
 	
 	
-	float randomness = 0.0f;
+	float randomness = 1.0f;
 	private float getHeadingVariance() {
 		return  randomness * (m_turnRight/10.0f + 1.0f);
 	}

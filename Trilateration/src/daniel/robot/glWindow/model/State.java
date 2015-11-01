@@ -6,7 +6,7 @@ import daniel.robot.slam.Movement;
 
 public class State {
 	private Float m_position = new Float(); //in degrees
-	public Direction m_heading; //in meters
+	public Direction m_heading;
 	
 	
 	

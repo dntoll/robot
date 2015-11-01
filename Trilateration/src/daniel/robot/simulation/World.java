@@ -16,7 +16,6 @@ import daniel.robot.glWindow.model.DirectionalReadingCollection;
 import daniel.robot.glWindow.model.State;
 import daniel.robot.sensors.LongRangeSharp;
 import daniel.robot.sensors.ShortRangeSharp;
-import daniel.robot.slam.map.bm.MapData;
 
 public class World extends Bitmap {
 
@@ -38,7 +37,6 @@ public class World extends Bitmap {
 		int[] pixels = new int[image.getWidth() * image.getHeight()];
 		image.getRGB(0, 0, image.getWidth(), image.getHeight(), pixels, 0, image.getWidth());
 		
-		Random rand = new Random();
 		for (int x = 0;x< size; x++) {
 			for (int y = 0; y < size; y++) {
 				grid[getIndex(x, y)] = BitMapCell.getEmpty();
@@ -106,10 +104,10 @@ public class World extends Bitmap {
 			randomness = 30.0f;
 		} else if (distance < 300) {
 			randomness = 100.0f;
-		} /*else {
+		} else {
 			randomness = 150.0f;
 			return 300 + rand.nextFloat() * randomness - randomness/2.0f;
-		}*/
+		}
 		randomness *= multiplier; 
 		return distance + rand.nextFloat() * randomness - randomness/2.0f;
 	}
@@ -125,10 +123,10 @@ public class World extends Bitmap {
 			randomness = 10.0f;
 		} else if (distance < 500) {
 			randomness = 30.0f;
-		} /*else {
+		} else {
 			randomness = 150.0f;
 			return 500 + rand.nextFloat() * randomness - randomness/2.0f;
-		}*/
+		}
 		randomness *= multiplier; 
 		return distance + rand.nextFloat() * randomness - randomness/2.0f;
 	}
